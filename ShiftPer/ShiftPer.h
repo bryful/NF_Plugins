@@ -34,6 +34,15 @@ enum {
 typedef struct SFTPInfo {
 	PF_FpLong	shiftX;
 	PF_FpLong	shiftY;
+	A_long		shiftXPixel;
+	A_long		shiftYPixel;
+	A_long		widthIn;
+	A_long		widthOut;
+	A_long		heightIn;
+	A_long		heightOut;
+	A_long		widthTrueIn;
+	A_long		widthTrueOut;
+	PF_PixelPtr data;
 } SFTPInfo, * SFTPInfoP, ** SFTPInfoH;
 
 

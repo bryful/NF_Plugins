@@ -32,7 +32,28 @@ GlobalSetup (
 
 	return err;
 }
+static PF_Err
+ShiftPixel8(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel8* inP,
+	PF_Pixel8* outP)
+{
+	PF_Err			err = PF_Err_NONE;
 
+	SFTPInfo* infoP = reinterpret_cast<SFTPInfo*>(refcon);
+
+	A_long nx = (xL - infoP->shiftXPixel) % infoP->widthIn;
+	if (nx < 0) nx += infoP->widthIn;
+	A_long ny = (yL - infoP->shiftYPixel) % infoP->heightIn;
+	if (ny < 0) ny += infoP->heightIn;
+	PF_Pixel* data = (PF_Pixel*)infoP->data;
+	*outP = data[infoP->widthTrueOut * ny + nx];
+
+
+	return err;
+}
 static PF_Err 
 ParamsSetup (
 	PF_InData		*in_data,
@@ -89,17 +110,51 @@ Render (
 	info.shiftY = params[SFTP_Y]->u.fs_d.value/100;
 
 
-	AEFX_SuiteScoper<PF_WorldTransformSuite1> worldTransformSuite =
-		AEFX_SuiteScoper<PF_WorldTransformSuite1>(in_dataP,
-			kPFWorldTransformSuite,
-			kPFWorldTransformSuiteVersion1,
-			out_data);
+	PF_EffectWorld *input = &params[SFTP_INPUT]->u.ld;
+	//ƒTƒCƒY‚ðŠl“¾
+	info.widthIn = input->width;
+	info.heightIn = input->height;
+	info.widthTrueIn = input->rowbytes/sizeof(PF_Pixel);
+	info.widthOut = output->width;
+	info.heightOut = output->height;
+	info.widthTrueOut = output->rowbytes / sizeof(PF_Pixel);
 
-	worldTransformSuite->copy(in_dataP->effect_ref,			// This effect ref (unique id)
-		&params[SFTP_X]->u.ld,			// Source
-		output,							// Dest
-		NULL,							// Source rect - null for all pixels
-		NULL);							// Dest rect - null for all pixels
+	info.shiftXPixel = (A_long)((PF_FpLong)info.widthIn * info.shiftX + 0.5);
+	info.shiftYPixel = (A_long)((PF_FpLong)info.heightIn * info.shiftY + 0.5);
+	info.data = input->data;
+
+	if ((info.shiftXPixel != 0)|| (info.shiftYPixel != 0)) {
+
+		AEFX_SuiteScoper<PF_Iterate8Suite2> iterate8Suite =
+			AEFX_SuiteScoper<PF_Iterate8Suite2>(in_dataP,
+				kPFIterate8Suite,
+				kPFIterate8SuiteVersion2,
+				out_data);
+
+		iterate8Suite->iterate(
+			in_dataP,
+			0,								// progress base
+			linesL,							// progress final
+			input,	// area - null for all pixels
+			NULL,
+			(void*)&info,					// refcon - your custom data pointer
+			ShiftPixel8,					// pixel function pointer
+			output);						// dest
+	}
+	else {
+
+		AEFX_SuiteScoper<PF_WorldTransformSuite1> worldTransformSuite =
+			AEFX_SuiteScoper<PF_WorldTransformSuite1>(in_dataP,
+				kPFWorldTransformSuite,
+				kPFWorldTransformSuiteVersion1,
+				out_data);
+
+		worldTransformSuite->copy(in_dataP->effect_ref,			// This effect ref (unique id)
+			&params[SFTP_INPUT]->u.ld,		// Source
+			output,							// Dest
+			NULL,							// Source rect - null for all pixels
+			NULL);							// Dest rect - null for all pixels
+	}
 	return err;
 }
 
