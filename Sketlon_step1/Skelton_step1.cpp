@@ -67,7 +67,7 @@ ParamsSetup (
 						0,
 						SLIDER_DISK_ID);
 	
-	out_data->num_params = NOISE_NUM_PARAMS;
+	out_data->num_params = PARAM_NUM_PARAMS;
 
 	return err;
 }
@@ -82,7 +82,7 @@ FilterImage8 (
 {
 	PF_Err			err = PF_Err_NONE;
 	
-	NoiseInfo *	niP		= reinterpret_cast<NoiseInfo*>(refcon);
+	ParamInfo *	niP		= reinterpret_cast<ParamInfo*>(refcon);
 	PF_FpLong	tempF		= 0;
 					
 	if (niP){
@@ -107,7 +107,7 @@ FilterImage16 (
 {
 	PF_Err			err = PF_Err_NONE;
 	
-	NoiseInfo *	niP		= reinterpret_cast<NoiseInfo*>(refcon);
+	ParamInfo *	niP		= reinterpret_cast<ParamInfo*>(refcon);
 	PF_FpLong	tempF	= 0;
 	
 	if (niP){
@@ -132,7 +132,7 @@ FilterImage32 (
 {
 	PF_Err			err = PF_Err_NONE;
 	
-	NoiseInfo *	niP		= reinterpret_cast<NoiseInfo*>(refcon);
+	ParamInfo *	niP		= reinterpret_cast<ParamInfo*>(refcon);
 	PF_FpShort	tempF	= 0;
 	
 	if (niP){
@@ -156,15 +156,15 @@ Render (
 {
 	PF_Err				err		= PF_Err_NONE;
 
-	NoiseInfo			niP;
+	ParamInfo			niP;
 	A_long				linesL	= 0;
 	
 	AEFX_CLR_STRUCT(niP);
 	
 	linesL 		= output->extent_hint.bottom - output->extent_hint.top;
-	niP.valF 	= params[NOISE_SLIDER]->u.fs_d.value;
+	niP.valF 	= params[PARAM_SLIDER]->u.fs_d.value;
 
-	if(params[NOISE_SLIDER]->u.fs_d.value != 0.0) {
+	if(params[PARAM_SLIDER]->u.fs_d.value != 0.0) {
 
 		AEFX_SuiteScoper<PF_Iterate8Suite2> iterate8Suite = 
 			AEFX_SuiteScoper<PF_Iterate8Suite2>(in_dataP,
@@ -175,7 +175,7 @@ Render (
 		iterate8Suite->iterate(	in_dataP,
 								0,								// progress base
 								linesL,							// progress final
-								&params[NOISE_INPUT]->u.ld,		// src 
+								&params[PARAM_INPUT]->u.ld,		// src 
 								NULL,							// area - null for all pixels
 								(void*)&niP,					// refcon - your custom data pointer
 								FilterImage8,					// pixel function pointer
@@ -189,7 +189,7 @@ Render (
 														out_data);
 
 		worldTransformSuite->copy(	in_dataP->effect_ref,			// This effect ref (unique id)
-									&params[NOISE_INPUT]->u.ld,		// Source
+									&params[PARAM_INPUT]->u.ld,		// Source
 									output,							// Dest
 									NULL,							// Source rect - null for all pixels
 									NULL);							// Dest rect - null for all pixels
@@ -215,18 +215,18 @@ PreRender(
 																						kPFHandleSuiteVersion1,
 																						out_dataP);
 
-	PF_Handle infoH	= handleSuite->host_new_handle(sizeof(NoiseInfo));
+	PF_Handle infoH	= handleSuite->host_new_handle(sizeof(ParamInfo));
 	
 	if (infoH){
 
-		NoiseInfo *infoP = reinterpret_cast<NoiseInfo*>(handleSuite->host_lock_handle(infoH));
+		ParamInfo *infoP = reinterpret_cast<ParamInfo*>(handleSuite->host_lock_handle(infoH));
 		
 		if (infoP){
 
 			extraP->output->pre_render_data = infoH;
 			
 			ERR(PF_CHECKOUT_PARAM(	in_dataP, 
-									NOISE_SLIDER, 
+									PARAM_SLIDER, 
 									in_dataP->current_time, 
 									in_dataP->time_step, 
 									in_dataP->time_scale, 
@@ -237,8 +237,8 @@ PreRender(
 			}
 			
 			ERR(extraP->cb->checkout_layer(	in_dataP->effect_ref,
-											NOISE_INPUT,
-											NOISE_INPUT,
+											PARAM_INPUT,
+											PARAM_INPUT,
 											&req,
 											in_dataP->current_time,
 											in_dataP->time_step,
@@ -273,10 +273,10 @@ SmartRender(
 																						kPFHandleSuiteVersion1,
 																						out_data);
 	
-	NoiseInfo	*infoP = reinterpret_cast<NoiseInfo*>(handleSuite->host_lock_handle(reinterpret_cast<PF_Handle>(extraP->input->pre_render_data)));
+	ParamInfo	*infoP = reinterpret_cast<ParamInfo*>(handleSuite->host_lock_handle(reinterpret_cast<PF_Handle>(extraP->input->pre_render_data)));
 	
 	if (infoP){
-		ERR((extraP->cb->checkout_layer_pixels(	in_data->effect_ref, NOISE_INPUT, &input_worldP)));
+		ERR((extraP->cb->checkout_layer_pixels(	in_data->effect_ref, PARAM_INPUT, &input_worldP)));
 		ERR(extraP->cb->checkout_output(in_data->effect_ref, &output_worldP));
 		
 		PF_PixelFormat		format	=	PF_PixelFormat_INVALID;
@@ -353,7 +353,7 @@ SmartRender(
 				}
 			}		
 		}
-		ERR2(extraP->cb->checkin_layer_pixels(in_data->effect_ref, NOISE_INPUT));
+		ERR2(extraP->cb->checkin_layer_pixels(in_data->effect_ref, PARAM_INPUT));
 	}
 	return err;
 	

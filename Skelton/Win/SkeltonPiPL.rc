@@ -6,7 +6,7 @@
 BEGIN
 	0x0001,	 
 	0, 0x0, 	
-	13, 0x0, 
+	12, 0x0, 
 	"MIB8",
 	"dnik", 
 	0, 0x0,
@@ -22,8 +22,8 @@ BEGIN
 	"MIB8",
 	"gtac", 
 	0, 0x0,
-	12, 0x0,
-	"\x0ANF-Plugins\0", 
+	20, 0x0,
+	"\x10NF-Plugins(Beta)\0\0\0", 
 
 	"MIB8",
 	"4668", 
@@ -59,13 +59,13 @@ BEGIN
 	"OLGe", 
 	0L,
 	4L,
-	33555460L, 
+	33556034L, 
 
 	"MIB8",
 	"2LGe", 
 	0L,
 	4L,
-	134222848L, 
+	134222921L, 
 
 	"MIB8",
 	"ANMe",
@@ -78,12 +78,6 @@ BEGIN
 	0L,
 	4L
 	0L, 
-
-	"MIB8",
-	"LRUe",
-	0, 0x0,
-	28, 0x0,
-	"\x19https://github.com/bryful\0\0", 
 
 
 END

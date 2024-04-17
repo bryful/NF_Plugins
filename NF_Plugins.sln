@@ -2,29 +2,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Skelton", "Sketlon\Win\Skelton.vcxproj", "{B379129A-C782-419D-8934-3661CE869ECF}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Skelton_step1", "Sketlon_step1\Win\Skelton_step1.vcxproj", "{5A7CE2C4-715C-4812-9F6C-C62F03158084}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShiftPer", "ShiftPer\Win\ShiftPer.vcxproj", "{223DC482-370F-4671-B8D3-28DB6330EA3F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Skelton", "Skelton\Win\Skelton.vcxproj", "{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B379129A-C782-419D-8934-3661CE869ECF}.Debug|x64.ActiveCfg = Debug|x64
-		{B379129A-C782-419D-8934-3661CE869ECF}.Debug|x64.Build.0 = Debug|x64
-		{B379129A-C782-419D-8934-3661CE869ECF}.Release|x64.ActiveCfg = Release|x64
-		{B379129A-C782-419D-8934-3661CE869ECF}.Release|x64.Build.0 = Release|x64
 		{5A7CE2C4-715C-4812-9F6C-C62F03158084}.Debug|x64.ActiveCfg = Debug|x64
+		{5A7CE2C4-715C-4812-9F6C-C62F03158084}.Debug|x86.ActiveCfg = Debug|Win32
+		{5A7CE2C4-715C-4812-9F6C-C62F03158084}.Debug|x86.Build.0 = Debug|Win32
 		{5A7CE2C4-715C-4812-9F6C-C62F03158084}.Release|x64.ActiveCfg = Release|x64
 		{5A7CE2C4-715C-4812-9F6C-C62F03158084}.Release|x64.Build.0 = Release|x64
+		{5A7CE2C4-715C-4812-9F6C-C62F03158084}.Release|x86.ActiveCfg = Release|Win32
+		{5A7CE2C4-715C-4812-9F6C-C62F03158084}.Release|x86.Build.0 = Release|Win32
 		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Debug|x64.ActiveCfg = Debug|x64
 		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Debug|x64.Build.0 = Debug|x64
+		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Debug|x86.ActiveCfg = Debug|Win32
+		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Debug|x86.Build.0 = Debug|Win32
 		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Release|x64.ActiveCfg = Release|x64
 		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Release|x64.Build.0 = Release|x64
+		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Release|x86.ActiveCfg = Release|Win32
+		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Release|x86.Build.0 = Release|Win32
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Debug|x64.ActiveCfg = Debug|x64
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Debug|x64.Build.0 = Debug|x64
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Debug|x86.ActiveCfg = Debug|Win32
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Debug|x86.Build.0 = Debug|Win32
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Release|x64.ActiveCfg = Release|x64
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Release|x64.Build.0 = Release|x64
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Release|x86.ActiveCfg = Release|Win32
+		{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

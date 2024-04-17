@@ -30,9 +30,9 @@
 #define	BUILD_VERSION	0
 
 enum {
-	NOISE_INPUT = 0,
-	NOISE_SLIDER,		// default input layer 
-	NOISE_NUM_PARAMS
+	PARAM_INPUT = 0,
+	PARAM_SLIDER,		// default input layer 
+	PARAM_NUM_PARAMS
 };
 
 enum {
@@ -65,9 +65,9 @@ extern "C" {
 
 }
 
-typedef struct NoiseInfo{
+typedef struct ParamInfo{
 	PF_FpLong	valF;
-} NoiseInfo, *NoiseInfoP, **NoiseInfoH;
+} ParamInfo, *ParamInfoP, **ParamInfoH;
 
 typedef struct {
 	A_u_char	blue, green, red, alpha;
