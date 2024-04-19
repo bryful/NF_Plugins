@@ -6,7 +6,7 @@
 BEGIN
 	0x0001,	 
 	0, 0x0, 	
-	12, 0x0, 
+	13, 0x0, 
 	"MIB8",
 	"dnik", 
 	0, 0x0,
@@ -16,8 +16,8 @@ BEGIN
 	"MIB8",
 	"eman",
 	0, 0x0,
-	12, 0x0,
-	"\x0BNF-ShiftPer", 
+	16, 0x0,
+	"\x0FNF-ShiftPer_old", 
 
 	"MIB8",
 	"gtac", 
@@ -59,25 +59,31 @@ BEGIN
 	"OLGe", 
 	0L,
 	4L,
-	33556034L, 
+	1600L, 
 
 	"MIB8",
 	"2LGe", 
 	0L,
 	4L,
-	134222921L, 
+	0L, 
 
 	"MIB8",
 	"ANMe",
 	0, 0x0,
-	12, 0x0,
-	"\x0BNF-ShiftPer", 
+	16, 0x0,
+	"\x0FNF-ShiftPer_old", 
 
 	"MIB8",
 	0x6165464CL, 
 	0L,
 	4L
 	0L, 
+
+	"MIB8",
+	"LRUe",
+	0, 0x0,
+	28, 0x0,
+	"\x19https://github.com/bryful\0\0", 
 
 
 END

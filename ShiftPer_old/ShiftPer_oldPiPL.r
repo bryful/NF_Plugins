@@ -1,3 +1,4 @@
+#include "NF_Target.h"
 
 #include "AEConfig.h"
 #include "AE_EffectVers.h"
@@ -6,7 +7,6 @@
 	#include "AE_General.r"
 #endif
 
-#include "NF_Target.h"
 
 resource 'PiPL' (16000) {
 	{	/* array properties: 12 elements */
@@ -16,15 +16,12 @@ resource 'PiPL' (16000) {
 		},
 		/* [2] */
 		Name {
-			/*AEのメニューに使われる */
 			NF_NAME
 		},
 		/* [3] */
 		Category {
-			/*AEのメニューに使われる */
 			NF_CATEGORY
 		},
-		
 #ifdef AE_OS_WIN
 	#ifdef AE_PROC_INTELx64
 		CodeWin64X86 {"EffectMain"},
@@ -32,6 +29,7 @@ resource 'PiPL' (16000) {
 #else
 	#ifdef AE_OS_MAC
 		CodeMacIntel64 {"EffectMain"},
+		CodeMacARM64 {"EffectMain"},
 	#endif
 #endif
 		/* [6] */
@@ -45,9 +43,8 @@ resource 'PiPL' (16000) {
 			PF_PLUG_IN_SUBVERS
 		},
 		/* [8] */
-		AE_Effect_Version {
-			/* v1.00 */
-			NF_VERSION 
+		AE_Effect_Version {	
+			NF_VERSION
 		},
 		/* [9] */
 		AE_Effect_Info_Flags {
@@ -60,15 +57,17 @@ resource 'PiPL' (16000) {
 		AE_Effect_Global_OutFlags_2 {
 			NF_OUT_FLAGS2
 		},
-
 		/* [11] */
 		AE_Effect_Match_Name {
-			/*プラグインの識別に使われる */
 			NF_MATCHNAME
 		},
 		/* [12] */
 		AE_Reserved_Info {
 			0
+		},
+		/* [13] */
+		AE_Effect_Support_URL {
+			"https://github.com/bryful"
 		}
 	}
 };
