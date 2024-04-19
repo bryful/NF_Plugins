@@ -27,9 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4F34A43D-CF5B-4672-84EF-BDC105F68A6E}</ProjectGuid>
-    <RootNamespace>Skelton</RootNamespace>
-    <ProjectName>Skelton</ProjectName>
+    <ProjectGuid>{FD56B0F2-B2E8-4094-B932-0C3FAC514BFA}</ProjectGuid>
+    <RootNamespace>Skelton_step2</RootNamespace>
+    <ProjectName>Skelton_step2</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -98,7 +98,7 @@
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b*.meta%3b*.asm%3b*.rr%3b*.rrc%3b$(TargetPath)</ExtensionsToDeleteOnClean>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\..\..\..\..\..\..\Program Files\Adobe\Common\Plug-ins\7.0\MediaCore\debug</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\output_debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">*.cdf;*.cache;*.obj;*.obj.enc;*.ilk;*.ipdb;*.iobj;*.resources;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;*.tlog;*.manifest;*.res;*.pch;*.exp;*.idb;*.rep;*.xdc;*.pdb;*_manifest.rc;*.bsc;*.sbr;*.xml;*.metagen;*.bi</ExtensionsToDeleteOnClean>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
@@ -148,7 +148,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Skelton.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/Skelton_step2.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -197,7 +197,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Skelton.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/Skelton_step2.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -250,7 +250,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Skelton.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/Skelton_step2.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -304,7 +304,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Skelton.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/Skelton_step2.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -358,7 +358,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Skelton.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/Skelton_step2.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -414,7 +414,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Skelton.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/Skelton_step2.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -496,7 +496,7 @@
     <ClInclude Include="..\..\_NFLib\NFUtils.h" />
     <ClInclude Include="..\..\_NFLib\NFWorld.h" />
     <ClInclude Include="..\NF_Target.h" />
-    <ClInclude Include="..\Skelton.h">
+    <ClInclude Include="..\Skelton_step2.h">
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\..\devstudio\Include\BASETSD.H" />
@@ -511,7 +511,7 @@
     </CustomBuildStep>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\SkeltonPiPL.r">
+    <CustomBuild Include="..\Skelton_step2PiPL.r">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling the PiPL</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cl /I "$(ProjectDir)..\..\..\Headers" /EP ".."\\"%(Filename).r" &gt; "$(IntDir)"\\"%(Filename).rr"
 "$(ProjectDir)..\..\..\Resources\PiPLTool" "$(IntDir)%(Filename).rr" "$(IntDir)%(Filename).rrc"
@@ -556,8 +556,7 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
     <ClCompile Include="..\..\..\Util\AEFX_SuiteHelper.c" />
     <ClCompile Include="..\..\..\Util\AEGP_SuiteHandler.cpp" />
     <ClCompile Include="..\..\..\Util\MissingSuiteError.cpp" />
-    <ClCompile Include="..\NF_Entry.cpp" />
-    <ClCompile Include="..\Skelton.cpp">
+    <ClCompile Include="..\Skelton_step2.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MSWindows;WIN32;_DEBUG;_WINDOWS</PreprocessorDefinitions>
@@ -579,10 +578,9 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release-MT|x64'">true</BrowseInformation>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BrowseInformation>
     </ClCompile>
-    <ClCompile Include="..\TargetPixel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SkeltonPiPL.rc" />
+    <ResourceCompile Include="Skelton_step2PiPL.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

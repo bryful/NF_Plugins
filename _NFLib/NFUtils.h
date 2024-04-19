@@ -272,80 +272,80 @@ static void init_xorShiftM(A_u_long s)
 	ƒsƒNƒZƒ‹•ÏŠ·
 */
 //***********************************************************************************
-#define FS_CONVERT8TO16(A)		( (((A_long)(A) * PF_MAX_CHAN16) + PF_HALF_CHAN8) / PF_MAX_CHAN8 )
-#define FS_CONVERT8TO32(A)      ((double)(long)((double)A*10000.0/(double)PF_MAX_CHAN8 + 0.5)/10000.0)
-//#define FS_CONVERT8TO32(A)      ((double)(A)/PF_MAX_CHAN8)
+#define NF_CONVERT8TO16(A)		( (((A_long)(A) * PF_MAX_CHAN16) + PF_HALF_CHAN8) / PF_MAX_CHAN8 )
+#define NF_CONVERT8TO32(A)      ((double)((long)((double)A*10000.0/(double)PF_MAX_CHAN8 + 0.5))/10000.0)
+//#define NF_CONVERT8TO32(A)      ((double)(A)/PF_MAX_CHAN8)
 
-#define FS_CONVERT16TO8(A)		( (((A_long)(A) * PF_MAX_CHAN8) + PF_HALF_CHAN16) / PF_MAX_CHAN16)
-#define FS_CONVERT16TO32(A)      ((double)(long)((double)A*10000.0/(double)PF_MAX_CHAN16 + 0.5)/10000.0)
-//#define FS_CONVERT16TO32(A)      ((double)(A)/PF_MAX_CHAN16)
+#define NF_CONVERT16TO8(A)		( (((A_long)(A) * PF_MAX_CHAN8) + PF_HALF_CHAN16) / PF_MAX_CHAN16)
+#define NF_CONVERT16TO32(A)      ((double)((long)((double)A*10000.0/(double)PF_MAX_CHAN16 + 0.5))/10000.0)
+//#define NF_CONVERT16TO32(A)      ((double)(A)/PF_MAX_CHAN16)
 
-#define FS_CONVERT32TO8(A)		(  (long)((A)*PF_MAX_CHAN8+0.5) )
-#define FS_CONVERT32TO16(A)		(  FS_CONVERT8TO16(FS_CONVERT32TO8(A)) )
+#define NF_CONVERT32TO8(A)		(  (long)((A)*PF_MAX_CHAN8+0.5) )
+#define NF_CONVERT32TO16(A)		(  NF_CONVERT8TO16(NF_CONVERT32TO8(A)) )
 //#define FS_CONVERT32TO16(A)		( (long)(PF_MAX_CHAN16*(A)+0.5) )
 
-#define FS_SHORT(A)				((double)(long)((double)A*10000.0 + 0.5)/10000.0)
+#define NF_SHORT(A)				((double)(long)((double)A*10000.0 + 0.5)/10000.0)
 
 //-----------------------------------------------------------------------------------
 inline PF_Pixel16 CONV8TO16(PF_Pixel c)
 {
 	PF_Pixel16 r;
-	r.alpha		= RoundShortFpLong(FS_CONVERT8TO16(c.alpha));
-	r.red		= RoundShortFpLong(FS_CONVERT8TO16(c.red));
-	r.green		= RoundShortFpLong(FS_CONVERT8TO16(c.green));
-	r.blue		= RoundShortFpLong(FS_CONVERT8TO16(c.blue));
+	r.alpha		= RoundShortFpLong(NF_CONVERT8TO16(c.alpha));
+	r.red		= RoundShortFpLong(NF_CONVERT8TO16(c.red));
+	r.green		= RoundShortFpLong(NF_CONVERT8TO16(c.green));
+	r.blue		= RoundShortFpLong(NF_CONVERT8TO16(c.blue));
 	return r;
 }
 #define C16TO8(A)		(RoundByteFpLong( (((A_long)(A) * PF_MAX_CHAN8) + PF_HALF_CHAN16) / PF_MAX_CHAN16))
 //-----------------------------------------------------------------------------------
-inline PF_Pixel CONV16TO8(PF_Pixel16 c)
+inline PF_Pixel NF_Pixel16TO8(PF_Pixel16 c)
 {
 
 	PF_Pixel r;
-	r.alpha		= RoundByteFpLong(FS_CONVERT16TO8(c.alpha));
-	r.red		= RoundByteFpLong(FS_CONVERT16TO8(c.red));
-	r.green		= RoundByteFpLong(FS_CONVERT16TO8(c.green));
-	r.blue		= RoundByteFpLong(FS_CONVERT16TO8(c.blue));
+	r.alpha		= RoundByteFpLong(NF_CONVERT16TO8(c.alpha));
+	r.red		= RoundByteFpLong(NF_CONVERT16TO8(c.red));
+	r.green		= RoundByteFpLong(NF_CONVERT16TO8(c.green));
+	r.blue		= RoundByteFpLong(NF_CONVERT16TO8(c.blue));
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_PixelFloat CONV8TO32(PF_Pixel c)
+inline PF_PixelFloat NF_Pixel8TO32(PF_Pixel c)
 {
 	PF_PixelFloat r;
-	r.alpha		= (PF_FpShort)(FS_CONVERT8TO32(c.alpha));
-	r.red		= (PF_FpShort)(FS_CONVERT8TO32(c.red));
-	r.green		= (PF_FpShort)(FS_CONVERT8TO32(c.green));
-	r.blue		= (PF_FpShort)(FS_CONVERT8TO32(c.blue));
+	r.alpha		= (PF_FpShort)(NF_CONVERT8TO32(c.alpha));
+	r.red		= (PF_FpShort)(NF_CONVERT8TO32(c.red));
+	r.green		= (PF_FpShort)(NF_CONVERT8TO32(c.green));
+	r.blue		= (PF_FpShort)(NF_CONVERT8TO32(c.blue));
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_PixelFloat CONV16TO32(PF_Pixel16 c)
+inline PF_PixelFloat NF_Pixel6TO32(PF_Pixel16 c)
 {
 	PF_PixelFloat r;
-	r.alpha		= (PF_FpShort)(FS_CONVERT16TO32(c.alpha));
-	r.red		= (PF_FpShort)(FS_CONVERT16TO32(c.red));
-	r.green		= (PF_FpShort)(FS_CONVERT16TO32(c.green));
-	r.blue		= (PF_FpShort)(FS_CONVERT16TO32(c.blue));
+	r.alpha		= (PF_FpShort)(NF_CONVERT16TO32(c.alpha));
+	r.red		= (PF_FpShort)(NF_CONVERT16TO32(c.red));
+	r.green		= (PF_FpShort)(NF_CONVERT16TO32(c.green));
+	r.blue		= (PF_FpShort)(NF_CONVERT16TO32(c.blue));
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_Pixel CONV32TO8(PF_PixelFloat c)
+inline PF_Pixel NF_Pixel32TO8(PF_PixelFloat c)
 {
 	PF_Pixel r;
-	r.alpha		= RoundByteLong(FS_CONVERT32TO8(c.alpha));
-	r.red		= RoundByteLong(FS_CONVERT32TO8(c.red));
-	r.green		= RoundByteLong(FS_CONVERT32TO8(c.green));
-	r.blue		= RoundByteLong(FS_CONVERT32TO8(c.blue));
+	r.alpha		= RoundByteLong(NF_CONVERT32TO8(c.alpha));
+	r.red		= RoundByteLong(NF_CONVERT32TO8(c.red));
+	r.green		= RoundByteLong(NF_CONVERT32TO8(c.green));
+	r.blue		= RoundByteLong(NF_CONVERT32TO8(c.blue));
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_Pixel16 CONV32TO16(PF_PixelFloat c)
+inline PF_Pixel16 NF_Pixel32TO16(PF_PixelFloat c)
 {
 	PF_Pixel16 r;
-	r.alpha		= RoundShortFpLong(FS_CONVERT32TO16(c.alpha));
-	r.red		= RoundShortFpLong(FS_CONVERT32TO16(c.red));
-	r.green		= RoundShortFpLong(FS_CONVERT32TO16(c.green));
-	r.blue		= RoundShortFpLong(FS_CONVERT32TO16(c.blue));
+	r.alpha		= RoundShortFpLong(NF_CONVERT32TO16(c.alpha));
+	r.red		= RoundShortFpLong(NF_CONVERT32TO16(c.red));
+	r.green		= RoundShortFpLong(NF_CONVERT32TO16(c.green));
+	r.blue		= RoundShortFpLong(NF_CONVERT32TO16(c.blue));
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
@@ -386,28 +386,28 @@ inline PF_Boolean compPix32Lv(PF_PixelFloat s,PF_PixelFloat d,PF_FpShort lv)
 inline PF_Boolean compPix16_8(PF_Pixel16 s,PF_Pixel d)
 {
 	PF_Pixel ss;
-	ss = CONV16TO8(s);
+	ss = NF_Pixel16TO8(s);
 	return ( (ss.blue==d.blue)&&(ss.green==d.green)&&(ss.red==d.red) );
 }
 //-------------------------------------------------------------------------------------------------
 inline PF_Boolean compPix16_8Lv(PF_Pixel16 s,PF_Pixel d,A_u_char lv)
 {
 	PF_Pixel ss;
-	ss = CONV16TO8(s);
+	ss = NF_Pixel16TO8(s);
 	return ( (F_ABS(ss.blue-d.blue)<=lv)&&(F_ABS(ss.green-d.green)<=lv)&&(F_ABS(ss.red-d.red)<=lv) );
 }
 //-------------------------------------------------------------------------------------------------
 inline PF_Boolean compPix32_8Lv(PF_PixelFloat s,PF_Pixel d,A_u_char lv)
 {
 	PF_Pixel ss;
-	ss = CONV32TO8(s);
+	ss = NF_Pixel32TO8(s);
 	return ( (F_ABS(ss.blue-d.blue)<=lv)&&(F_ABS(ss.green-d.green)<=lv)&&(F_ABS(ss.red-d.red)<=lv) );
 }
 //-------------------------------------------------------------------------------------------------
 inline PF_Boolean compPix32_8(PF_PixelFloat s,PF_Pixel d)
 {
 	PF_Pixel ss;
-	ss = CONV32TO8(s);
+	ss = NF_Pixel32TO8(s);
 	return ( (ss.blue==d.blue)&&(ss.green==d.green)&&(ss.red==d.red) );
 }
 //-------------------------------------------------------------------------------------------------
@@ -604,15 +604,15 @@ inline PF_FpLong gray32(PF_PixelFloat p)
 
 }
 //*************************************************************************************************
-A_u_char ScrBlend8(A_u_char c0, A_u_char c1)
+inline A_u_char ScrBlend8(A_u_char c0, A_u_char c1)
 {
 	return RoundByteLong((A_u_long)c0 + (A_u_long)c1 - (A_u_long)c0 * (A_u_long)c1/PF_MAX_CHAN8);
 }
-A_u_short ScrBlend16(A_u_short c0, A_u_short c1)
+inline A_u_short ScrBlend16(A_u_short c0, A_u_short c1)
 {
 	return RoundShort((A_u_long)c0 + (A_u_long)c1 - (A_u_long)c0 * (A_u_long)c1 / PF_MAX_CHAN16);
 }
-PF_FpShort ScrBlend32(PF_FpShort c0, PF_FpShort c1)
+inline PF_FpShort ScrBlend32(PF_FpShort c0, PF_FpShort c1)
 {
 	return RoundFpShortDouble((double)c0 + (double)c1 - (double)c0 * (double)c1);
 }

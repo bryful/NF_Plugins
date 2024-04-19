@@ -1,8 +1,71 @@
-#include "Skelton.h"
-
-
+#include "Skelton_step2.h"
 // **********************************************************
-PF_Err Skelton::ParamsSetup(
+
+static PF_Err
+Shift8(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel8* inP,
+	PF_Pixel8* outP)
+{
+	PF_Err			err = PF_Err_NONE;
+	ParamInfo* infoP = reinterpret_cast<ParamInfo*>(refcon);
+
+	A_long w = infoP->inWld->width();
+	A_long h = infoP->inWld->height();
+	A_long nx = (xL - infoP->shiftXPx) % w;
+	if (nx < 0) nx += w;
+	A_long ny = (yL - infoP->shiftYPx) % h;
+	if (ny < 0) ny += h;
+	*outP = infoP->inWld->GetPix8(nx, ny);
+	return err;
+}
+//-------------------------------------------------------------------------------------------------
+static PF_Err
+Shift16(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel16* inP,
+	PF_Pixel16* outP)
+{
+	PF_Err			err = PF_Err_NONE;
+	ParamInfo* infoP = reinterpret_cast<ParamInfo*>(refcon);
+
+	A_long w = infoP->inWld->width();
+	A_long h = infoP->inWld->height();
+	A_long nx = (xL - infoP->shiftXPx) % w;
+	if (nx < 0) nx += w;
+	A_long ny = (yL - infoP->shiftYPx) % h;
+	if (ny < 0) ny += h;
+	*outP = infoP->inWld->GetPix16(nx, ny);
+
+	return err;
+}
+//-------------------------------------------------------------------------------------------------
+static PF_Err
+Shift32(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_PixelFloat* inP,
+	PF_PixelFloat* outP)
+{
+	PF_Err			err = PF_Err_NONE;
+	ParamInfo* infoP = reinterpret_cast<ParamInfo*>(refcon);
+
+	A_long w = infoP->inWld->width();
+	A_long h = infoP->inWld->height();
+	A_long nx = (xL - infoP->shiftXPx) % w;
+	if (nx < 0) nx += w;
+	A_long ny = (yL - infoP->shiftYPx) % h;
+	if (ny < 0) ny += h;
+	*outP = infoP->inWld->GetPix32(nx, ny);
+	return err;
+}
+// **********************************************************
+PF_Err Skelton_step2::ParamsSetup(
 	PF_InData* in_dataP,
 	PF_OutData* out_dataP,
 	PF_ParamDef* paramsP[],
@@ -16,52 +79,33 @@ PF_Err Skelton::ParamsSetup(
 	PF_ParamDef		def;
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
-	PF_ADD_POPUP(
-		"TargetMode",
-		3,	//メニューの数
-		2,	//デフォルト
-		"FullScreen|AlphaOn|TargetColor|",
-		ID_TARGET_MODE
-	);
-	//----------------------------------------------------------------
-	AEFX_CLR_STRUCT(def);
-	PF_ADD_COLOR("TargetColor",
-		0xFF,
-		0xFF,
-		0xFF,
-		ID_TARGET_COLOR
-	);
-	//----------------------------------------------------------------
-	AEFX_CLR_STRUCT(def);
-	PF_ADD_POPUP(
-		"TargetMode",
-		5,	//メニューの数
-		1,	//デフォルト
-		"Normal|Add|Multiply|Screen|Overlay",
-		ID_BLEND_MODE
-	);
-	//----------------------------------------------------------------
-	AEFX_CLR_STRUCT(def);
-	PF_ADD_COLOR("BlendColor",
-		0xFF,
-		0x80,
-		0x00,
-		ID_BLEND_COLOR
+	PF_ADD_FLOAT_SLIDER(
+		"shiftX(%)",				//Name
+		-30000,					//VALID_MIN
+		30000,					//VALID_MAX
+		-200,						//SLIDER_MIN
+		200,				//SLIDER_MAX
+		1,						//CURVE_TOLERANCE
+		0,						//DFLT
+		1,						//PREC
+		0,						//DISP
+		0,						//WANT_PHASE
+		ID_SHIFTX
 	);
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_FLOAT_SLIDER(
-		"BlendOpacity",			//Name
-		0,						//VALID_MIN
-		100,					//VALID_MAX
-		0,						//SLIDER_MIN
-		100,					//SLIDER_MAX
-		100,					//CURVE_TOLERANCE
-		100,						//DFLT
+		"shiftY(%)",				//Name
+		-30000,					//VALID_MIN
+		30000,					//VALID_MAX
+		-200,						//SLIDER_MIN
+		200,				//SLIDER_MAX
+		1,						//CURVE_TOLERANCE
+		0,						//DFLT
 		1,						//PREC
 		0,						//DISP
 		0,						//WANT_PHASE
-		ID_BLEND_OPACITY
+		ID_SHIFTY
 	);
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
@@ -171,17 +215,14 @@ PF_Err Skelton::ParamsSetup(
 	return err;
 };
 // **********************************************************
-PF_Err Skelton::GetParams(ParamInfo* infoP)
+PF_Err Skelton_step2::GetParams(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
-	ERR(GetPOPUP(ID_TARGET_MODE, &infoP->targetMode));
-	ERR(GetCOLOR(ID_TARGET_COLOR, &infoP->targetColor));
-	ERR(GetPOPUP(ID_BLEND_MODE, &infoP->blendMode));
-	ERR(GetCOLOR(ID_BLEND_COLOR, &infoP->blendColor));
-	ERR(GetFLOAT(ID_BLEND_OPACITY, &infoP->blendOpacity));
-	if (!err) infoP->blendOpacity /= 100;
+	ERR(GetFLOAT(ID_SHIFTX, &infoP->shiftX));
+	if (!err){infoP->shiftX /= 100;}
+	ERR(GetFLOAT(ID_SHIFTY, &infoP->shiftY));
+	if (!err) { infoP->shiftY /= 100; }
 
-	/*
 	ERR(GetCOLOR(ID_COLOR, &infoP->color));
 	ERR(GetADD(ID_INT, &infoP->intValue));
 	ERR(GetFIXED(ID_FIXED, &infoP->fixedValue));
@@ -191,18 +232,39 @@ PF_Err Skelton::GetParams(ParamInfo* infoP)
 	ERR(GetPOPUP(ID_POPUP, &infoP->popupValue));
 	ERR(GetPOINT_FIXED(ID_POINT, &infoP->pointValue));
 	ERR(GetPOINT3D(ID_POINT, &infoP->point3DValue));
-	*/
+
 	return err;
 };
 // **********************************************************
-PF_Err Skelton::Exec(ParamInfo* infoP)
+PF_Err Skelton_step2::Exec(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
 	NFWorld* src = new NFWorld(input, in_data, pixelFormat());
 	NFWorld* dst = new NFWorld(output, in_data, pixelFormat());
 	dst->Copy(src);
-	if (infoP->blendOpacity != 0) {
-		TargetExec(infoP, src, dst);
+	if ((infoP->shiftX != 0)|| (infoP->shiftY != 0)) {
+		//init_xorShift(frame()); // 乱数の初期化
+		//実際に動かすピクセル数を計算
+		infoP->shiftXPx = (A_long)(infoP->shiftX * (PF_FpLong)(src->width()) + 0.5);
+		infoP->shiftYPx = (A_long)(infoP->shiftY * (PF_FpLong)(src->height()) + 0.5);
+		//画像を登録
+		infoP->inWld = src;
+		infoP->outWld = dst;
+
+		switch (pixelFormat())
+		{
+		case PF_PixelFormat_ARGB128:
+			iterate32(src->world, (void*)infoP, Shift32, dst->world);
+			break;
+		case PF_PixelFormat_ARGB64:
+			iterate16(src->world, (void*)infoP, Shift16, dst->world);
+			break;
+		case PF_PixelFormat_ARGB32:
+			iterate8(src->world, (void*)infoP, Shift8, dst->world);
+			break;
+		default:
+			break;
+		}
 	}
 
 
