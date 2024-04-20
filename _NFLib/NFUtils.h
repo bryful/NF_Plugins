@@ -287,7 +287,7 @@ static void init_xorShiftM(A_u_long s)
 #define NF_SHORT(A)				((double)(long)((double)A*10000.0 + 0.5)/10000.0)
 
 //-----------------------------------------------------------------------------------
-inline PF_Pixel16 CONV8TO16(PF_Pixel c)
+inline PF_Pixel16 NF_Pixel8To16(PF_Pixel c)
 {
 	PF_Pixel16 r;
 	r.alpha		= RoundShortFpLong(NF_CONVERT8TO16(c.alpha));
@@ -298,7 +298,7 @@ inline PF_Pixel16 CONV8TO16(PF_Pixel c)
 }
 #define C16TO8(A)		(RoundByteFpLong( (((A_long)(A) * PF_MAX_CHAN8) + PF_HALF_CHAN16) / PF_MAX_CHAN16))
 //-----------------------------------------------------------------------------------
-inline PF_Pixel NF_Pixel16TO8(PF_Pixel16 c)
+inline PF_Pixel NF_Pixel16To8(PF_Pixel16 c)
 {
 
 	PF_Pixel r;
@@ -309,7 +309,7 @@ inline PF_Pixel NF_Pixel16TO8(PF_Pixel16 c)
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_PixelFloat NF_Pixel8TO32(PF_Pixel c)
+inline PF_PixelFloat NF_Pixel8To32(PF_Pixel c)
 {
 	PF_PixelFloat r;
 	r.alpha		= (PF_FpShort)(NF_CONVERT8TO32(c.alpha));
@@ -319,7 +319,7 @@ inline PF_PixelFloat NF_Pixel8TO32(PF_Pixel c)
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_PixelFloat NF_Pixel6TO32(PF_Pixel16 c)
+inline PF_PixelFloat NF_Pixel6To32(PF_Pixel16 c)
 {
 	PF_PixelFloat r;
 	r.alpha		= (PF_FpShort)(NF_CONVERT16TO32(c.alpha));
@@ -329,7 +329,7 @@ inline PF_PixelFloat NF_Pixel6TO32(PF_Pixel16 c)
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_Pixel NF_Pixel32TO8(PF_PixelFloat c)
+inline PF_Pixel NF_Pixel32To8(PF_PixelFloat c)
 {
 	PF_Pixel r;
 	r.alpha		= RoundByteLong(NF_CONVERT32TO8(c.alpha));
@@ -339,7 +339,7 @@ inline PF_Pixel NF_Pixel32TO8(PF_PixelFloat c)
 	return r;
 }
 //-------------------------------------------------------------------------------------------------
-inline PF_Pixel16 NF_Pixel32TO16(PF_PixelFloat c)
+inline PF_Pixel16 NF_Pixel32To16(PF_PixelFloat c)
 {
 	PF_Pixel16 r;
 	r.alpha		= RoundShortFpLong(NF_CONVERT32TO16(c.alpha));
@@ -386,28 +386,28 @@ inline PF_Boolean compPix32Lv(PF_PixelFloat s,PF_PixelFloat d,PF_FpShort lv)
 inline PF_Boolean compPix16_8(PF_Pixel16 s,PF_Pixel d)
 {
 	PF_Pixel ss;
-	ss = NF_Pixel16TO8(s);
+	ss = NF_Pixel16To8(s);
 	return ( (ss.blue==d.blue)&&(ss.green==d.green)&&(ss.red==d.red) );
 }
 //-------------------------------------------------------------------------------------------------
 inline PF_Boolean compPix16_8Lv(PF_Pixel16 s,PF_Pixel d,A_u_char lv)
 {
 	PF_Pixel ss;
-	ss = NF_Pixel16TO8(s);
+	ss = NF_Pixel16To8(s);
 	return ( (F_ABS(ss.blue-d.blue)<=lv)&&(F_ABS(ss.green-d.green)<=lv)&&(F_ABS(ss.red-d.red)<=lv) );
 }
 //-------------------------------------------------------------------------------------------------
 inline PF_Boolean compPix32_8Lv(PF_PixelFloat s,PF_Pixel d,A_u_char lv)
 {
 	PF_Pixel ss;
-	ss = NF_Pixel32TO8(s);
+	ss = NF_Pixel32To8(s);
 	return ( (F_ABS(ss.blue-d.blue)<=lv)&&(F_ABS(ss.green-d.green)<=lv)&&(F_ABS(ss.red-d.red)<=lv) );
 }
 //-------------------------------------------------------------------------------------------------
 inline PF_Boolean compPix32_8(PF_PixelFloat s,PF_Pixel d)
 {
 	PF_Pixel ss;
-	ss = NF_Pixel32TO8(s);
+	ss = NF_Pixel32To8(s);
 	return ( (ss.blue==d.blue)&&(ss.green==d.green)&&(ss.red==d.red) );
 }
 //-------------------------------------------------------------------------------------------------
@@ -468,7 +468,7 @@ inline PF_FpShort Pixel32Level(PF_PixelFloat s)
 }
 //*************************************************************************************************
 //AlphaBlend
-inline PF_Pixel PixelBlend8(PF_Pixel src,PF_Pixel dst)
+inline PF_Pixel PixelAlphaBlend8(PF_Pixel src,PF_Pixel dst)
 {
 	PF_Pixel rr = {0,0,0,0};
 	PF_Pixel ss = src;
@@ -502,7 +502,7 @@ inline PF_Pixel PixelBlend8(PF_Pixel src,PF_Pixel dst)
 		return rr;
 	}
 }
-inline PF_Pixel16 PixelBlend16(PF_Pixel16 src,PF_Pixel16 dst)
+inline PF_Pixel16 PixelAlphaBlend16(PF_Pixel16 src,PF_Pixel16 dst)
 {
 	PF_Pixel16 rr = {0,0,0,0};
 	PF_Pixel16 ss = src;
@@ -534,7 +534,7 @@ inline PF_Pixel16 PixelBlend16(PF_Pixel16 src,PF_Pixel16 dst)
 		return rr;
 	}
 }
-inline PF_PixelFloat PixelBlend32(PF_PixelFloat src,PF_PixelFloat dst)
+inline PF_PixelFloat PixelAlphaBlend32(PF_PixelFloat src,PF_PixelFloat dst)
 {
 	PF_PixelFloat rr = {0,0,0,0};
 	PF_PixelFloat ss = src;
@@ -567,27 +567,284 @@ inline PF_PixelFloat PixelBlend32(PF_PixelFloat src,PF_PixelFloat dst)
 	}
 }
 //*************************************************************************************************
-inline PF_Pixel PMat8(PF_Pixel p)
+inline PF_Pixel ToPremultiplied8(PF_Pixel col)
 {
-	p.red = RoundByteFpLong((PF_FpLong)p.red * (PF_FpLong)p.alpha / PF_MAX_CHAN8 + 0.5);
-	p.green = RoundByteFpLong((PF_FpLong)p.green * (PF_FpLong)p.alpha / PF_MAX_CHAN8 + 0.5);
-	p.blue = RoundByteFpLong((PF_FpLong)p.blue * (PF_FpLong)p.alpha / PF_MAX_CHAN8 + 0.5);
-	return p;
+	PF_Pixel ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha == PF_MAX_CHAN8)
+	{
+		ret = col;
+	}
+	else {
+		PF_FpLong a = (PF_FpLong)col.alpha / PF_MAX_CHAN8;
+		ret.red = RoundByteFpLong((PF_FpLong)col.red * a +0.5);
+		ret.green = RoundByteFpLong((PF_FpLong)col.green * a + 0.5);
+		ret.blue = RoundByteFpLong((PF_FpLong)col.blue * a +0.5);
+		ret.alpha = col.alpha;
+	}
+	return ret;
 }
-inline PF_Pixel16 PMat16(PF_Pixel16 p)
+inline PF_Pixel16 ToPremultiplied16(PF_Pixel16 col)
 {
-	p.red = RoundShortFpLong((PF_FpLong)p.red * (PF_FpLong)p.alpha / PF_MAX_CHAN16 + 0.5);
-	p.green = RoundShortFpLong((PF_FpLong)p.green * (PF_FpLong)p.alpha / PF_MAX_CHAN16 + 0.5);
-	p.blue = RoundShortFpLong((PF_FpLong)p.blue * (PF_FpLong)p.alpha / PF_MAX_CHAN16 + 0.5);
-	return p;
+	PF_Pixel16 ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha == PF_MAX_CHAN16)
+	{
+		ret = col;
+	}
+	else {
+		PF_FpLong a = (PF_FpLong)col.alpha / PF_MAX_CHAN16;
+		ret.red = RoundShortFpLong((PF_FpLong)col.red * a + 0.5);
+		ret.green = RoundShortFpLong((PF_FpLong)col.green * a + 0.5);
+		ret.blue = RoundShortFpLong((PF_FpLong)col.blue * a + 0.5);
+		ret.alpha = col.alpha;
+	}
+	return ret;
 }
-inline PF_PixelFloat PMat32(PF_PixelFloat p)
+inline PF_Pixel32 ToPremultiplied32(PF_Pixel32 col)
 {
-	p.red = RoundFpShortDouble((PF_FpLong)p.red * (PF_FpLong)p.alpha);
-	p.green = RoundFpShortDouble((PF_FpLong)p.green * (PF_FpLong)p.alpha);
-	p.blue = RoundFpShortDouble((PF_FpLong)p.blue * (PF_FpLong)p.alpha);
-	return p;
+	PF_Pixel32 ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha >=1.0)
+	{
+		col.alpha = 1.0;
+		ret = col;
+	}
+	else {
+		ret.red = RoundFpShort(col.red * col.alpha);
+		ret.green = RoundFpShort(col.green * col.alpha);
+		ret.blue = RoundFpShort(col.blue * col.alpha);
+		ret.alpha = col.alpha;
+	}
+	return ret;
 }
+//*************************************************************************************************
+inline PF_Pixel ToPremultipliedW8(PF_Pixel col)
+{
+	PF_Pixel ret = { 0,PF_MAX_CHAN8,PF_MAX_CHAN8,PF_MAX_CHAN8 };
+	if (col.alpha <= 0)
+	{
+		ret.alpha = 0;
+		ret.blue = ret.green = ret.red = PF_MAX_CHAN8;
+	}
+	else if (col.alpha >= PF_MAX_CHAN8)
+	{
+		ret = col;
+	}
+	else {
+		PF_FpLong a = (PF_FpLong)col.alpha / PF_MAX_CHAN8;
+		PF_FpLong b = 1 - a;
+
+		ret.red = RoundByteFpLong(PF_MAX_CHAN8 * b + (PF_FpLong)col.red * a);
+		ret.green = RoundByteFpLong(PF_MAX_CHAN8 * b + (PF_FpLong)col.green * a);
+		ret.blue = RoundByteFpLong(PF_MAX_CHAN8 * b + (PF_FpLong)col.blue * a);
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+inline PF_Pixel16 ToPremultipliedW16(PF_Pixel16 col)
+{
+	PF_Pixel16 ret = { 0,PF_MAX_CHAN16,PF_MAX_CHAN16,PF_MAX_CHAN16 };
+	if (col.alpha <= 0)
+	{
+	}
+	else if (col.alpha >= PF_MAX_CHAN16)
+	{
+		ret = col;
+	}
+	else {
+		PF_FpLong a = (PF_FpLong)col.alpha / PF_MAX_CHAN16;
+		PF_FpLong b = 1 - a;
+
+		ret.red = RoundShortFpLong(PF_MAX_CHAN16 * b + (PF_FpLong)col.red * a);
+		ret.green = RoundShortFpLong(PF_MAX_CHAN16 * b + (PF_FpLong)col.green * a);
+		ret.blue = RoundShortFpLong(PF_MAX_CHAN16 * b + (PF_FpLong)col.blue * a);
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+inline PF_Pixel32 ToPremultipliedW32(PF_Pixel32 col)
+{
+	PF_Pixel32 ret = { 0,1,1,1 };
+	if (col.alpha <= 0)
+	{
+	}
+	else if (col.alpha >= 1)
+	{
+		col.alpha = 1;
+		ret = col;
+	}
+	else {
+		PF_FpLong a = (PF_FpLong)col.alpha;
+		if (a > 1) a = 1;
+		PF_FpLong b = 1 - a;
+
+		ret.red = RoundFpShortDouble(b + (PF_FpLong)col.red * a);
+		ret.green = RoundFpShortDouble(b + (PF_FpLong)col.green * a);
+		ret.blue = RoundFpShortDouble(b + (PF_FpLong)col.blue * a);
+		ret.alpha = (PF_FpShort)a;
+	}
+	return ret;
+}
+
+//*************************************************************************************************
+inline PF_Pixel ToStraight8(PF_Pixel col)
+{
+	PF_Pixel ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha >= PF_MAX_CHAN8)
+	{
+		ret = col;
+	}
+	else
+	{
+		PF_FpLong a = PF_MAX_CHAN8 / (PF_FpLong)col.alpha;
+		ret.red = RoundByteFpLong( ((PF_FpLong)col.red - PF_MAX_CHAN8) / (PF_FpLong)col.alpha);
+
+
+		ret.green = RoundByteFpLong((PF_FpLong)col.green * a + 0.5);
+		ret.blue = RoundByteFpLong((PF_FpLong)col.blue * a + 0.5);
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+inline PF_Pixel16 ToStraight16(PF_Pixel16 col)
+{
+	PF_Pixel16 ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha >= PF_MAX_CHAN16)
+	{
+		ret = col;
+	}
+	else
+	{
+		PF_FpLong a = PF_MAX_CHAN16 / (PF_FpLong)col.alpha;
+		ret.red = RoundShortFpLong((PF_FpLong)col.red * a + 0.5);
+		ret.green = RoundShortFpLong((PF_FpLong)col.green * a + 0.5);
+		ret.blue = RoundShortFpLong((PF_FpLong)col.blue * a + 0.5);
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+inline PF_Pixel32 ToStraight32(PF_Pixel32 col)
+{
+	PF_Pixel32 ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha >= 1)
+	{
+		col.alpha = 1;
+		ret = col;
+	}
+	else
+	{
+		PF_FpLong a = 1 / (PF_FpLong)col.alpha;
+		ret.red = RoundFpShortDouble((PF_FpLong)col.red * a);
+		ret.green = RoundFpShortDouble((PF_FpLong)col.green * a);
+		ret.blue = RoundFpShortDouble((PF_FpLong)col.blue * a);
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+
+inline PF_Pixel ToStraightW8(PF_Pixel col)
+{
+	PF_Pixel ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha >= PF_MAX_CHAN8)
+	{
+		ret = col;
+	}
+	else
+	{
+		double r = (PF_FpLong)col.red / PF_MAX_CHAN8;
+		double g = (PF_FpLong)col.green / PF_MAX_CHAN8;
+		double b = (PF_FpLong)col.blue / PF_MAX_CHAN8;
+		double a = (PF_FpLong)col.alpha / PF_MAX_CHAN8;
+
+		double a2 = 1 / a;
+		double a3 = 1 - a;
+
+		ret.red   = RoundByteFpLong((r - a3) * a2 * PF_MAX_CHAN8);
+		ret.green = RoundByteFpLong((g - a3) * a2 * PF_MAX_CHAN8);
+		ret.blue  = RoundByteFpLong((b - a3) * a2 * PF_MAX_CHAN8);
+
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+inline PF_Pixel16 ToStraightW16(PF_Pixel16 col)
+{
+	PF_Pixel16 ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha >= PF_MAX_CHAN16)
+	{
+		ret = col;
+	}
+	else
+	{
+		double r = (PF_FpLong)col.red / PF_MAX_CHAN16;
+		double g = (PF_FpLong)col.green / PF_MAX_CHAN16;
+		double b = (PF_FpLong)col.blue / PF_MAX_CHAN16;
+		double a = (PF_FpLong)col.alpha / PF_MAX_CHAN16;
+
+		double a2 = 1 / a;
+		double a3 = 1 - a;
+
+		ret.red = RoundShortFpLong((r - a3) * a2 * PF_MAX_CHAN16);
+		ret.green = RoundShortFpLong((g - a3) * a2 * PF_MAX_CHAN16);
+		ret.blue = RoundShortFpLong((b - a3) * a2 * PF_MAX_CHAN16);
+
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+
+inline PF_Pixel32 ToStraightW32(PF_Pixel32 col)
+{
+	PF_Pixel32 ret = { 0,0,0,0 };
+	if (col.alpha == 0)
+	{
+	}
+	else if (col.alpha >= 1)
+	{
+		col.alpha = 1;
+		ret = col;
+	}
+	else
+	{
+		double r = (PF_FpLong)col.red ;
+		double g = (PF_FpLong)col.green;
+		double b = (PF_FpLong)col.blue;
+		double a = (PF_FpLong)col.alpha;
+
+		double a2 = 1 / a;
+		double a3 = 1 - a;
+
+		ret.red = RoundFpShortDouble((r - a3) * a2);
+		ret.green = RoundFpShortDouble((g - a3) * a2);
+		ret.blue = RoundFpShortDouble((b - a3) * a2);
+		ret.alpha = col.alpha;
+	}
+	return ret;
+}
+
+
 inline PF_FpLong gray8(PF_Pixel p)
 {
 	return (0.29891 * (PF_FpLong)p.red) + (0.58661 * (PF_FpLong)p.green) + (0.11448 * (PF_FpLong)p.blue);

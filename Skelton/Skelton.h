@@ -6,6 +6,7 @@
 #include "../_NFLib/AEInfo.h"
 #include "../_NFLib/NFWorld.h"
 #include "../_NFLib/NFLibVersion.h"
+#include "../_NFLib/NFBlend.h"
 #include "NF_Target.h"
 
 
@@ -74,6 +75,27 @@ TargetPixel32(
 	A_long		yL,
 	PF_Pixel32* inP,
 	PF_Pixel32* outP);
+static PF_Err
+Blend8(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel8* inP,
+	PF_Pixel8* outP);
+static PF_Err
+Blend16(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel16* inP,
+	PF_Pixel16* outP);
+static PF_Err
+Blend32(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel32* inP,
+	PF_Pixel32* outP);
 //-------------------------------------------------------
 class Skelton : public AEInfo
 {
@@ -87,6 +109,7 @@ public:
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
 	PF_Err TargetExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err BlendExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	// ******************************************************
 	PF_Err	About(
 		PF_InData* in_dataP,

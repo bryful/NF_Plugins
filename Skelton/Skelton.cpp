@@ -200,9 +200,12 @@ PF_Err Skelton::Exec(ParamInfo* infoP)
 	PF_Err err = PF_Err_NONE;
 	NFWorld* src = new NFWorld(input, in_data, pixelFormat());
 	NFWorld* dst = new NFWorld(output, in_data, pixelFormat());
-	dst->Copy(src);
 	if (infoP->blendOpacity != 0) {
 		TargetExec(infoP, src, dst);
+		BlendExec(infoP, src, dst);
+	}
+	else {
+		dst->Copy(src);
 	}
 
 

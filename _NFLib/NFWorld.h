@@ -772,10 +772,10 @@ public:
 		switch (m_format)
 		{
 		case PF_PixelFormat_ARGB128:
-			ret = NF_Pixel32TO8(GetPix32(x, y));
+			ret = NF_Pixel32To8(GetPix32(x, y));
 			break;
 		case PF_PixelFormat_ARGB64:
-			ret = NF_Pixel16TO8( GetPix16(x, y));
+			ret = NF_Pixel16To8( GetPix16(x, y));
 			break;
 		case PF_PixelFormat_ARGB32:
 			ret = GetPix8(x, y);

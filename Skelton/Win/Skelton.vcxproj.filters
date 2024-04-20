@@ -19,6 +19,7 @@
     </ClCompile>
     <ClCompile Include="..\NF_Entry.cpp" />
     <ClCompile Include="..\TargetPixel.cpp" />
+    <ClCompile Include="..\PixelBlend.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Skelton.h" />
@@ -114,6 +115,9 @@
       <Filter>Header Files\NF</Filter>
     </ClInclude>
     <ClInclude Include="..\..\_NFLib\AEInfo.h">
+      <Filter>Header Files\NF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\_NFLib\NFBlend.h">
       <Filter>Header Files\NF</Filter>
     </ClInclude>
   </ItemGroup>
