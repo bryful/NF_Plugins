@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Skelton_step2", "Skelton_st
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShiftPer_old", "ShiftPer_old\Win\ShiftPer_old.vcxproj", "{223DC482-370F-4671-B8D3-28DB6330EA3F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mult", "Mult\Win\Mult.vcxproj", "{0E51B777-FC10-4B8C-997C-01BA8B41384F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,18 @@ Global
 		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Release-MT|x64.Build.0 = Release|x64
 		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Release-MT|x86.ActiveCfg = Release|Win32
 		{223DC482-370F-4671-B8D3-28DB6330EA3F}.Release-MT|x86.Build.0 = Release|Win32
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Debug|x64.ActiveCfg = Debug|x64
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Debug|x64.Build.0 = Debug|x64
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Debug|x86.ActiveCfg = Debug|Win32
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Debug|x86.Build.0 = Debug|Win32
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release|x64.ActiveCfg = Release|x64
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release|x64.Build.0 = Release|x64
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release|x86.ActiveCfg = Release|Win32
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release|x86.Build.0 = Release|Win32
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release-MT|x64.ActiveCfg = Release-MT|x64
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release-MT|x64.Build.0 = Release-MT|x64
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release-MT|x86.ActiveCfg = Release-MT|Win32
+		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release-MT|x86.Build.0 = Release-MT|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
