@@ -496,6 +496,7 @@
     <ClInclude Include="..\..\_NFLib\NFLibVersion.h" />
     <ClInclude Include="..\..\_NFLib\NFUtils.h" />
     <ClInclude Include="..\..\_NFLib\NFWorld.h" />
+    <ClInclude Include="..\..\_NFLib\NF_CATEGORY.h" />
     <ClInclude Include="..\NF_Target.h" />
     <ClInclude Include="..\Mult.h">
       <DeploymentContent>true</DeploymentContent>

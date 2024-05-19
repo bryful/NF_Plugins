@@ -122,6 +122,9 @@
     <ClInclude Include="..\..\_NFLib\NFBlend.h">
       <Filter>Header Files\NF</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\_NFLib\NF_CATEGORY.h">
+      <Filter>Header Files\NF</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
