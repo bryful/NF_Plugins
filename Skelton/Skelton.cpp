@@ -214,8 +214,9 @@ PF_Err	 Skelton::UserChangedParam(
 	A_long pc)
 {
 	PF_Err err = PF_Err_NONE;
-	Init();
+	Init(in_dataP, out_dataP, paramsP, outputP,ID_NUM_PARAMS);
 	m_cmd = PF_Cmd_USER_CHANGED_PARAM;
+	/*
 	setParamCount(pc);
 	if (paramsP != NULL) {
 		input = &paramsP[0]->u.ld;
@@ -228,45 +229,38 @@ PF_Err	 Skelton::UserChangedParam(
 	output = outputP;
 	GetFrame(in_dataP);
 	GetSuites(in_dataP);
-
+	*/
 	if (extraP->param_index == ID_BTN2)
 	{
-		if (paramsP[ID_BLEND_OPACITY]->u.sd.value != 100) {
-			paramsP[ID_BLEND_OPACITY]->u.sd.value = 100;
+		if (params[ID_BLEND_OPACITY]->u.fs_d.value != 100) {
+			SetFLOAT(ID_BLEND_OPACITY, 100);
 		}
 		else {
-			paramsP[ID_BLEND_OPACITY]->u.sd.value = 50;
+			SetFLOAT(ID_BLEND_OPACITY, 50);
 		}
-
-		paramsP[ID_BLEND_OPACITY]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
 	}
 	else if (extraP->param_index == ID_BTN1)
 	{
-		if (paramsP[ID_BLEND_COLOR]->u.cd.value.red != 255)
+		if (params[ID_BLEND_COLOR]->u.cd.value.red != 255)
 		{
-			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 255;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 0;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 0;
+			PF_Pixel c = { 255,255,0,0 };
+			SetCOLOR(ID_BLEND_COLOR, c);
 		}
-		else if (paramsP[ID_BLEND_COLOR]->u.cd.value.green != 255)
+		else if (params[ID_BLEND_COLOR]->u.cd.value.green != 255)
 		{
-			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 0;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 255;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 0;
+			PF_Pixel c2 = { 255,0,255,0 };
+			SetCOLOR(ID_BLEND_COLOR, c2);
 		}
-		else if (paramsP[ID_BLEND_COLOR]->u.cd.value.blue != 255)
+		else if (params[ID_BLEND_COLOR]->u.cd.value.blue != 255)
 		{
-			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 0;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 0;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 255;
+			PF_Pixel c3 = { 255,0,255,255 };
+			SetCOLOR(ID_BLEND_COLOR, c3);
 		}
 		else {
-			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 0;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 0;
-			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 0;
+			PF_Pixel c4 = { 255,0,0,0 };
+			SetCOLOR(ID_BLEND_COLOR, c4);
 
 		}
-		paramsP[ID_BLEND_COLOR]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
 
 	}
 	else if (extraP->param_index == ID_BTNSV)

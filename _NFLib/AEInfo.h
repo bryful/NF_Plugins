@@ -120,6 +120,52 @@ public:
 		for (A_long i = 0; i < AEInfo_ITEM_COUNT; i++) ae_item_streamH[i] = NULL;
 
 	}
+	void Init(
+		PF_InData* in_dataP,
+		PF_OutData* out_dataP,
+		PF_ParamDef* paramsP[],
+		PF_LayerDef* outputP,
+		A_long pc)
+	{
+		m_cmd = PF_Cmd_ABOUT;
+		m_paramsCount = pc;
+		m_infoSize = 0;
+		//m_isGetEffectStream = FALSE;
+		m_err = PF_Err_NONE;
+
+		in_data = in_dataP;
+		out_data = out_dataP;
+		if (paramsP != NULL) {
+			input = &paramsP[0]->u.ld;
+			if (pc > 0) {
+				for (A_long i = 0; i < pc; i++) params[i] = paramsP[i];
+			}
+		}
+		output = outputP;
+
+		GetFrame(in_dataP);
+		GetSuites(in_dataP);
+
+		if (outputP != NULL) {
+			if (PF_WORLD_IS_DEEP(outputP) == TRUE) {
+				m_format = PF_PixelFormat_ARGB64;
+			}
+			else {
+				m_format = PF_PixelFormat_ARGB32;
+			}
+		}
+		else {
+			m_format = PF_PixelFormat_INVALID;
+		}
+		PreRenderH = NULL;
+		PRextraP = NULL;
+		SRextraP = NULL;
+		ws2P = NULL;
+
+		ae_effect_refH = NULL;
+		for (A_long i = 0; i < AEInfo_ITEM_COUNT; i++) ae_item_streamH[i] = NULL;
+
+	}
 	//******************************************************************************
 	AEInfo()
 	{
