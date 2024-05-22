@@ -4,7 +4,6 @@ json PixelToJson(PF_Pixel p)
 {
 	json ret =
 	{
-		{"alpha",p.alpha},
 		{"red",p.red},
 		{"green",p.green},
 		{"blue",p.blue}
@@ -13,10 +12,7 @@ json PixelToJson(PF_Pixel p)
 }
 PF_Pixel JsonToPixel(json jsn)
 {
-	PF_Pixel ret = { 0,0,0,0 };
-	if (jsn.find("alpha") != jsn.end()) {
-		ret.alpha = jsn["alpha"].get<BYTE>();
-	}
+	PF_Pixel ret = { 255,255,255,255 };
 	if (jsn.find("red") != jsn.end()) {
 		ret.red = jsn["red"].get<BYTE>();
 	}

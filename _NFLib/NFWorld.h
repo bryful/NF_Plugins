@@ -4,7 +4,18 @@
 
 #include "AE_SDK.h"
 #include "NFUtils.h"
+#include <vector>
+#include <algorithm>
+typedef struct PixelCountInfo {
+	PF_Pixel	col;
+	A_long		count;
+} PixelCountInfo, * PixelCountInfoP, ** PixelCountInfoH;
+bool compPixelCountInfo(PixelCountInfo i, PixelCountInfo j);
 
+#ifndef CPCI
+#define CPCI
+
+#endif
 class NFWorld
 {
 protected:
@@ -499,6 +510,236 @@ public:
 	}
 #pragma endregion
 	// ***************************************************************
+#pragma region Fill
+	PF_Err Fill8(PF_Rect rct, PF_Pixel8 col)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		if (m_data == NULL) return PF_Err_OUT_OF_MEMORY;
+
+		double d = downScale();
+		rct.left = (A_long)((double)rct.left * d);
+		rct.right = (A_long)((double)rct.right * d);
+		rct.top = (A_long)((double)rct.top * d);
+		rct.bottom = (A_long)((double)rct.bottom * d);
+
+		if (rct.left < 0)rct.left = 0;
+		if (rct.right >= m_width)rct.right = m_width-1;
+		if (rct.top < 0)rct.top = 0;
+		if (rct.bottom >= m_height)rct.bottom = m_height - 1;
+
+
+
+		A_long target = 0;
+		for (A_long y = rct.top; y <= rct.bottom; y++)
+		{
+			int adr = m_vurTbl[y];
+			for (A_long x = rct.left; x <= rct.right; x++)
+			{
+				m_data8[adr + x] = col;
+			}
+		}
+		return err;
+	}
+	PF_Err Fill16(PF_Rect rct, PF_Pixel16 col)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		if (m_data == NULL) return PF_Err_OUT_OF_MEMORY;
+
+		double d = downScale();
+		rct.left = (A_long)((double)rct.left * d);
+		rct.right = (A_long)((double)rct.right * d);
+		rct.top = (A_long)((double)rct.top * d);
+		rct.bottom = (A_long)((double)rct.bottom * d);
+
+		if (rct.left < 0)rct.left = 0;
+		if (rct.right >= m_width)rct.right = m_width - 1;
+		if (rct.top < 0)rct.top = 0;
+		if (rct.bottom >= m_height)rct.bottom = m_height - 1;
+
+
+
+		A_long target = 0;
+		for (A_long y = rct.top; y <= rct.bottom; y++)
+		{
+			int adr = m_vurTbl[y];
+			for (A_long x = rct.left; x <= rct.right; x++)
+			{
+				m_data16[adr + x] = col;
+			}
+		}
+		return err;
+	}
+	PF_Err Fill32(PF_Rect rct, PF_Pixel32 col)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		if (m_data == NULL) return PF_Err_OUT_OF_MEMORY;
+
+		double d = downScale();
+		rct.left = (A_long)((double)rct.left * d);
+		rct.right = (A_long)((double)rct.right * d);
+		rct.top = (A_long)((double)rct.top * d);
+		rct.bottom = (A_long)((double)rct.bottom * d);
+
+		if (rct.left < 0)rct.left = 0;
+		if (rct.right >= m_width)rct.right = m_width - 1;
+		if (rct.top < 0)rct.top = 0;
+		if (rct.bottom >= m_height)rct.bottom = m_height - 1;
+
+
+
+		A_long target = 0;
+		for (A_long y = rct.top; y <= rct.bottom; y++)
+		{
+			int adr = m_vurTbl[y];
+			for (A_long x = rct.left; x <= rct.right; x++)
+			{
+				m_data32[adr + x] = col;
+			}
+		}
+		return err;
+	}
+#pragma endregion
+
+	// ***************************************************************
+	A_long FindPixel(std::vector<PixelCountInfo> tbl, PF_Pixel p)
+	{
+		A_long ret = -1;
+		if (tbl.size() <= 0) return ret;
+		for (int i = 0; i < tbl.size(); i++)
+		{
+			if (compPix8(tbl[i].col, p) == TRUE)
+			{
+				ret = i;
+				break;
+			}
+		}
+		return ret;
+	}
+	
+	std::vector<PixelCountInfo> Histogram8()
+	{
+		std::vector<PixelCountInfo> ret;
+		PF_Pixel bl = { 255,0,0,0 };
+		PF_Pixel w = { 255,255,255,255 };
+		for (int y = 0; y < m_height; y++)
+		{
+			A_long adr = m_vurTbl[y];
+			for (int x = 0; x < m_width; x++)
+			{
+				PF_Pixel p = m_data8[adr + x];
+				if (p.alpha != 255) continue;
+				if (compPix8(p, w)) continue;
+				if (compPix8(p, bl)) continue;
+				int id = FindPixel(ret, p);
+				if (id < 0)
+				{
+					PixelCountInfo pc;
+					pc.col = p;
+					pc.count = 1;
+					ret.push_back(pc);
+				}
+				else {
+					ret[id].count++;
+				}
+			}
+		}
+		if (ret.size() > 16)
+		{
+			for (int i = ret.size() - 1; i >= 0; i--)
+			{
+				if (ret[i].count < 10)
+				{
+					ret.erase(ret.begin() + i);
+				}
+			}
+		}
+		std::sort(ret.rbegin(), ret.rend(), compPixelCountInfo);
+		return ret;
+	}
+	std::vector<PixelCountInfo> Histogram16()
+	{
+		std::vector<PixelCountInfo> ret;
+		PF_Pixel bl = { 255,0,0,0 };
+		PF_Pixel w = { 255,255,255,255 };
+		for (int y = 0; y < m_height; y++)
+		{
+			A_long adr = m_vurTbl[y];
+			for (int x = 0; x < m_width; x++)
+			{
+				PF_Pixel p =  NF_Pixel16To8(  m_data16[adr + x]);
+				if (p.alpha != 255) continue;
+				if (compPix8(p, w)) continue;
+				if (compPix8(p, bl)) continue;
+				int id = FindPixel(ret, p);
+				if (id < 0)
+				{
+					PixelCountInfo pc;
+					pc.col = p;
+					pc.count = 1;
+					ret.push_back(pc);
+				}
+				else {
+					ret[id].count++;
+				}
+			}
+		}
+		if (ret.size() > 16)
+		{
+			for (int i = ret.size() - 1; i >= 0; i--)
+			{
+				if (ret[i].count < 10)
+				{
+					ret.erase(ret.begin() + i);
+				}
+			}
+		}
+		std::sort(ret.rbegin(), ret.rend(), compPixelCountInfo);
+		return ret;
+	}
+	std::vector<PixelCountInfo> Histogram32()
+	{
+		std::vector<PixelCountInfo> ret;
+		PF_Pixel bl = { 255,0,0,0 };
+		PF_Pixel w = { 255,255,255,255 };
+		for (int y = 0; y < m_height; y++)
+		{
+			A_long adr = m_vurTbl[y];
+			for (int x = 0; x < m_width; x++)
+			{
+				PF_Pixel p = NF_Pixel32To8(m_data32[adr + x]);
+				if (p.alpha != 255) continue;
+				if (compPix8(p, w)) continue;
+				if (compPix8(p, bl)) continue;
+				int id = FindPixel(ret, p);
+				if (id < 0)
+				{
+					PixelCountInfo pc;
+					pc.col = p;
+					pc.count = 1;
+					ret.push_back(pc);
+				}
+				else {
+					ret[id].count++;
+				}
+			}
+		}
+		if (ret.size() > 16)
+		{
+			for (int i = ret.size() - 1; i >= 0; i--)
+			{
+				if (ret[i].count < 10)
+				{
+					ret.erase(ret.begin() + i);
+				}
+			}
+		}
+		std::sort(ret.rbegin(), ret.rend(), compPixelCountInfo);
+		return ret;
+	}
+	// ***************************************************************
 #pragma region Mat
 	PF_Err ToMat8()
 	{
@@ -782,6 +1023,40 @@ public:
 			break;
 		}
 		return ret;
+	}
+	PF_Err Fill(PF_Rect rct, PF_Pixel col)
+	{
+		PF_Err err = PF_Err_NONE;
+		switch (m_format)
+		{
+		case PF_PixelFormat_ARGB128:
+			PF_Pixel32 col32 = NF_Pixel8To32(col);
+			err = Fill32(rct, col32);
+			break;
+		case PF_PixelFormat_ARGB64:
+			PF_Pixel16 col16 = NF_Pixel8To16(col);
+			err = Fill16(rct, col16);
+			break;
+		case PF_PixelFormat_ARGB32:
+			err = Fill8(rct,col);
+			break;
+		}
+		return err;
+	}
+	std::vector<PixelCountInfo> Histogram()
+	{
+		switch (m_format)
+		{
+		case PF_PixelFormat_ARGB128:
+			return Histogram32();
+		case PF_PixelFormat_ARGB64:
+			return Histogram16();
+		case PF_PixelFormat_ARGB32:
+			return Histogram8();
+		default:
+			std::vector<PixelCountInfo> ret;
+			return ret;
+		}
 	}
 #pragma region Iterate
 

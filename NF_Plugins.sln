@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShiftPer_old", "ShiftPer_ol
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mult", "Mult\Win\Mult.vcxproj", "{0E51B777-FC10-4B8C-997C-01BA8B41384F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ColorChange", "ColorChange\Win\ColorChange.vcxproj", "{547CBB70-F261-40AE-9978-C0F701C57B9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -95,6 +97,18 @@ Global
 		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release-MT|x64.Build.0 = Release-MT|x64
 		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release-MT|x86.ActiveCfg = Release-MT|Win32
 		{0E51B777-FC10-4B8C-997C-01BA8B41384F}.Release-MT|x86.Build.0 = Release-MT|Win32
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Debug|x64.ActiveCfg = Debug|x64
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Debug|x64.Build.0 = Debug|x64
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Debug|x86.ActiveCfg = Debug|Win32
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Debug|x86.Build.0 = Debug|Win32
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release|x64.ActiveCfg = Release|x64
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release|x64.Build.0 = Release|x64
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release|x86.ActiveCfg = Release|Win32
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release|x86.Build.0 = Release|Win32
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release-MT|x64.ActiveCfg = Release-MT|x64
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release-MT|x64.Build.0 = Release-MT|x64
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release-MT|x86.ActiveCfg = Release-MT|Win32
+		{547CBB70-F261-40AE-9978-C0F701C57B9F}.Release-MT|x86.Build.0 = Release-MT|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
