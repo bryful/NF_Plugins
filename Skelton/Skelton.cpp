@@ -65,6 +65,24 @@ PF_Err Skelton::ParamsSetup(
 	);
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
+	def.flags |= PF_ParamFlag_SUPERVISE;
+	PF_ADD_BUTTON("ColorSet",
+		"Red",
+		0,
+		PF_ParamFlag_SUPERVISE,
+		ID_BTN1);
+
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	def.flags |= PF_ParamFlag_SUPERVISE;
+	PF_ADD_BUTTON("OpacitySet",
+		"50%",
+		0,
+		PF_ParamFlag_SUPERVISE,
+		ID_BTN2);
+
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
 	//def.flags = PF_ParamFlag_START_COLLAPSED;	//‚±‚ê‚ð‚Â‚¯‚é‚Æ•\Ž¦Žž‚ÉŠJ‚¢‚½ó‘Ô‚É‚È‚é
 	PF_ADD_TOPIC("Topic", ID_TOPIC);
 	//----------------------------------------------------------------
@@ -165,11 +183,153 @@ PF_Err Skelton::ParamsSetup(
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_END_TOPIC(ID_TOPICEND);
-					
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	def.flags |= PF_ParamFlag_SUPERVISE;
+	PF_ADD_BUTTON("ColorP",
+		"save",
+		0,
+		PF_ParamFlag_SUPERVISE,
+		ID_BTNSV);
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	def.flags |= PF_ParamFlag_SUPERVISE;
+	PF_ADD_BUTTON("ColorP",
+		"Load",
+		0,
+		PF_ParamFlag_SUPERVISE,
+		ID_BTNLD);
+
 //----------------------------------------------------------------
 	out_data->num_params = ID_NUM_PARAMS;
 	return err;
 };
+// **********************************************************
+PF_Err	 Skelton::UserChangedParam(
+	PF_InData* in_dataP,
+	PF_OutData* out_dataP,
+	PF_ParamDef* paramsP[],
+	PF_LayerDef* outputP,
+	PF_UserChangedParamExtra* extraP,
+	A_long pc)
+{
+	PF_Err err = PF_Err_NONE;
+	Init();
+	m_cmd = PF_Cmd_USER_CHANGED_PARAM;
+	setParamCount(pc);
+	if (paramsP != NULL) {
+		input = &paramsP[0]->u.ld;
+		if (pc > 0) {
+			for (A_long i = 0; i < pc; i++) params[i] = paramsP[i];
+		}
+	}
+	in_data = in_dataP;
+	out_data = out_dataP;
+	output = outputP;
+	GetFrame(in_dataP);
+	GetSuites(in_dataP);
+
+	if (extraP->param_index == ID_BTN2)
+	{
+		if (paramsP[ID_BLEND_OPACITY]->u.sd.value != 100) {
+			paramsP[ID_BLEND_OPACITY]->u.sd.value = 100;
+		}
+		else {
+			paramsP[ID_BLEND_OPACITY]->u.sd.value = 50;
+		}
+
+		paramsP[ID_BLEND_OPACITY]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+	}
+	else if (extraP->param_index == ID_BTN1)
+	{
+		if (paramsP[ID_BLEND_COLOR]->u.cd.value.red != 255)
+		{
+			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 255;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 0;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 0;
+		}
+		else if (paramsP[ID_BLEND_COLOR]->u.cd.value.green != 255)
+		{
+			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 0;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 255;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 0;
+		}
+		else if (paramsP[ID_BLEND_COLOR]->u.cd.value.blue != 255)
+		{
+			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 0;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 0;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 255;
+		}
+		else {
+			paramsP[ID_BLEND_COLOR]->u.cd.value.red = 0;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.green = 0;
+			paramsP[ID_BLEND_COLOR]->u.cd.value.blue = 0;
+
+		}
+		paramsP[ID_BLEND_COLOR]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+
+	}
+	else if (extraP->param_index == ID_BTNSV)
+	{
+		std::string p = SaveJsonFileDialog(std::string("Json Save"), directoryPath);
+		if (p.empty() == FALSE)
+		{
+			directoryPath = p;
+			ParamInfo info;
+			GetParams(&info);
+			json m_json = ParamsToJson(&info);
+
+
+			std::ofstream writing_file;
+			writing_file.open(directoryPath, std::ios::out);
+			writing_file << m_json.dump() << std::endl;
+			writing_file.close();
+		}
+	}
+	else if (extraP->param_index == ID_BTNLD)
+	{
+		std::string p = OpenJsonFileDialog(std::string("Json Save"), directoryPath);
+		if (p.empty() == FALSE)
+		{
+			directoryPath = p;
+			std::ifstream ifs(directoryPath);
+			if (ifs.good())
+			{
+				json m_json;
+				ifs >> m_json;
+				JsonLoad(m_json);
+			}
+			else
+			{
+				err = PF_Err_BAD_CALLBACK_PARAM;
+			}
+		}
+
+	}
+	return err;
+}
+// **********************************************************
+json Skelton::ParamsToJson(ParamInfo* infoP)
+{
+	json m_json;
+	m_json["blendColor"] = PixelToJson(infoP->blendColor);
+	m_json["blemdOpacity"] =infoP->blendOpacity*100;
+	return m_json;
+}
+// **********************************************************
+PF_Err Skelton::JsonLoad(json jsn)
+{
+	PF_Err err = PF_Err_NONE;
+	if (jsn.find("blendColor") != jsn.end()) {
+		PF_Pixel bc = JsonToPixel(jsn["blendColor"]);
+		ERR(SetCOLOR(ID_BLEND_COLOR, bc));
+	}
+	if (jsn.find("blemdOpacity") != jsn.end()) {
+		PF_FpLong bo = jsn["blemdOpacity"].get< PF_FpLong>();
+		ERR(SetFLOAT(ID_BLEND_OPACITY, bo));
+	}
+	return err;
+}
 // **********************************************************
 PF_Err Skelton::GetParams(ParamInfo* infoP)
 {

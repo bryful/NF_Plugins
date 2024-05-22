@@ -17,9 +17,15 @@
     <ClCompile Include="..\..\..\Util\Smart_Utils.cpp">
       <Filter>Supporting code\AE</Filter>
     </ClCompile>
-    <ClCompile Include="..\NF_Entry.cpp" />
     <ClCompile Include="..\TargetPixel.cpp" />
     <ClCompile Include="..\PixelBlend.cpp" />
+    <ClCompile Include="..\..\_NFLib\tinyfiledialogs.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NF_Entry.cpp" />
+    <ClCompile Include="..\..\_NFLib\NFJson.cpp">
+      <Filter>Supporting code\NFs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Skelton.h" />
@@ -119,6 +125,15 @@
     </ClInclude>
     <ClInclude Include="..\..\_NFLib\NFBlend.h">
       <Filter>Header Files\NF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\_NFLib\tinyfiledialogs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\_NFLib\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\_NFLib\NFJson.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,8 +7,12 @@
 #include "../_NFLib/NFWorld.h"
 #include "../_NFLib/NFLibVersion.h"
 #include "../_NFLib/NFBlend.h"
-#include "NF_Target.h"
+#include "../_NFLib/NFJson.h"
 
+#include "../_NFLib/tinyfiledialogs.h"
+#include <string>
+
+#include "NF_Target.h"
 
 //UIのパラメータ
 typedef struct ParamInfo {
@@ -39,6 +43,8 @@ enum {
 	ID_BLEND_MODE,
 	ID_BLEND_COLOR,
 	ID_BLEND_OPACITY,
+	ID_BTN1,
+	ID_BTN2,
 	ID_TOPIC,
 	ID_COLOR,
 	ID_INT,
@@ -50,6 +56,8 @@ enum {
 	ID_POINT,
 	ID_POINT3D,
 	ID_TOPICEND,
+	ID_BTNSV,
+	ID_BTNLD,
 	ID_NUM_PARAMS
 };
 
@@ -96,12 +104,16 @@ Blend32(
 	A_long		yL,
 	PF_Pixel32* inP,
 	PF_Pixel32* outP);
+
+static std::string directoryPath;
 //-------------------------------------------------------
 class Skelton : public AEInfo
 {
 public:
 	// ******************************************************
 	PF_Err GetParams(ParamInfo *infoP);
+	json ParamsToJson(ParamInfo* infoP);
+	PF_Err JsonLoad(json jsn);
 	PF_Err Exec(ParamInfo* infoP);
 	PF_Err ParamsSetup(
 		PF_InData* in_dataP,
@@ -201,8 +213,50 @@ public:
 		return err;
 	}
 	// ******************************************************
-	
+	PF_Err	UserChangedParam(
+		PF_InData* in_dataP,
+		PF_OutData* out_dataP,
+		PF_ParamDef* paramsP[],
+		PF_LayerDef* outputP,
+		PF_UserChangedParamExtra* extraP,
+		A_long pc)override;
+	std::string OpenJsonFileDialog(std::string title,std::string defp )
+	{
+		const char* filterPatterns[] = { "*.json", "*.*" };
+		const char* selectedFile = tinyfd_openFileDialog(
+			title.c_str(),                      // ダイアログのタイトル
+			defp.c_str(),                       // 初期ディレクトリ
+			2,                          // フィルタパターンの数
+			filterPatterns,             // フィルタパターン
+			"Json files and All Files", // フィルタの説明
+			0                           // マルチセレクトの可否 (0 = No, 1 = Yes)
+		);
+		std::string ret;
+		if (selectedFile)
+		{
+			ret = std::string(selectedFile);
+		}
 
+		return ret;
+	}
+	std::string SaveJsonFileDialog(std::string title, std::string defp)
+	{
+		const char* filterPatterns[] = { "*.json", "*.*" };
+		const char* selectedFile = tinyfd_saveFileDialog(
+			title.c_str(),                      // ダイアログのタイトル
+			defp.c_str(),                       // 初期ディレクトリ
+			2,                          // フィルタパターンの数
+			filterPatterns,             // フィルタパターン
+			"Json files and All Files" // フィルタの説明
+		);
+		std::string ret;
+		if (selectedFile)
+		{
+			ret = std::string(selectedFile);
+		}
+
+		return ret;
+	}
 };
 
 #endif // Skelton_H

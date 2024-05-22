@@ -22,8 +22,8 @@ BEGIN
 	"MIB8",
 	"gtac", 
 	0, 0x0,
-	20, 0x0,
-	"\x10NF-Plugins(Beta)\0\0\0", 
+	16, 0x0,
+	"\x0FNFP-Avior(Beta)", 
 
 	"MIB8",
 	"4668", 

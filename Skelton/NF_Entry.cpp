@@ -107,11 +107,12 @@ extern "C" {
 				//err = PopDialog(in_data,out_data,params,output);
 				break;
 			case PF_Cmd_USER_CHANGED_PARAM:
-				err = ae.HandleChangedParam(in_dataP,
+				err = ae.UserChangedParam(in_dataP,
 					out_dataP,
 					paramsP,
 					outputP,
-					reinterpret_cast<PF_UserChangedParamExtra*>(extraP));
+					reinterpret_cast<PF_UserChangedParamExtra*>(extraP),
+					ID_NUM_PARAMS);
 				break;
 			case PF_Cmd_QUERY_DYNAMIC_FLAGS:
 				err = ae.QueryDynamicFlags(in_dataP,

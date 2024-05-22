@@ -4,6 +4,7 @@
 #define NF_TARGET_H
 
 #include "../_NFLib/NFLibVersion.h"
+#include "../_NFLib/NF_CATEGORY.h"
 
 
 //-----------------------------------------------------------------------------------
@@ -19,8 +20,12 @@
 	//-----------------------------------------------------------------------------------
 	//プラグインが表示されるメニュー名
 
-//#define NF_CATEGORY "NF-Plugins"
-#define NF_CATEGORY "NF-Plugins(Beta)"
+/*
+#define NFP_CATEGORY_CHANNLE "NFP-Avior_Channel"
+#define NFP_CATEGORY_BETE "NFP-Avior(Beta)"
+*/
+//#define NF_CATEGORY NFP_CATEGORY_CHANNLE
+#define NF_CATEGORY NFP_CATEGORY_BETE
 
 
 //バージョンを買えたAlphaFixPiPL.rのAE_Effect_Versionも変えること

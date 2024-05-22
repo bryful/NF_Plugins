@@ -5,6 +5,7 @@
 #include "AE_SDK.h"
 
 
+
 typedef struct {
 	PF_FpLong	x, y, z;
 } Point3D;
@@ -47,6 +48,9 @@ dlg.show();"
 
 #pragma endregion
 
+
+
+
 //******************************************************************************
 #define AEInfo_ITEM_COUNT	256
 //******************************************************************************
@@ -66,6 +70,7 @@ public:
 	A_long				frame() { return m_frame; }
 	PF_Cmd				cmd() { return m_cmd; }
 	A_long				paramsCount() { return m_paramsCount; }
+	void				setParamCount(A_long p) { m_paramsCount = p; }
 	PF_Err				err() { return m_err; }
 	//PF_Boolean			isGetEffectStream() { return m_isGetEffectStream; }
 
@@ -433,6 +438,30 @@ public:
 		m_cmd = PF_Cmd_USER_CHANGED_PARAM;
 		in_data = in_dataP;
 		out_data = out_dataP;
+		return err;
+	}
+	//******************************************************************************
+	virtual
+		PF_Err	UserChangedParam(
+			PF_InData* in_dataP,
+			PF_OutData* out_dataP,
+			PF_ParamDef* paramsP[],
+			PF_LayerDef* outputP,
+			PF_UserChangedParamExtra* extraP,
+			A_long pc)
+	{
+		PF_Err				err = PF_Err_NONE;
+		/*
+		Init();
+		m_cmd = PF_Cmd_USER_CHANGED_PARAM;
+		m_paramsCount = pc;
+		in_data = in_dataP;
+		out_data = out_dataP;
+		output = outputP;
+		GetFrame(in_dataP);
+		GetSuites(in_dataP);
+
+		*/
 		return err;
 	}
 	//******************************************************************************
@@ -1014,6 +1043,134 @@ public:
 		*pop = ret;
 		return err;
 	}
+	//--------------------------------------------------------------------
+	PF_Err SetADD(A_long idx, A_long a)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM))
+		{
+			params[idx]->u.sd.value = a;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		return err;
+	}
+	PF_Err SetCOLOR(A_long idx, PF_Pixel col)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM))
+		{
+			params[idx]->u.cd.value.alpha = col.alpha;
+			params[idx]->u.cd.value.red = col.red;
+			params[idx]->u.cd.value.green = col.green;
+			params[idx]->u.cd.value.blue = col.blue;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		return err;
+	}
+	PF_Err SetFIXED(A_long idx, PF_Fixed f)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM))
+		{
+			params[idx]->u.sd.value = f;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	PF_Err SetANGLE(A_long idx, PF_Fixed r)
+	{
+		PF_Err err = PF_Err_NONE;
+		PF_Fixed ret = 0;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)){
+			params[idx]->u.ad.value = r;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	PF_Err SetANGLE(A_long idx, PF_FpLong r)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)) {
+			PF_Fixed r2 =  (PF_Fixed)(r*65536);
+			params[idx]->u.ad.value = r2;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	PF_Err SetFLOAT(A_long idx, PF_FpLong f)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)) {
+			params[idx]->u.fs_d.value = f;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	PF_Err SetCHECKBOX(A_long idx, PF_Boolean b)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)) {
+			params[idx]->u.bd.value = b;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	PF_Err SetPOINT(A_long idx, PF_FixedPoint pos)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)) {
+			params[idx]->u.td.x_value = pos.x;
+			params[idx]->u.td.y_value = pos.y;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	PF_Err SetPOINT(A_long idx, A_FloatPoint pos)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)) {
+			params[idx]->u.td.x_value = (PF_Fixed)(pos.x * 65536);
+			params[idx]->u.td.y_value = (PF_Fixed)(pos.y * 65536);
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	PF_Err SetPOPUP(A_long idx, A_long pop)
+	{
+		PF_Err err = PF_Err_NONE;
+		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)) {
+			params[idx]->u.pd.value = pop;
+			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
+		}
+		else {
+			err = PF_Err_INVALID_INDEX;
+		}
+		return err;
+	}
+	//--------------------------------------------------------------------
+
+	//PF_FpLong
 	//--------------------------------------------------------------------
 #pragma endregion
 
