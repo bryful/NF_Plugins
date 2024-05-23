@@ -9,13 +9,13 @@
 
 //-----------------------------------------------------------------------------------
 //プラグインの識別に使われる名前
-#define NF_NAME			"NF-AAA"
-#define NF_MATCHNAME	"NF-AAA"
+#define NF_NAME			"NF-ColorSelect"
+#define NF_MATCHNAME	"NF-ColorSelect"
 
 
 //-----------------------------------------------------------------------------------
 //プラグインの説明に使われる文字
-#define NF_DESCRIPTION	"NF_Plugins Test"
+#define NF_DESCRIPTION	"NF_Plugins Skeleton"
 
 	//-----------------------------------------------------------------------------------
 	//プラグインが表示されるメニュー名
@@ -52,17 +52,16 @@
 /*
 out_data->out_flags
 	PF_OutFlag_PIX_INDEPENDENT		1024
-	PF_OutFlag_SEND_UPDATE_PARAMS_UI	|
 	PF_OutFlag_NON_PARAM_VARY			4
 	PF_OutFlag_DEEP_COLOR_AWARE		33554432
 	PF_OutFlag_USE_OUTPUT_EXTENT	64
 	PF_OutFlag_I_EXPAND_BUFFER		512
-	//PF_OutFlag_I_DO_DIALOG				32
+	PF_OutFlag_I_DO_DIALOG				32
 	PF_OutFlag_WIDE_TIME_INPUT |
 	//PF_OutFlag_I_DO_DIALOG;
 */
 
-#define NF_OUT_FLAGS	100664898	//通常はこちら
+#define NF_OUT_FLAGS	33556034	//通常はこちら
 //#define NF_OUT_FLAGS	33556038	//こっちを有効にすると毎フレームごとに描画する。NON_PARAM_VARYを動作中に切り替えるときもこちらに
 //#define NF_OUT_FLAGS	1604		//8bitのみ
 //#define NF_OUT_FLAGS	1606		//8bitのみ 
@@ -76,10 +75,9 @@ out_data->out_flags2
 	PF_OutFlag2_SUPPORTS_QUERY_DYNAMIC_FLAGS
 	PF_OutFlag2_DOESNT_NEED_EMPTY_PIXELS;
 	PF_OutFlag2_SUPPORTS_THREADED_RENDERING
-	PF_OutFlag2_AUTOMATIC_WIDE_TIME_INPUT
 */
 #if defined(SUPPORT_SMARTFX)
-#define NF_OUT_FLAGS2 134353993
+#define NF_OUT_FLAGS2 134222921
 #else
 #define NF_OUT_FLAGS2 134217801
 #endif

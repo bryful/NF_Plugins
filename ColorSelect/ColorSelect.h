@@ -1,113 +1,103 @@
 #pragma once
-#ifndef AAA_H
-#define AAA_H
+#ifndef ColorSelect_H
+#define ColorSelect_H
 
 #include "../_NFLib/AE_SDK.h"
 #include "../_NFLib/AEInfo.h"
 #include "../_NFLib/NFWorld.h"
 #include "../_NFLib/NFLibVersion.h"
 #include "../_NFLib/NFBlend.h"
+#include "../_NFLib/NFJson.h"
+
+#include "../_NFLib/tinyfiledialogs.h"
+#include <string>
+#include <vector>
+
 #include "NF_Target.h"
 
-
 //UIのパラメータ
+typedef struct ColorSelectInfo {
+	PF_Boolean	Enabled;
+	PF_Pixel	Src;
+} ColorSelectInfo, * ColorSelectInfoP, ** ColorSelectInfoH;
+
+#define COLOR_MAX 16
 typedef struct ParamInfo {
-	A_long		AddValue;
-	PF_Pixel	Color;
+	PF_Boolean	enabled;
+	PF_Boolean	dispCTable;
+	PF_Boolean	dispUseColor;
+	PF_FpLong	level;
+	A_u_char	lv_byte;
+	PF_Boolean	rev;
+	A_long		count;
+	ColorSelectInfo colorTable[COLOR_MAX];
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
 //ユーザーインターフェースのID
 //ParamsSetup関数とRender関数のparamsパラメータのIDになる
 enum {
 	ID_INPUT = 0,	// default input layer
-	ID_BTN1,
-	ID_BTN2,
-	ID_ADD,
-	ID_COLOR,
-	ID_NUM_PARAMS
+	ID_TOPIC_IO,
+	ID_DispTable,
+	ID_DispUse,
+	ID_BTN_SAVE,
+	ID_BTN_LOAD,
+	ID_TOPIC_IO_END,
+	ID_TOPIC_CTABLE,
+	ID_ENABLED,
+	ID_LEVEL,
+	ID_REV,
+	ID_CTABLE_ST //8
 };
+#define ID_CTABLE(idx) (ID_CTABLE_ST + idx*2 )
+#define ID_TOPIC_CTABLE_END (ID_CTABLE_ST + COLOR_MAX*2)
+#define ID_NUM_PARAMS  (ID_TOPIC_CTABLE_END+1)
 
 // 関数定義
+static PF_Err
+ColSelect8(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel8* inP,
+	PF_Pixel8* outP);
+static PF_Err
+ColSelect16(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel16* inP,
+	PF_Pixel16* outP);
+static PF_Err
+ColSelect32(
+	void* refcon,
+	A_long		xL,
+	A_long		yL,
+	PF_Pixel32* inP,
+	PF_Pixel32* outP);
+
+static std::string directoryPath;
 //-------------------------------------------------------
-class AAA : public AEInfo
+class ColorSelect : public AEInfo
 {
 public:
 	// ******************************************************
+
+	// ******************************************************
+	A_long ChkTableSub(ParamInfo* infoP, A_long idx);
+	void ChkParams(ParamInfo* infoP);
 	PF_Err GetParams(ParamInfo *infoP);
+	ParamInfo JsonToParams(json jsn);
+	json ParamsToJson(ParamInfo* infoP);
+	PF_Err ParamsSet(ParamInfo* infoP);
 	PF_Err Exec(ParamInfo* infoP);
 	PF_Err ParamsSetup(
 		PF_InData* in_dataP,
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
-	
-	PF_Err TargetExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
-	PF_Err BlendExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
-
-	// ******************************************************
-	PF_Err UpdateParamsUI(
-		PF_InData* in_dataP,
-		PF_OutData* out_dataP,
-		PF_ParamDef* paramsP[],
-		PF_LayerDef* outputP)
-	{
-		PF_Err err = PF_Err_NONE;
-		PF_InData* in_data = in_dataP;
-		GetSuites(in_dataP);
-		// ボタンが押されたかどうかをチェック
-		if (paramsP[ID_BTN1]->u.button_d.value) {
-			// スライダーパラメータを変更
-			PF_ParamDef def;
-			AEFX_CLR_STRUCT(def);
-			def.u.fs_d.value = 75.0; // 新しい値に設定
-
-			// パラメータを設定
-
-			suitesP->ParamUtilsSuite3()->PF_UpdateParamUI(in_data->effect_ref, ID_ADD, &def);
-
-			// ボタンの状態をリセット
-			AEFX_CLR_STRUCT(def);
-			def.u.button_d.value = 0; // リセット
-			suitesP->ParamUtilsSuite3()->PF_UpdateParamUI(in_data->effect_ref, ID_BTN1, &def);
-		}
-		return err;
-	}
-	// ******************************************************
-	PF_Err
-		UserChangedParam(
-			PF_InData* in_dataP,
-			PF_OutData* out_dataP,
-			PF_ParamDef* paramsP[],
-			PF_LayerDef* outputP,
-			PF_UserChangedParamExtra* extraP)
-	{
-		PF_Err err = PF_Err_NONE;
-		Init();
-		m_cmd = PF_Cmd_USER_CHANGED_PARAM;
-		in_data = in_dataP;
-		out_data = out_dataP;
-		output = outputP;
-		GetFrame(in_dataP);
-		GetSuites(in_dataP);
-
-		if (extraP->param_index == ID_BTN1)
-		{
-			out_data->out_flags |= PF_OutFlag_DISPLAY_ERROR_MESSAGE;
-			
-			paramsP[ID_ADD]->u.sd.value = 75;
-			paramsP[ID_ADD]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
-		}
-		else if (extraP->param_index == ID_BTN2)
-		{
-
-			paramsP[ID_COLOR]->u.cd.value.red = 75;
-			paramsP[ID_COLOR]->u.cd.value.green = 128;
-			paramsP[ID_COLOR]->u.cd.value.blue = 36;
-			paramsP[ID_COLOR]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
-
-		}
-		return err;
-	}
+	//PF_Err TargetExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	//PF_Err BlendExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	// ******************************************************
 	PF_Err	About(
 		PF_InData* in_dataP,
@@ -198,10 +188,54 @@ public:
 
 		return err;
 	}
+	// ******************************************************
+	PF_Err	UserChangedParam(
+		PF_InData* in_dataP,
+		PF_OutData* out_dataP,
+		PF_ParamDef* paramsP[],
+		PF_LayerDef* outputP,
+		PF_UserChangedParamExtra* extraP,
+		A_long pc)override;
+	std::string OpenJsonFileDialog(std::string title,std::string defp )
+	{
+		const char* filterPatterns[] = { "*,csj" };
+		const char* selectedFile = tinyfd_openFileDialog(
+			title.c_str(),                      // ダイアログのタイトル
+			defp.c_str(),                       // 初期ディレクトリ
+			1,                          // フィルタパターンの数
+			filterPatterns,             // フィルタパターン
+			"Csj files", // フィルタの説明
+			0                           // マルチセレクトの可否 (0 = No, 1 = Yes)
+		);
+		std::string ret;
+		if (selectedFile)
+		{
+			ret = std::string(selectedFile);
+		}
 
+		return ret;
+	}
+	std::string SaveJsonFileDialog(std::string title, std::string defp)
+	{
+		const char* filterPatterns[] = { "*,csj" };
+		const char* selectedFile = tinyfd_saveFileDialog(
+			title.c_str(),                      // ダイアログのタイトル
+			defp.c_str(),                       // 初期ディレクトリ
+			1,                          // フィルタパターンの数
+			filterPatterns,             // フィルタパターン
+			"Csj files" // フィルタの説明
+		);
+		std::string ret;
+		if (selectedFile)
+		{
+			ret = std::string(selectedFile);
+		}
+
+		return ret;
+	}
 };
 
-#endif // AAA_H
+#endif // ColorSelect_H
 #ifndef EFFECT_MAIN_H
 #define EFFECT_MAIN_H
 //-----------------------------------------------------------------------------------

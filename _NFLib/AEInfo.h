@@ -1193,8 +1193,8 @@ public:
 	{
 		PF_Err err = PF_Err_NONE;
 		if ((idx >= 1) && (idx < m_paramsCount) && (m_cmd == PF_Cmd_USER_CHANGED_PARAM)) {
-			params[idx]->u.td.x_value = (PF_Fixed)(pos.x * 65536);
 			params[idx]->u.td.y_value = (PF_Fixed)(pos.y * 65536);
+			params[idx]->u.td.x_value = (PF_Fixed)(pos.x * 65536);
 			params[idx]->uu.change_flags = PF_ChangeFlag_CHANGED_VALUE;
 		}
 		else {

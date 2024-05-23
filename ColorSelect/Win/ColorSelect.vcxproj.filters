@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\AAA.cpp" />
+    <ClCompile Include="..\ColorSelect.cpp" />
     <ClCompile Include="..\..\..\Util\AEFX_SuiteHelper.c">
       <Filter>Header Files\AE</Filter>
     </ClCompile>
@@ -17,10 +17,19 @@
     <ClCompile Include="..\..\..\Util\Smart_Utils.cpp">
       <Filter>Supporting code\AE</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\_NFLib\tinyfiledialogs.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\NF_Entry.cpp" />
+    <ClCompile Include="..\..\_NFLib\NFJson.cpp">
+      <Filter>Supporting code\NFs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\_NFLib\NFWorld.cpp">
+      <Filter>Supporting code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\AAA.h" />
+    <ClInclude Include="..\ColorSelect.h" />
     <ClInclude Include="..\..\..\Headers\A.h">
       <Filter>Header Files\AE</Filter>
     </ClInclude>
@@ -118,6 +127,15 @@
     <ClInclude Include="..\..\_NFLib\NFBlend.h">
       <Filter>Header Files\NF</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\_NFLib\tinyfiledialogs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\_NFLib\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\_NFLib\NFJson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -143,12 +161,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\AAAPiPL.r">
+    <CustomBuild Include="..\ColorSelectPiPL.r">
       <Filter>Resource Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="AAAPiPL.rc">
+    <ResourceCompile Include="ColorSelectPiPL.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

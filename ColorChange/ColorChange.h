@@ -40,13 +40,13 @@ typedef struct ParamInfo {
 enum {
 	ID_INPUT = 0,	// default input layer
 	ID_TOPIC_IO,
-	ID_ENABLED,
 	ID_DispTable,
 	ID_DispUse,
 	ID_BTN_SAVE,
 	ID_BTN_LOAD,
 	ID_TOPIC_IO_END,
 	ID_TOPIC_CTABLE,
+	ID_ENABLED,
 	ID_LEVEL,
 	ID_CTABLE_ST //8
 };
@@ -218,13 +218,13 @@ public:
 		A_long pc)override;
 	std::string OpenJsonFileDialog(std::string title,std::string defp )
 	{
-		const char* filterPatterns[] = { "*.json", "*.*" };
+		const char* filterPatterns[] = { "*.ccj" };
 		const char* selectedFile = tinyfd_openFileDialog(
 			title.c_str(),                      // ダイアログのタイトル
 			defp.c_str(),                       // 初期ディレクトリ
-			2,                          // フィルタパターンの数
+			1,                          // フィルタパターンの数
 			filterPatterns,             // フィルタパターン
-			"Json files and All Files", // フィルタの説明
+			"Ccj files", // フィルタの説明
 			0                           // マルチセレクトの可否 (0 = No, 1 = Yes)
 		);
 		std::string ret;
@@ -237,13 +237,13 @@ public:
 	}
 	std::string SaveJsonFileDialog(std::string title, std::string defp)
 	{
-		const char* filterPatterns[] = { "*.json", "*.*" };
+		const char* filterPatterns[] = { "*.ccj" };
 		const char* selectedFile = tinyfd_saveFileDialog(
 			title.c_str(),                      // ダイアログのタイトル
 			defp.c_str(),                       // 初期ディレクトリ
-			2,                          // フィルタパターンの数
+			1,                          // フィルタパターンの数
 			filterPatterns,             // フィルタパターン
-			"Json files and All Files" // フィルタの説明
+			"Ccj files" // フィルタの説明
 		);
 		std::string ret;
 		if (selectedFile)

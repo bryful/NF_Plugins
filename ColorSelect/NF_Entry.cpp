@@ -1,4 +1,4 @@
-#include "AAA.h"
+#include "ColorSelect.h"
 //-----------------------------------------------------------------------------------
 extern "C" {
 	DllExport
@@ -40,7 +40,7 @@ extern "C" {
 		try
 		{
 
-			AAA ae;
+			ColorSelect ae;
 			ae.in_data = in_dataP;
 
 			switch (cmd) {
@@ -112,11 +112,7 @@ extern "C" {
 					paramsP,
 					outputP,
 					reinterpret_cast<PF_UserChangedParamExtra*>(extraP),
-					ID_NUM_PARAMS
-					);
-				break;
-			case PF_Cmd_UPDATE_PARAMS_UI:
-				
+					ID_NUM_PARAMS);
 				break;
 			case PF_Cmd_QUERY_DYNAMIC_FLAGS:
 				err = ae.QueryDynamicFlags(in_dataP,

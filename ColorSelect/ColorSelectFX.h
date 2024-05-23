@@ -1,6 +1,6 @@
 #pragma once
-#ifndef AAAFX_H
-#define AAAFX_H
+#ifndef ColorSelectFX_H
+#define ColorSelectFX_H
 
 #include "../_NFLib/AE_SDK.h"
 #include "../_NFLib/AEInfo.h"
@@ -8,7 +8,7 @@
 #include "../_NFLib/NFLibVersion.h"
 
 
-#include "AAA.h"
+#include "ColorSelect.h"
 
 
 // **************************************************************
@@ -56,12 +56,12 @@ static PF_Err Noise32(void* refcon, A_long x, A_long y, PF_PixelFloat* p)
 	*/
 	return err;
 }
-class AAAFX :public NFWorld
+class ColorSelectFX :public NFWorld
 {
 private:
 
 public:
-	AAAFX(
+	ColorSelectFX(
 		PF_EffectWorld* wld = NULL,
 		PF_InData* ind = NULL,
 		PF_PixelFormat	fmt = PF_PixelFormat_ARGB32

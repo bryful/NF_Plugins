@@ -1,7 +1,7 @@
-#include "ColorChange.h"
+#include "ColorSelect.h"
 
 static PF_Err
-ColChange8(
+ColSelect8(
 	void* refcon,
 	A_long		xL,
 	A_long		yL,
@@ -10,21 +10,40 @@ ColChange8(
 {
 	PF_Err			err = PF_Err_NONE;
 	ParamInfo* infoP = reinterpret_cast<ParamInfo*>(refcon);
-
+	PF_Pixel op = { 0,0,0,0 };
+	PF_Boolean ok = FALSE;
 	for (int i = 0; i < COLOR_MAX; i++)
 	{
-		if (infoP->colorTable[i].Enabled == FALSE) continue;
-
-		if (compPix8Lv(*inP, infoP->colorTable[i].Src, infoP->lv_byte) == TRUE)
+		if (infoP->colorTable[i].Enabled == TRUE)
 		{
-			*outP = infoP->colorTable[i].Dst;
+			if (compPix8Lv(*inP, infoP->colorTable[i].Src, infoP->lv_byte) == TRUE)
+			{
+				ok = TRUE;
+			}
 		}
+	}
+	if (infoP->rev == TRUE)
+	{
+		if (ok == TRUE)
+		{
+			ok = FALSE;
+		}
+		else {
+			ok = TRUE;
+		}
+	}
+	if (ok==TRUE)
+	{
+		*outP = *inP;
+	}
+	else {
+		*outP = op;
 	}
 	return err;
 }
 // **********************************************************
 static PF_Err
-ColChange16(
+ColSelect16(
 	void* refcon,
 	A_long		xL,
 	A_long		yL,
@@ -33,21 +52,40 @@ ColChange16(
 {
 	PF_Err			err = PF_Err_NONE;
 	ParamInfo* infoP = reinterpret_cast<ParamInfo*>(refcon);
-
+	PF_Pixel16 op = { 0,0,0,0 };
+	PF_Boolean ok = FALSE;
 	for (int i = 0; i < COLOR_MAX; i++)
 	{
-		if (infoP->colorTable[i].Enabled == FALSE) continue;
-
-		if (compPix16_8Lv(*inP, infoP->colorTable[i].Src, infoP->lv_byte) == TRUE)
+		if (infoP->colorTable[i].Enabled == TRUE)
 		{
-			*outP = infoP->colorTable[i].Dst16;
+			if (compPix16_8Lv(*inP, infoP->colorTable[i].Src, infoP->lv_byte) == TRUE)
+			{
+				ok = TRUE;
+			}
 		}
+	}
+	if (infoP->rev == TRUE)
+	{
+		if (ok == TRUE)
+		{
+			ok = FALSE;
+		}
+		else {
+			ok = TRUE;
+		}
+	}
+	if (ok == TRUE)
+	{
+		*outP = *inP;
+	}
+	else {
+		*outP = op;
 	}
 	return err;
 }
 // **********************************************************
 static PF_Err
-ColChange32(
+ColSelect32(
 	void* refcon,
 	A_long		xL,
 	A_long		yL,
@@ -56,20 +94,39 @@ ColChange32(
 {
 	PF_Err			err = PF_Err_NONE;
 	ParamInfo* infoP = reinterpret_cast<ParamInfo*>(refcon);
-
+	PF_Pixel32 op = { 0,0,0,0 };
+	PF_Boolean ok = FALSE;
 	for (int i = 0; i < COLOR_MAX; i++)
 	{
-		if (infoP->colorTable[i].Enabled == FALSE) continue;
-
-		if (compPix32_8Lv(*inP, infoP->colorTable[i].Src, infoP->lv_byte) == TRUE)
+		if (infoP->colorTable[i].Enabled == TRUE)
 		{
-			*outP = infoP->colorTable[i].Dst32;
+			if (compPix32_8Lv(*inP, infoP->colorTable[i].Src, infoP->lv_byte) == TRUE)
+			{
+				ok = TRUE;
+			}
 		}
+	}
+	if (infoP->rev==TRUE)
+	{
+		if (ok==TRUE)
+		{
+			ok = FALSE;
+		}
+		else {
+			ok = TRUE;
+		}
+	}
+	if (ok == TRUE)
+	{
+		*outP = *inP;
+	}
+	else {
+		*outP = op;
 	}
 	return err;
 }
 // **********************************************************
-PF_Err ColorChange::ParamsSetup(
+PF_Err ColorSelect::ParamsSetup(
 	PF_InData* in_dataP,
 	PF_OutData* out_dataP,
 	PF_ParamDef* paramsP[],
@@ -86,7 +143,6 @@ PF_Err ColorChange::ParamsSetup(
 	AEFX_CLR_STRUCT(def);
 	//def.flags = PF_ParamFlag_START_COLLAPSED;	//Ç±ÇÍÇÇ¬ÇØÇÈÇ∆ï\é¶éûÇ…äJÇ¢ÇΩèÛë‘Ç…Ç»ÇÈ
 	PF_ADD_TOPIC("IO", ID_TOPIC_IO);
-
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_CHECKBOX(
@@ -152,6 +208,15 @@ PF_Err ColorChange::ParamsSetup(
 		ID_LEVEL
 	);
 	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_CHECKBOX(
+		"rev",
+		"on",
+		FALSE,
+		0,
+		ID_REV
+	);
+	//----------------------------------------------------------------
 	for (int i = 0; i < COLOR_MAX; i++)
 	{
 		int idx = ID_CTABLE(i);
@@ -177,15 +242,6 @@ PF_Err ColorChange::ParamsSetup(
 			0xFF,
 			idx+1
 		);
-		c = std::string("dst") + idxStr;
-		AEFX_CLR_STRUCT(def);
-		PF_ADD_COLOR(
-			c.c_str(),
-			0xFF,
-			0xFF,
-			0xFF,
-			idx + 2
-		);
 	}
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
@@ -195,7 +251,7 @@ PF_Err ColorChange::ParamsSetup(
 	return err;
 };
 // **********************************************************
-PF_Err	 ColorChange::UserChangedParam(
+PF_Err	 ColorSelect::UserChangedParam(
 	PF_InData* in_dataP,
 	PF_OutData* out_dataP,
 	PF_ParamDef* paramsP[],
@@ -247,11 +303,11 @@ PF_Err	 ColorChange::UserChangedParam(
 	return err;
 }
 // **********************************************************
-json ColorChange::ParamsToJson(ParamInfo* infoP)
+json ColorSelect::ParamsToJson(ParamInfo* infoP)
 {
 	json ret;
 	ret["level"] =infoP->level;
-
+	ret["rev"] = (bool)infoP->rev;
 	json ct;
 
 	for (int i = 0; i < COLOR_MAX; i++)
@@ -260,19 +316,21 @@ json ColorChange::ParamsToJson(ParamInfo* infoP)
 		bb["index"] = i;
 		bb["enabled"] = (bool)infoP->colorTable[i].Enabled;
 		bb["src"] =  PixelToJson(infoP->colorTable[i].Src);
-		bb["dst"] = PixelToJson(infoP->colorTable[i].Dst);
 		ct.push_back(bb);
 	}
 	ret["ctable"] = ct;
 	return ret;
 }
 // **********************************************************
-ParamInfo ColorChange::JsonToParams(json jsn)
+ParamInfo ColorSelect::JsonToParams(json jsn)
 {
 	ParamInfo info;
 	AEFX_CLR_STRUCT(info);
 	if (jsn.find("level") != jsn.end()) {
 		info.level = jsn["level"].get< PF_FpLong>();
+	}
+	if (jsn.find("rev") != jsn.end()) {
+		info.rev = jsn["rev"].get< PF_Boolean>();
 	}
 	if (jsn.find("ctable") != jsn.end()) {
 		json ct = jsn["ctable"];
@@ -287,34 +345,28 @@ ParamInfo ColorChange::JsonToParams(json jsn)
 				if (it.find("src") != it.end()) {
 					info.colorTable[i].Src = JsonToPixel(it["src"]);
 				}
-				if (it.find("dst") != it.end()) {
-					info.colorTable[i].Dst = JsonToPixel(it["dst"]);
-					info.colorTable[i].Dst16 = NF_Pixel8To16(info.colorTable[i].Dst);
-					info.colorTable[i].Dst32 = NF_Pixel8To32(info.colorTable[i].Dst);
-				}
-
 			}
 		}
 	}
 	return info;
 }
 
-PF_Err ColorChange::ParamsSet(ParamInfo* infoP)
+PF_Err ColorSelect::ParamsSet(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
 	
 	ERR(SetFLOAT(ID_LEVEL, infoP->level));
+	ERR(SetCHECKBOX(ID_REV, infoP->rev));
 	for (int i = 0; i < COLOR_MAX; i++)
 	{
 		int idx = ID_CTABLE(i);
 		ERR(SetCHECKBOX(idx, infoP->colorTable[i].Enabled));
 		ERR(SetCOLOR(idx + 1, infoP->colorTable[i].Src));
-		ERR(SetCOLOR(idx + 2, infoP->colorTable[i].Dst));
 	}
 	return err;
 }
 // **********************************************************
-A_long ColorChange::ChkTableSub(ParamInfo* infoP, A_long idx)
+A_long ColorSelect::ChkTableSub(ParamInfo* infoP, A_long idx)
 {
 	A_long ret = 0;
 	if (idx >= COLOR_MAX - 1) return -1;
@@ -333,7 +385,7 @@ A_long ColorChange::ChkTableSub(ParamInfo* infoP, A_long idx)
 	}
 	return ret;
 }
-void ColorChange::ChkParams(ParamInfo* infoP)
+void ColorSelect::ChkParams(ParamInfo* infoP)
 {
 	for (int i = 0; i < COLOR_MAX; i++)
 	{
@@ -342,13 +394,14 @@ void ColorChange::ChkParams(ParamInfo* infoP)
 	}
 
 }
-PF_Err ColorChange::GetParams(ParamInfo* infoP)
+PF_Err ColorSelect::GetParams(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
 
 	ERR(GetCHECKBOX(ID_ENABLED, &infoP->enabled));
 	ERR(GetCHECKBOX(ID_DispTable, &infoP->dispCTable));
 	ERR(GetCHECKBOX(ID_DispUse, &infoP->dispUseColor));
+	ERR(GetCHECKBOX(ID_REV, &infoP->rev));
 	ERR(GetFLOAT(ID_LEVEL, &infoP->level));
 	if (!err)
 	{
@@ -360,16 +413,6 @@ PF_Err ColorChange::GetParams(ParamInfo* infoP)
 		int idx = ID_CTABLE(i);
 		ERR(GetCHECKBOX(idx, &infoP->colorTable[i].Enabled));
 		ERR(GetCOLOR(idx+1 , &infoP->colorTable[i].Src));
-		ERR(GetCOLOR(idx+2 , &infoP->colorTable[i].Dst));
-		if (!err)
-		{
-			infoP->colorTable[i].Dst16 = NF_Pixel8To16(infoP->colorTable[i].Dst);
-			infoP->colorTable[i].Dst32 = NF_Pixel8To32(infoP->colorTable[i].Dst);
-		}
-		if (compPix8(infoP->colorTable[i].Src, infoP->colorTable[i].Dst) == TRUE)
-		{
-			infoP->colorTable[i].Enabled = FALSE;
-		}
 
 	}
 	ChkParams(infoP);
@@ -381,7 +424,7 @@ PF_Err ColorChange::GetParams(ParamInfo* infoP)
 	return err;
 };
 // **********************************************************
-PF_Err ColorChange::Exec(ParamInfo* infoP)
+PF_Err ColorSelect::Exec(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
 	NFWorld* src = new NFWorld(input, in_data, pixelFormat());
@@ -389,23 +432,25 @@ PF_Err ColorChange::Exec(ParamInfo* infoP)
 
 	//PF_FILL(NULL, NULL, dst->world);
 
-	dst->Copy(src);
 	if ((infoP->enabled == TRUE)&&(infoP->count>0))
 	{
 		switch (pixelFormat())
 		{
 		case PF_PixelFormat_ARGB128:
-			iterate32(src->world, (void*)infoP, ColChange32, dst->world);
+			iterate32(src->world, (void*)infoP, ColSelect32, dst->world);
 			break;
 		case PF_PixelFormat_ARGB64:
-			iterate16(src->world, (void*)infoP, ColChange16, dst->world);
+			iterate16(src->world, (void*)infoP, ColSelect16, dst->world);
 			break;
 		case PF_PixelFormat_ARGB32:
-			iterate8(src->world, (void*)infoP, ColChange8, dst->world);
+			iterate8(src->world, (void*)infoP, ColSelect8, dst->world);
 			break;
 		default:
 			break;
 		}
+	}
+	else {
+		dst->Copy(src);
 	}
 	int sz = 50;
 	PF_Pixel c = { 255,128,128,128 };
@@ -414,7 +459,7 @@ PF_Err ColorChange::Exec(ParamInfo* infoP)
 	{
 		rct.left = sz;
 		rct.top = sz;
-		rct.right = rct.left + sz * 3;
+		rct.right = rct.left + sz * 2;
 		rct.bottom = rct.top + sz * COLOR_MAX;
 		dst->Fill(rct, c);
 		PF_Pixel con = { 255,255,255,255 };
@@ -434,9 +479,6 @@ PF_Err ColorChange::Exec(ParamInfo* infoP)
 			rct.left += sz;
 			rct.right += sz;
 			dst->Fill(rct, infoP->colorTable[i].Src);
-			rct.left += sz;
-			rct.right += sz;
-			dst->Fill(rct, infoP->colorTable[i].Dst);
 		}
 	}
 	if (infoP->dispUseColor == TRUE)
@@ -449,7 +491,7 @@ PF_Err ColorChange::Exec(ParamInfo* infoP)
 
 			for (int i = 0; i < cnt; i++)
 			{
-				rct.left = sz * (i / 16) + sz * 4;
+				rct.left = sz * (i / 16) + sz * 3;
 				rct.right = rct.left + sz;
 				rct.top = sz * (i % 16) + sz;
 				rct.bottom = rct.top + sz;
