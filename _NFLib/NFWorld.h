@@ -86,12 +86,14 @@ public:
 				break;
 			case PF_PixelFormat_ARGB64:
 				m_widthTrue = wld->rowbytes / sizeof(PF_Pixel16);
-				m_data16 = (PF_Pixel16*)m_data;
+				//m_data16 = (PF_Pixel16*)m_data;
+				PF_GET_PIXEL_DATA16(world, NULL, &m_data16);
 				break;
 			default:
 			case PF_PixelFormat_ARGB32:
 				m_widthTrue = wld->rowbytes / sizeof(PF_Pixel8);
-				m_data8 = (PF_Pixel*)m_data;
+				//m_data8 = (PF_Pixel*)m_data;
+				PF_GET_PIXEL_DATA8(world, NULL, &m_data8);
 				break;
 			}
 			m_offsetWidth = m_widthTrue - m_width;
