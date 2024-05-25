@@ -21,6 +21,7 @@ typedef struct ParamInfo {
 	A_long		blendMode;
 	PF_Pixel	blendColor;
 	PF_FpLong	blendOpacity;
+	PF_FixedPoint	pointValue;
 	/*
 	PF_Pixel	color;
 	A_long		intValue;
@@ -29,7 +30,6 @@ typedef struct ParamInfo {
 	PF_Boolean	check;
 	A_Fixed		rotValue;
 	A_long		popupValue;
-	PF_FixedPoint	pointValue;
 	Point3D		point3DValue;
 	*/
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
@@ -58,6 +58,7 @@ enum {
 	ID_TOPICEND,
 	ID_BTNSV,
 	ID_BTNLD,
+	ID_LAYER,
 	ID_NUM_PARAMS
 };
 

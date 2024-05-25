@@ -200,6 +200,11 @@ PF_Err Skelton::ParamsSetup(
 		PF_ParamFlag_SUPERVISE,
 		ID_BTNLD);
 
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_LAYER("layer",
+		PF_LayerDefault_NONE,
+		ID_LAYER);
 //----------------------------------------------------------------
 	out_data->num_params = ID_NUM_PARAMS;
 	return err;
@@ -335,6 +340,8 @@ PF_Err Skelton::GetParams(ParamInfo* infoP)
 	ERR(GetFLOAT(ID_BLEND_OPACITY, &infoP->blendOpacity));
 	if (!err) infoP->blendOpacity /= 100;
 
+	ERR(GetPOINT_FIXED(ID_POINT, &infoP->pointValue));
+
 	/*
 	ERR(GetCOLOR(ID_COLOR, &infoP->color));
 	ERR(GetADD(ID_INT, &infoP->intValue));
@@ -343,7 +350,6 @@ PF_Err Skelton::GetParams(ParamInfo* infoP)
 	ERR(GetFLOAT(ID_FLOAT, &infoP->floatvalue));
 	ERR(GetCHECKBOX(ID_CHECK, &infoP->check));
 	ERR(GetPOPUP(ID_POPUP, &infoP->popupValue));
-	ERR(GetPOINT_FIXED(ID_POINT, &infoP->pointValue));
 	ERR(GetPOINT3D(ID_POINT, &infoP->point3DValue));
 	*/
 	return err;
@@ -352,6 +358,7 @@ PF_Err Skelton::GetParams(ParamInfo* infoP)
 PF_Err Skelton::Exec(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
+	PF_Err err2 = PF_Err_NONE;
 	NFWorld* src = new NFWorld(input, in_data, pixelFormat());
 	NFWorld* dst = new NFWorld(output, in_data, pixelFormat());
 	if (infoP->blendOpacity != 0) {
@@ -361,7 +368,37 @@ PF_Err Skelton::Exec(ParamInfo* infoP)
 	else {
 		dst->Copy(src);
 	}
+	PF_ParamDef			checkout;
+	PF_ChannelDesc		desc;
+	PF_ChannelRef		ref;
+	PF_ChannelChunk		chunk;
+	PF_Boolean			found_depthPB;
+	int32_t				num_channelsL = 0;
+	PF_Rect				rect = { 0,0,100,100 };
+	PF_Rect				rect2 = { 0,0,100,100 };
+	
+	ERR(PF_CHECKOUT_PARAM(in_data,
+		ID_LAYER,
+		(in_data->current_time),
+		in_data->time_step,
+		in_data->time_scale,
+		&checkout));
+	if (checkout.u.ld.data) {
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = rect.left + checkout.u.ld.width;
+		rect.bottom = rect.top + checkout.u.ld.height;
 
+		rect2.left = infoP->pointValue.x / 66636;
+		rect2.top = infoP->pointValue.y / 66636;
+		rect2.right = rect2.left + checkout.u.ld.width;
+		rect2.bottom= rect2.top + checkout.u.ld.height;
+		ERR(PF_COPY(&checkout.u.ld,
+			dst->world,
+			&rect,
+			&rect2));
+	}
+	ERR2(PF_CHECKIN_PARAM(in_data, &checkout));		// ALWAYS check in,
 
 	delete src;
 	delete dst;

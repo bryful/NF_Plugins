@@ -470,6 +470,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Headers\AE_ChannelSuites.h" />
     <ClInclude Include="..\..\_NFLib\AEInfo.h" />
     <ClInclude Include="..\..\_NFLib\AE_SDK.h" />
     <ClInclude Include="..\..\..\Headers\A.h" />

@@ -14,6 +14,7 @@
 #include "String_Utils.h"
 #include "Param_Utils.h"
 #include "Smart_Utils.h"
+#include "AE_ChannelSuites.h"
 
 #ifdef AE_OS_WIN
 #include <Windows.h>

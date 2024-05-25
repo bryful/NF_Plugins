@@ -135,6 +135,9 @@
     <ClInclude Include="..\..\_NFLib\NFJson.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Headers\AE_ChannelSuites.h">
+      <Filter>Header Files\AE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
