@@ -71,7 +71,7 @@ public:
 	PF_Cmd				cmd() { return m_cmd; }
 	A_long				paramsCount() { return m_paramsCount; }
 	void				setParamCount(A_long p) { m_paramsCount = p; }
-	PF_Err				err() { return m_err; }
+	PF_Err				ErrResult() { return m_err; }
 	//PF_Boolean			isGetEffectStream() { return m_isGetEffectStream; }
 
 
@@ -1287,18 +1287,21 @@ public:
 	PF_Err Copy(PF_EffectWorld* src, PF_EffectWorld* dst)
 	{
 		PF_Err err = PF_Err_NONE;
-
+		m_err = err;
 		err = suitesP->WorldTransformSuite1()->copy_hq(in_data->effect_ref,	// This effect ref (unique id)
 			src,						// Source
 			dst,						// Dest
 			NULL,						// Source rect - null for all pixels
 			NULL);						// Dest rect - null for all pixels
+		m_err = err;
+
 		return err;
 	}
 	//--------------------------------------------------------------------
 	PF_EffectWorld NewEffectWorld(A_long w, A_long h, PF_PixelFormat fmt)
 	{
 		PF_Err err = PF_Err_NONE;
+		m_err = PF_Err_NONE;
 		PF_EffectWorld ret;
 		AEFX_CLR_STRUCT(ret);
 		if (m_cmd == PF_Cmd_SMART_RENDER) {
@@ -1312,8 +1315,17 @@ public:
 
 			ERR((*in_data->utils->new_world)(in_data->effect_ref, w, h, f, &ret));
 		}
-		
+		m_err = err;
 		return ret;
+	}
+	PF_Err DisposeEffectWorld(PF_EffectWorld world)
+	{
+		PF_Err err = PF_Err_NONE;
+		m_err = err;
+		err = PF_DISPOSE_WORLD(&world);
+		m_err = err;
+		return err;
+
 	}
 };
 //******************************************************************************

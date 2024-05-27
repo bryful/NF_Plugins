@@ -9,13 +9,13 @@
 
 //-----------------------------------------------------------------------------------
 //プラグインの識別に使われる名前
-#define NF_NAME			"NF-Noise"
-#define NF_MATCHNAME	"NF-Noise"
+#define NF_NAME			"NF-NoiseHorizon"
+#define NF_MATCHNAME	"NF-NoiseHorizon"
 
 
 //-----------------------------------------------------------------------------------
 //プラグインの説明に使われる文字
-#define NF_DESCRIPTION	"NF_Plugins Noise"
+#define NF_DESCRIPTION	"NF_Plugins NoiseHorizon"
 
 	//-----------------------------------------------------------------------------------
 	//プラグインが表示されるメニュー名

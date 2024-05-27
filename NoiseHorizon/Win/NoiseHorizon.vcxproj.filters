@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\Noise.cpp" />
+    <ClCompile Include="..\NoiseHorizon.cpp" />
     <ClCompile Include="..\..\..\Util\AEFX_SuiteHelper.c">
       <Filter>Header Files\AE</Filter>
     </ClCompile>
@@ -17,16 +17,14 @@
     <ClCompile Include="..\..\..\Util\Smart_Utils.cpp">
       <Filter>Supporting code\AE</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\_NFLib\tinyfiledialogs.c">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\NF_Entry.cpp" />
-    <ClCompile Include="..\..\_NFLib\NFJson.cpp">
-      <Filter>Supporting code\NFs</Filter>
-    </ClCompile>
+    <ClCompile Include="..\NoiseHor.cpp" />
+    <ClCompile Include="..\SwapLine.cpp" />
+    <ClCompile Include="..\RGBShift.cpp" />
+    <ClCompile Include="..\RandomShift.cpp" />
+    <ClCompile Include="..\RandomLine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Noise.h" />
     <ClInclude Include="..\..\..\Headers\A.h">
       <Filter>Header Files\AE</Filter>
     </ClInclude>
@@ -124,15 +122,6 @@
     <ClInclude Include="..\..\_NFLib\NFBlend.h">
       <Filter>Header Files\NF</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\_NFLib\tinyfiledialogs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\_NFLib\json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\_NFLib\NFJson.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Headers\AE_ChannelSuites.h">
       <Filter>Header Files\AE</Filter>
     </ClInclude>
@@ -161,12 +150,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\NoisePiPL.r">
+    <CustomBuild Include="..\NoiseHorizonPiPL.r">
       <Filter>Resource Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="NoisePiPL.rc">
+    <ResourceCompile Include="NoiseHorizonPiPL.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

@@ -1,15 +1,13 @@
 #pragma once
-#ifndef Noise_H
-#define Noise_H
+#ifndef NoiseHorizon_H
+#define NoiseHorizon_H
 
 #include "../_NFLib/AE_SDK.h"
 #include "../_NFLib/AEInfo.h"
 #include "../_NFLib/NFWorld.h"
 #include "../_NFLib/NFLibVersion.h"
 #include "../_NFLib/NFBlend.h"
-#include "../_NFLib/NFJson.h"
 
-#include "../_NFLib/tinyfiledialogs.h"
 #include <string>
 
 #include "NF_Target.h"
@@ -22,12 +20,26 @@ typedef struct RGBShiftInfo {
 	A_long		BShift;
 	NFWorld* nfworld;
 } RGBShift, * RGBShiftP, ** RGBShiftH;
+typedef struct RShiftInfo {
+	A_long		seed;
+	A_long		frame;
+	A_long		value;
+	A_long		XShift;
+} RShiftInfo, * RShiftInfoP, ** RShiftInfoH;
+typedef struct RandomLineInfo {
+	A_long		seed;
+	A_long		frame;
+	A_long		value;
+	A_long		value2;
+	PF_FpLong	Opacity;
+} RandomLineInfo, * RandomLineInfoP, ** RandomLineInfoH;
+
 //UIのパラメータ
 typedef struct ParamInfo {
 	PF_Boolean	moving;
 	A_long		frame;
-	RGBShiftInfo rgbs;
-
+	RGBShiftInfo	rgbs;
+	RShiftInfo		rs;
 	A_long		swapline_seed;
 	A_long		swapValue;
 	A_long		swapHeight;
@@ -36,28 +48,12 @@ typedef struct ParamInfo {
 	PF_FpLong	noisevalue;
 	A_long		noiseLength;
 	PF_FpLong	noiseStrong;
-	//A_long		noiseSize;
+	RandomLineInfo	rl;
 	NFWorld*	nfworld;
 
 
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
-
-
-/*
-double noiseTbl2[3][3]{
-	{0.25,0.50,0.25},
-	{0.50,1.00,0.50},
-	{0.25,0.50,0.25}
-};
-double noiseTbl3[5][5]{
-	{0.00 / 0.11 / 0.22 / 0.11 / 0.00},
-	{0.11 / 0.53 / 0.70 / 0.53 / 0.11},
-	{0.22 / 0.70 / 1.00 / 0.70 / 0.22},
-	{0.11 / 0.53 / 0.70 / 0.53 / 0.21},
-	{0.00 / 0.11 / 0.22 / 0.11 / 0.00},
-};
-*/
 //ユーザーインターフェースのID
 //ParamsSetup関数とRender関数のparamsパラメータのIDになる
 enum {
@@ -73,6 +69,13 @@ enum {
 	ID_RGBS_B,
 	ID_TOPIC_RGBS_END,
 
+	ID_TOPIC_RS,
+	ID_RS_SEED,
+	ID_RS_VALUE,
+	ID_RS_SHIFT,
+	ID_TOPIC_RS_END,
+
+
 	ID_TOPIC_SWAPLINE,
 	ID_SWAPLINE_SEED,
 	ID_SWAPVALUE,
@@ -86,17 +89,24 @@ enum {
 	ID_NOISESTRONG,
 	ID_TOPIC_NOISE_END,
 
+	ID_TOPIC_RL,
+	ID_RL_SEED,
+	ID_RL_VALUE,
+	ID_RL_VALUE2,
+	ID_RL_OPACITY,
+
+	ID_TOPIC_RL_END,
+
 
 
 	ID_NUM_PARAMS
 };
 
 // 関数定義
-static PF_Err Noise8(ParamInfo* infoP);
-
-static std::string directoryPath;
+PF_Err NoiseHor8(ParamInfo* infoP);
+PF_Err SwapLine8(ParamInfo* infoP);
 //-------------------------------------------------------
-class Noise : public AEInfo
+class NoiseHorizon : public AEInfo
 {
 public:
 	// ******************************************************
@@ -110,6 +120,8 @@ public:
 	//PF_Err TargetExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	//PF_Err BlendExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err RGBShiftExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err RandomShiftExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err RandomLineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 
 	// ******************************************************
 	PF_Err	About(
@@ -217,46 +229,10 @@ public:
 		PF_UserChangedParamExtra* extraP,
 		A_long pc
 	)override;
-	std::string OpenJsonFileDialog(std::string title,std::string defp )
-	{
-		const char* filterPatterns[] = { "*.json", "*.*" };
-		const char* selectedFile = tinyfd_openFileDialog(
-			title.c_str(),                      // ダイアログのタイトル
-			defp.c_str(),                       // 初期ディレクトリ
-			2,                          // フィルタパターンの数
-			filterPatterns,             // フィルタパターン
-			"Json files and All Files", // フィルタの説明
-			0                           // マルチセレクトの可否 (0 = No, 1 = Yes)
-		);
-		std::string ret;
-		if (selectedFile)
-		{
-			ret = std::string(selectedFile);
-		}
 
-		return ret;
-	}
-	std::string SaveJsonFileDialog(std::string title, std::string defp)
-	{
-		const char* filterPatterns[] = { "*.json", "*.*" };
-		const char* selectedFile = tinyfd_saveFileDialog(
-			title.c_str(),                      // ダイアログのタイトル
-			defp.c_str(),                       // 初期ディレクトリ
-			2,                          // フィルタパターンの数
-			filterPatterns,             // フィルタパターン
-			"Json files and All Files" // フィルタの説明
-		);
-		std::string ret;
-		if (selectedFile)
-		{
-			ret = std::string(selectedFile);
-		}
-
-		return ret;
-	}
 };
 
-#endif // Noise_H
+#endif // NoiseHorizon_H
 #ifndef EFFECT_MAIN_H
 #define EFFECT_MAIN_H
 //-----------------------------------------------------------------------------------

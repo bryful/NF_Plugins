@@ -28,8 +28,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EDC92880-8F77-4F20-88BF-B53FF4FEC7DD}</ProjectGuid>
-    <RootNamespace>Noise</RootNamespace>
-    <ProjectName>Noise</ProjectName>
+    <RootNamespace>NoiseHorizon</RootNamespace>
+    <ProjectName>NoiseHorizon</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -150,7 +150,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Noise.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/NoiseHorizon.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -199,7 +199,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Noise.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/NoiseHorizon.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -253,7 +253,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Noise.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/NoiseHorizon.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -307,7 +307,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Noise.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/NoiseHorizon.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -361,7 +361,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Noise.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/NoiseHorizon.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -417,7 +417,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/Noise.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/NoiseHorizon.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -497,17 +497,11 @@
     <ClInclude Include="..\..\..\Util\Param_Utils.h" />
     <ClInclude Include="..\..\..\Util\Smart_Utils.h" />
     <ClInclude Include="..\..\..\Util\String_Utils.h" />
-    <ClInclude Include="..\..\_NFLib\json.hpp" />
     <ClInclude Include="..\..\_NFLib\NFBlend.h" />
-    <ClInclude Include="..\..\_NFLib\NFJson.h" />
     <ClInclude Include="..\..\_NFLib\NFLibVersion.h" />
     <ClInclude Include="..\..\_NFLib\NFUtils.h" />
     <ClInclude Include="..\..\_NFLib\NFWorld.h" />
-    <ClInclude Include="..\..\_NFLib\tinyfiledialogs.h" />
     <ClInclude Include="..\NF_Target.h" />
-    <ClInclude Include="..\Noise.h">
-      <DeploymentContent>true</DeploymentContent>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\..\devstudio\Include\BASETSD.H" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\VC98\Include\BASETSD.H" />
     <CustomBuildStep Include="..\..\..\Util\AEFX_SuiteHelper.h" />
@@ -520,7 +514,7 @@
     </CustomBuildStep>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\NoisePiPL.r">
+    <CustomBuild Include="..\NoiseHorizonPiPL.r">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling the PiPL</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cl /I "$(ProjectDir)..\..\..\Headers" /EP ".."\\"%(Filename).r" &gt; "$(IntDir)"\\"%(Filename).rr"
 "$(ProjectDir)..\..\..\Resources\PiPLTool" "$(IntDir)%(Filename).rr" "$(IntDir)%(Filename).rrc"
@@ -565,10 +559,9 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
     <ClCompile Include="..\..\..\Util\AEFX_SuiteHelper.c" />
     <ClCompile Include="..\..\..\Util\AEGP_SuiteHandler.cpp" />
     <ClCompile Include="..\..\..\Util\MissingSuiteError.cpp" />
-    <ClCompile Include="..\..\_NFLib\NFJson.cpp" />
-    <ClCompile Include="..\..\_NFLib\tinyfiledialogs.c" />
     <ClCompile Include="..\NF_Entry.cpp" />
-    <ClCompile Include="..\Noise.cpp">
+    <ClCompile Include="..\NoiseHor.cpp" />
+    <ClCompile Include="..\NoiseHorizon.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MSWindows;WIN32;_DEBUG;_WINDOWS</PreprocessorDefinitions>
@@ -590,9 +583,13 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release-MT|x64'">true</BrowseInformation>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BrowseInformation>
     </ClCompile>
+    <ClCompile Include="..\RandomLine.cpp" />
+    <ClCompile Include="..\RandomShift.cpp" />
+    <ClCompile Include="..\RGBShift.cpp" />
+    <ClCompile Include="..\SwapLine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="NoisePiPL.rc" />
+    <ResourceCompile Include="NoiseHorizonPiPL.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

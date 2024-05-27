@@ -1,4 +1,4 @@
-#include "Noise.h"
+#include "NoiseHorizon.h"
 //-----------------------------------------------------------------------------------
 extern "C" {
 	DllExport
@@ -40,7 +40,7 @@ extern "C" {
 		try
 		{
 
-			Noise ae;
+			NoiseHorizon ae;
 			ae.in_data = in_dataP;
 
 			switch (cmd) {
