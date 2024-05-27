@@ -118,7 +118,9 @@ extern "C" {
 				err = ae.QueryDynamicFlags(in_dataP,
 					out_dataP,
 					paramsP,
-					reinterpret_cast<PF_UserChangedParamExtra*>(extraP));
+					reinterpret_cast<PF_UserChangedParamExtra*>(extraP)
+					ID_NUM_PARAMS
+				);
 				break;
 			}
 		}

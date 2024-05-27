@@ -6,7 +6,13 @@ LineSwap8(ParamInfo *infoP)
 	PF_Err			err = PF_Err_NONE;
 	if (infoP->swapValue <= 0) return err;
 
-	F_SRAND(infoP->swapline_seed);
+	if (infoP->moving == TRUE)
+	{
+		F_SRAND(infoP->swapline_seed+infoP->frame );
+	}
+	else {
+		F_SRAND(infoP->swapline_seed);
+	}
 	int cnt = infoP->swapValue;
 
 	PF_Pixel* data = infoP->nfworld->data8();
@@ -48,7 +54,14 @@ Noise8(ParamInfo* infoP)
 	int cnt = w*h;
 	cnt = (int)((double)cnt * infoP->noisevalue * F_RAND_D()+0.5);
 	if (cnt <= 0) return err;
-	F_SRAND(infoP->noise_seed);
+	if (infoP->moving == TRUE)
+	{
+		F_SRAND(infoP->swapline_seed + infoP->frame);
+	}
+	else {
+		F_SRAND(infoP->swapline_seed);
+	}
+
 
 	PF_Pixel* data = infoP->nfworld->data8();
 	for (int i = 0; i < cnt; i++)
@@ -65,9 +78,23 @@ Noise8(ParamInfo* infoP)
 			for (int x = 0; x < nl; x++)
 			{
 				PF_Pixel p = *adr;
-				p.red = RoundByteDouble((double)p.red + ad);
-				p.green = RoundByteDouble((double)p.green + ad);
-				p.blue = RoundByteDouble((double)p.blue + ad);
+				if (p.alpha != PF_MAX_CHAN8)
+				{
+					p.alpha = RoundByteDouble(ABS( (double)p.alpha + ad));
+				}
+				PF_FpLong a = 1;
+				if (p.alpha != 0)
+				{
+					a = PF_MAX_CHAN8 / (double)p.alpha;
+				}
+				PF_FpLong r = ABS((double)p.red + ad) * a;
+				PF_FpLong g = ABS((double)p.green+ ad) * a;
+				PF_FpLong b = ABS((double)p.blue + ad) * a;
+
+
+				p.red = RoundByteDouble(r);
+				p.green = RoundByteDouble(g);
+				p.blue = RoundByteDouble(b);
 				*adr = p;
 				adr++;
 			}
@@ -96,13 +123,13 @@ RGBShift8(
 	PF_FpLong a = 0;
 	rp = infoP->nfworld->GetPix8(xL - infoP->RShift, yL);
 	r = rp.red;
-	a = a + rp.red - a * (double)rp.red / PF_MAX_CHAN8;
+	a += rp.alpha/3 +1;
 	gp = infoP->nfworld->GetPix8(xL - infoP->GShift, yL);
 	g = gp.green;
-	a = a + gp.green - a * (double)gp.green / PF_MAX_CHAN8;
+	a += gp.alpha/3+1;
 	bp = infoP->nfworld->GetPix8(xL - infoP->BShift, yL);
 	b = bp.blue;
-	a = a + bp.blue - a * (double)bp.blue / PF_MAX_CHAN8;
+	a += bp.alpha/3 +1;
 
 	outP->red = r;
 	outP->green = g;
@@ -116,11 +143,20 @@ PF_Err Noise::RGBShiftExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst)
 	PF_Err err = PF_Err_NONE;
 	RGBShiftInfo rgbsInfo;
 	rgbsInfo.seed = infoP->rgbs.seed;
-	F_SRAND(rgbsInfo.seed);
+
 	rgbsInfo.RShift = F_RANDR(-infoP->rgbs.RShift, infoP->rgbs.RShift);
 	rgbsInfo.GShift = F_RANDR(-infoP->rgbs.GShift, infoP->rgbs.GShift);
 	rgbsInfo.BShift = F_RANDR(-infoP->rgbs.BShift, infoP->rgbs.BShift);
+
+	if ((rgbsInfo.RShift == 0) && (rgbsInfo.GShift == 0) && (rgbsInfo.BShift == 0)) return err;
 	rgbsInfo.nfworld = infoP->rgbs.nfworld;
+	if (infoP->moving == TRUE)
+	{
+		F_SRAND(infoP->rgbs.seed + infoP->frame);
+	}
+	else {
+		F_SRAND(infoP->rgbs.seed);
+	}
 	switch (pixelFormat())
 	{
 	case PF_PixelFormat_ARGB128:
@@ -150,8 +186,19 @@ PF_Err Noise::ParamsSetup(
 	in_data = in_dataP;
 	out_data = out_dataP;
 	PF_ParamDef		def;
-	AEFX_CLR_STRUCT(def);
 	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	def.flags = PF_ParamFlag_SUPERVISE |
+		PF_ParamFlag_CANNOT_TIME_VARY |
+		PF_ParamFlag_CANNOT_INTERP;
+	PF_ADD_CHECKBOX(
+		"moving",
+		"on",
+		TRUE,
+		0,
+		ID_MOVING
+	);	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
 	PF_ADD_FLOAT_SLIDER(
 		"globalValue",			//Name
 		0,						//VALID_MIN
@@ -178,6 +225,20 @@ PF_Err Noise::ParamsSetup(
 		0,				//デフォルトの値
 		ID_RGBS_SEED
 	);
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_FLOAT_SLIDER(
+		"shiftVaue",			//Name
+		0,						//VALID_MIN
+		1000,					//VALID_MAX
+		0,						//SLIDER_MIN
+		100,					//SLIDER_MAX
+		100,					//CURVE_TOLERANCE
+		100,					//DFLT
+		1,						//PREC
+		0,						//DISP
+		0,						//WANT_PHASE
+		ID_RGBS_VALUE
+	);	
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_SLIDER(
 		"RedShift",	//パラメータの名前
@@ -320,34 +381,86 @@ PF_Err	 Noise::UserChangedParam(
 	A_long pc)
 {
 	PF_Err err = PF_Err_NONE;
-	Init(in_dataP, out_dataP, paramsP, outputP,ID_NUM_PARAMS);
-	m_cmd = PF_Cmd_USER_CHANGED_PARAM;
+	try {
+		Init(in_dataP, out_dataP, paramsP, outputP,ID_NUM_PARAMS);
+		m_cmd = PF_Cmd_USER_CHANGED_PARAM;
+		if (!err) {
+			
+		}
+	}
+	catch (PF_Err& errP) {
+		err = errP;
+	}
 	return err;
 }
-
+PF_Err Noise::QueryDynamicFlags(
+	PF_InData* in_dataP,
+	PF_OutData* out_dataP,
+	PF_ParamDef* paramsP[],
+	PF_LayerDef* outputP,
+	PF_UserChangedParamExtra* extraP,
+	A_long pc
+)
+{
+	PF_Err err = PF_Err_NONE;
+	try {
+		Init(in_dataP, out_dataP, paramsP, outputP, ID_NUM_PARAMS);
+		m_cmd = PF_Cmd_QUERY_DYNAMIC_FLAGS;
+		if ((in_data!=NULL)&&(out_data!=NULL)) {
+			PF_ParamDef def;
+			AEFX_CLR_STRUCT(def);
+			
+			ERR(PF_CHECKOUT_PARAM(
+				in_dataP,
+				ID_MOVING,
+				in_dataP->current_time, in_dataP->time_step, in_dataP->time_scale,
+				&def));
+			PF_Boolean b = (PF_Boolean)def.u.bd.value;
+			if (out_dataP->out_flags != PF_OutFlag_NONE) {
+				if (b == TRUE) {
+					out_dataP->out_flags |= PF_OutFlag_NON_PARAM_VARY;
+				}
+				else {
+					out_dataP->out_flags &= ~PF_OutFlag_NON_PARAM_VARY;
+				}
+			}
+			ERR(PF_CHECKIN_PARAM(in_dataP,&def));
+		}
+	}
+	catch (PF_Err& errP) {
+		err = errP;
+	}
+	return err;
+}
+// **********************************************************
 // **********************************************************
 PF_Err Noise::GetParams(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
 	PF_FpLong gv=1;
+	ERR(GetCHECKBOX(ID_MOVING, &infoP->moving));
+
 	ERR(GetFLOAT(ID_GLOBAL_VALUE, &gv));
 	if (!err) gv /= 100;
 
 	ERR(GetADD(ID_RGBS_SEED, &infoP->rgbs.seed));
+	PF_FpLong rv = 1;
+	ERR(GetFLOAT(ID_RGBS_VALUE, &rv));
+	if (!err) rv /= 100;
 	ERR(GetADD(ID_RGBS_R, &infoP->rgbs.RShift));
 	if (!err)
 	{
-		infoP->rgbs.RShift = (A_long)((double)infoP->rgbs.RShift * gv + 0.5);
+		infoP->rgbs.RShift = (A_long)((double)infoP->rgbs.RShift * gv*rv + 0.5);
 	}
 	ERR(GetADD(ID_RGBS_G, &infoP->rgbs.GShift));
 	if (!err)
 	{
-		infoP->rgbs.GShift = (A_long)((double)infoP->rgbs.GShift * gv + 0.5);
+		infoP->rgbs.GShift = (A_long)((double)infoP->rgbs.GShift * gv*rv + 0.5);
 	}
 	ERR(GetADD(ID_RGBS_B, &infoP->rgbs.BShift));
 	if (!err)
 	{
-		infoP->rgbs.BShift = (A_long)((double)infoP->rgbs.BShift * gv + 0.5);
+		infoP->rgbs.BShift = (A_long)((double)infoP->rgbs.BShift * gv*rv + 0.5);
 	}
 
 	ERR(GetADD(ID_SWAPLINE_SEED, &infoP->swapline_seed));
@@ -381,6 +494,16 @@ PF_Err Noise::Exec(ParamInfo* infoP)
 	dst->Copy(src);
 	infoP->nfworld = dst;
 	infoP->rgbs.nfworld = src;
+	infoP->frame = frame();
+	infoP->rgbs.frame = frame();
+	double ds = ParamDownScaleX();
+
+	infoP->noiseLength = (A_long)((double)infoP->noiseLength * ds);
+	infoP->swapHeight = (A_long)((double)infoP->swapHeight * ds);
+	infoP->rgbs.RShift = (A_long)((double)infoP->rgbs.RShift * ds);
+	infoP->rgbs.GShift = (A_long)((double)infoP->rgbs.GShift * ds);
+	infoP->rgbs.BShift = (A_long)((double)infoP->rgbs.BShift * ds);
+
 	switch (pixelFormat())
 	{
 	case PF_PixelFormat_ARGB128:

@@ -16,6 +16,7 @@
 
 typedef struct RGBShiftInfo {
 	A_long		seed;
+	A_long		frame;
 	A_long		RShift;
 	A_long		GShift;
 	A_long		BShift;
@@ -23,6 +24,8 @@ typedef struct RGBShiftInfo {
 } RGBShift, * RGBShiftP, ** RGBShiftH;
 //UIのパラメータ
 typedef struct ParamInfo {
+	PF_Boolean	moving;
+	A_long		frame;
 	RGBShiftInfo rgbs;
 
 	A_long		swapline_seed;
@@ -33,7 +36,7 @@ typedef struct ParamInfo {
 	PF_FpLong	noisevalue;
 	A_long		noiseLength;
 	PF_FpLong	noiseStrong;
-	A_long		noiseSize;
+	//A_long		noiseSize;
 	NFWorld*	nfworld;
 
 
@@ -59,10 +62,12 @@ double noiseTbl3[5][5]{
 //ParamsSetup関数とRender関数のparamsパラメータのIDになる
 enum {
 	ID_INPUT = 0,	// default input layer
+	ID_MOVING,
 	ID_GLOBAL_VALUE,
 
 	ID_TOPIC_RGBS,
 	ID_RGBS_SEED,
+	ID_RGBS_VALUE,
 	ID_RGBS_R,
 	ID_RGBS_G,
 	ID_RGBS_B,
@@ -204,6 +209,14 @@ public:
 		PF_LayerDef* outputP,
 		PF_UserChangedParamExtra* extraP,
 		A_long pc)override;
+	PF_Err QueryDynamicFlags(
+		PF_InData* in_dataP,
+		PF_OutData* out_dataP,
+		PF_ParamDef* paramsP[],
+		PF_LayerDef* outputP,
+		PF_UserChangedParamExtra* extraP,
+		A_long pc
+	)override;
 	std::string OpenJsonFileDialog(std::string title,std::string defp )
 	{
 		const char* filterPatterns[] = { "*.json", "*.*" };

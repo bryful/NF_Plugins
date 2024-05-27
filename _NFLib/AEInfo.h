@@ -93,8 +93,9 @@ public:
 	AEGP_StreamRefH			ae_item_streamH[AEInfo_ITEM_COUNT];
 	AEGP_EffectRefH			ae_effect_refH;
 	//*********************************************************************************
-	void Init()
+	PF_Err Init()
 	{
+		PF_Err	err = PF_Err_NONE;
 		m_format = PF_PixelFormat_INVALID;
 		m_frame = 0;
 		m_cmd = PF_Cmd_ABOUT;
@@ -118,15 +119,16 @@ public:
 
 		ae_effect_refH = NULL;
 		for (A_long i = 0; i < AEInfo_ITEM_COUNT; i++) ae_item_streamH[i] = NULL;
-
+		return err;
 	}
-	void Init(
+	PF_Err Init(
 		PF_InData* in_dataP,
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP,
 		A_long pc)
 	{
+		PF_Err	err = PF_Err_NONE;
 		m_cmd = PF_Cmd_ABOUT;
 		m_paramsCount = pc;
 		m_infoSize = 0;
@@ -164,7 +166,7 @@ public:
 
 		ae_effect_refH = NULL;
 		for (A_long i = 0; i < AEInfo_ITEM_COUNT; i++) ae_item_streamH[i] = NULL;
-
+		return err;
 	}
 	//******************************************************************************
 	AEInfo()
@@ -516,7 +518,10 @@ public:
 			PF_InData* in_dataP,
 			PF_OutData* out_dataP,
 			PF_ParamDef* paramsP[],
-			void* extraP)
+			PF_LayerDef* outputP,
+			PF_UserChangedParamExtra* extraP,
+			A_long pc
+	)
 	{
 		PF_Err 	err = PF_Err_NONE;
 		Init();
