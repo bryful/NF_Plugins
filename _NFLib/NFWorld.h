@@ -45,10 +45,12 @@ public:
 	A_long	height() { return m_height; }
 	A_long	widthTrue() { return  m_widthTrue; }
 	A_long	offsetWidth() { m_offsetWidth; }
+	A_long yAdr(A_long y) {return m_vurTbl[y];}
 	PF_Pixel* data8() { return (PF_Pixel*)m_data; }
 	PF_Pixel16* data16() { return (PF_Pixel16*)m_data; }
 	PF_PixelFloat* data32() { return (PF_PixelFloat*)m_data; }
 	PF_PixelFormat pixelFormat() { return m_format; }
+
 	PF_FpLong downScale() {
 		PF_FpLong ret = 1;
 		if (in_data->downsample_x.den <= 0)
@@ -135,6 +137,21 @@ public:
 		if (y < 0)y = 0; else if (y >= m_height) y = m_height - 1;
 
 		return m_data8[x + m_vurTbl[y]];
+
+	}
+	PF_Pixel GetPix8Z(A_long x, A_long y)
+	{
+		if ((x >= 0) && (x < m_width)
+			&& (y >= 0) && (y < m_height))
+		{
+			return m_data8[x + m_vurTbl[y]];
+
+		}
+		else {
+			PF_Pixel ret = { 0,0,0,0 };
+			return ret;
+		}
+
 
 	}
 	// ***************************************************************

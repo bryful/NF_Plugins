@@ -9,6 +9,7 @@
 #define F_SRAND(s) (init_xorShift(s))
 #define F_RAND() (xorShift()) 
 #define F_RAND_MAX 0x7FFF
+#define F_RANDR(min,max) ( min + ((max - min)*xorShift()/F_RAND_MAX)) 
 
 #define F_RAND_D() (xorShiftDouble())
 
