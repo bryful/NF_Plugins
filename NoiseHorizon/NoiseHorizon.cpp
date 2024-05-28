@@ -122,6 +122,16 @@ PF_Err NoiseHorizon::ParamsSetup(
 	);
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_SLIDER(
+		"rsSize",	//パラメータの名前
+		16, 			//数値入力する場合の最小値
+		256,		//数値入力する場合の最大値
+		16,			//スライダーの最小値
+		128,		//スライダーの最大値
+		0,			//デフォルトの値
+		ID_RS_SIZE
+	);
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_SLIDER(
 		"rsValue",	//パラメータの名前
 		0, 			//数値入力する場合の最小値
 		2000,		//数値入力する場合の最大値
@@ -393,6 +403,7 @@ PF_Err NoiseHorizon::GetParams(ParamInfo* infoP)
 	{
 		infoP->rs.seed = v;
 	}
+	ERR(GetADD(ID_RS_SIZE, &infoP->rs.size));
 	ERR(GetADD(ID_RS_VALUE, &v));
 	if (!err)
 	{
@@ -454,66 +465,22 @@ PF_Err NoiseHorizon::Exec(ParamInfo* infoP)
 	infoP->rgbs.frame = frame();
 	double ds = ParamDownScaleX();
 
+	//解像度の補正
 	infoP->noiseLength = (A_long)((double)infoP->noiseLength * ds);
 	infoP->swapHeight = (A_long)((double)infoP->swapHeight * ds);
 	infoP->rgbs.RShift = (A_long)((double)infoP->rgbs.RShift * ds);
 	infoP->rgbs.GShift = (A_long)((double)infoP->rgbs.GShift * ds);
 	infoP->rgbs.BShift = (A_long)((double)infoP->rgbs.BShift * ds);
 	infoP->rs.XShift = (A_long)((double)infoP->rs.XShift * ds);
+	infoP->rs.size = (A_long)((double)infoP->rs.size * ds);
 	infoP->rl.value = (A_long)((double)infoP->rl.value * ds);
 
-	switch (pixelFormat())
-	{
-	case PF_PixelFormat_ARGB128:
-		//iterate32(src->world, (void*)infoP, Blend32, dst->world);
-		break;
-	case PF_PixelFormat_ARGB64:
-		//iterate16(src->world, (void*)infoP, Blend16, dst->world);
-		break;
-	case PF_PixelFormat_ARGB32:
-		//iterate8(src->world, (void*)infoP, NoiseHorizon8, dst->world);
-		RGBShiftExec(infoP, src, dst);
-		RandomShiftExec(infoP, src, dst);
-		SwapLine8(infoP);
-		NoiseHor8(infoP);
-		RandomLineExec(infoP, src, dst);
-		break;
-	default:
-		break;
-	}
-	/*
-	PF_ParamDef			checkout;
-	PF_ChannelDesc		desc;
-	PF_ChannelRef		ref;
-	PF_ChannelChunk		chunk;
-	PF_Boolean			found_depthPB;
-	int32_t				num_channelsL = 0;
-	PF_Rect				rect = { 0,0,100,100 };
-	PF_Rect				rect2 = { 0,0,100,100 };
-	
-	ERR(PF_CHECKOUT_PARAM(in_data,
-		ID_LAYER,
-		(in_data->current_time),
-		in_data->time_step,
-		in_data->time_scale,
-		&checkout));
-	if (checkout.u.ld.data) {
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = rect.left + checkout.u.ld.width;
-		rect.bottom = rect.top + checkout.u.ld.height;
+	RGBShiftExec(infoP, src, dst);
+	RandomShiftExec(infoP, src, dst);
+	SwapLineExec(infoP, src, dst);
+	NoiseHorExec(infoP, src, dst);
+	RandomLineExec(infoP, src, dst);
 
-		rect2.left = infoP->pointValue.x / 66636;
-		rect2.top = infoP->pointValue.y / 66636;
-		rect2.right = rect2.left + checkout.u.ld.width;
-		rect2.bottom= rect2.top + checkout.u.ld.height;
-		ERR(PF_COPY(&checkout.u.ld,
-			dst->world,
-			&rect,
-			&rect2));
-	}
-	ERR2(PF_CHECKIN_PARAM(in_data, &checkout));		// ALWAYS check in,
-	*/
 	delete src;
 	delete dst;
 

@@ -23,6 +23,7 @@
     <ClCompile Include="..\RGBShift.cpp" />
     <ClCompile Include="..\RandomShift.cpp" />
     <ClCompile Include="..\RandomLine.cpp" />
+    <ClCompile Include="..\RandomScanline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Headers\A.h">
@@ -125,6 +126,7 @@
     <ClInclude Include="..\..\..\Headers\AE_ChannelSuites.h">
       <Filter>Header Files\AE</Filter>
     </ClInclude>
+    <ClInclude Include="..\NoiseHorizon.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

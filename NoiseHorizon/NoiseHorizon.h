@@ -23,6 +23,7 @@ typedef struct RGBShiftInfo {
 typedef struct RShiftInfo {
 	A_long		seed;
 	A_long		frame;
+	A_long		size;
 	A_long		value;
 	A_long		XShift;
 } RShiftInfo, * RShiftInfoP, ** RShiftInfoH;
@@ -33,7 +34,13 @@ typedef struct RandomLineInfo {
 	A_long		value2;
 	PF_FpLong	Opacity;
 } RandomLineInfo, * RandomLineInfoP, ** RandomLineInfoH;
-
+typedef struct ScanlineInfo {
+	A_long		seed;
+	A_long		frame;
+	PF_FpLong	value;
+	A_long		XShift;
+	NFWorld* nfworld;
+} ScanlineInfo, * ScanlineInfoP, ** ScanlineInfoH;
 //UIのパラメータ
 typedef struct ParamInfo {
 	PF_Boolean	moving;
@@ -71,6 +78,7 @@ enum {
 
 	ID_TOPIC_RS,
 	ID_RS_SEED,
+	ID_RS_SIZE,
 	ID_RS_VALUE,
 	ID_RS_SHIFT,
 	ID_TOPIC_RS_END,
@@ -103,8 +111,6 @@ enum {
 };
 
 // 関数定義
-PF_Err NoiseHor8(ParamInfo* infoP);
-PF_Err SwapLine8(ParamInfo* infoP);
 //-------------------------------------------------------
 class NoiseHorizon : public AEInfo
 {
@@ -117,11 +123,11 @@ public:
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
-	//PF_Err TargetExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
-	//PF_Err BlendExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err RGBShiftExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err RandomShiftExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err RandomLineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err SwapLineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err NoiseHorExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 
 	// ******************************************************
 	PF_Err	About(
