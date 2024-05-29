@@ -26,7 +26,8 @@ PF_Err NoiseHorizon::ParamsSetup(
 		TRUE,
 		0,
 		ID_MOVING
-	);	//----------------------------------------------------------------
+	);	
+	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_FLOAT_SLIDER(
 		"globalValue",			//Name
@@ -78,7 +79,7 @@ PF_Err NoiseHorizon::ParamsSetup(
 		30000,			//数値入力する場合の最大値
 		0,			//スライダーの最小値
 		200,			//スライダーの最大値
-		0,				//デフォルトの値
+		2,				//デフォルトの値
 		ID_RGBS_R
 	);
 	//----------------------------------------------------------------
@@ -87,9 +88,9 @@ PF_Err NoiseHorizon::ParamsSetup(
 		"GreenShift",	//パラメータの名前
 		0, 		//数値入力する場合の最小値
 		30000,			//数値入力する場合の最大値
-		-200,			//スライダーの最小値
+		0,				//スライダーの最小値
 		200,			//スライダーの最大値
-		0,				//デフォルトの値
+		2,				//デフォルトの値
 		ID_RGBS_G
 	);
 	//----------------------------------------------------------------
@@ -98,9 +99,9 @@ PF_Err NoiseHorizon::ParamsSetup(
 		"BlueShift",	//パラメータの名前
 		-0, 		//数値入力する場合の最小値
 		30000,			//数値入力する場合の最大値
-		-200,			//スライダーの最小値
+		-0,			//スライダーの最小値
 		200,			//スライダーの最大値
-		0,				//デフォルトの値
+		2,				//デフォルトの値
 		ID_RGBS_B
 	);
 	//----------------------------------------------------------------
@@ -122,23 +123,23 @@ PF_Err NoiseHorizon::ParamsSetup(
 	);
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_SLIDER(
-		"rsSize",	//パラメータの名前
-		16, 			//数値入力する場合の最小値
-		256,		//数値入力する場合の最大値
-		16,			//スライダーの最小値
-		128,		//スライダーの最大値
-		0,			//デフォルトの値
-		ID_RS_SIZE
-	);
-	AEFX_CLR_STRUCT(def);
-	PF_ADD_SLIDER(
 		"rsValue",	//パラメータの名前
 		0, 			//数値入力する場合の最小値
 		2000,		//数値入力する場合の最大値
 		0,			//スライダーの最小値
 		100,		//スライダーの最大値
-		0,			//デフォルトの値
+		10,			//デフォルトの値
 		ID_RS_VALUE
+	);
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_SLIDER(
+		"rsSize",	//パラメータの名前
+		16, 			//数値入力する場合の最小値
+		256,		//数値入力する場合の最大値
+		16,			//スライダーの最小値
+		128,		//スライダーの最大値
+		64,			//デフォルトの値
+		ID_RS_SIZE
 	);
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_SLIDER(
@@ -147,13 +148,53 @@ PF_Err NoiseHorizon::ParamsSetup(
 		1000,		//数値入力する場合の最大値
 		1,			//スライダーの最小値
 		200,		//スライダーの最大値
-		20,			//デフォルトの値
+		100,			//デフォルトの値
 		ID_RS_SHIFT
 	);
 
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_END_TOPIC(ID_TOPIC_RS_END);
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_TOPIC("Scanline", ID_TOPIC_SL);
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_SLIDER(
+		"sl_seed",	//パラメータの名前
+		-30000, 		//数値入力する場合の最小値
+		30000,			//数値入力する場合の最大値
+		-200,			//スライダーの最小値
+		200,			//スライダーの最大値
+		0,				//デフォルトの値
+		ID_SL_SEED
+	);
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_FLOAT_SLIDER(
+		"slVaue",			//Name
+		0,						//VALID_MIN
+		100,					//VALID_MAX
+		0,						//SLIDER_MIN
+		100,					//SLIDER_MAX
+		100,					//CURVE_TOLERANCE
+		10,					//DFLT
+		1,						//PREC
+		0,						//DISP
+		0,						//WANT_PHASE
+		ID_SL_VALUE
+	);
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_SLIDER(
+		"slShift",		//パラメータの名前
+		0, 				//数値入力する場合の最小値
+		3000,			//数値入力する場合の最大値
+		0,				//スライダーの最小値
+		100,			//スライダーの最大値
+		20,				//デフォルトの値
+		ID_SL_SHIFT
+	);
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	PF_END_TOPIC(ID_TOPIC_SL_END);
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_TOPIC("swapLine", ID_TOPIC_SWAPLINE);
@@ -183,12 +224,13 @@ PF_Err NoiseHorizon::ParamsSetup(
 	PF_ADD_SLIDER(
 		"swapHeight",	//パラメータの名前
 		1, 				//数値入力する場合の最小値
-		200,			//数値入力する場合の最大値
+		1000,			//数値入力する場合の最大値
 		1,				//スライダーの最小値
-		100,			//スライダーの最大値
-		30,				//デフォルトの値
+		200,			//スライダーの最大値
+		35,				//デフォルトの値
 		ID_SWAPVALUE
 	);
+
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_END_TOPIC(ID_TOPIC_SWAPLINE_END);
@@ -239,7 +281,7 @@ PF_Err NoiseHorizon::ParamsSetup(
 		0,						//SLIDER_MIN
 		100,					//SLIDER_MAX
 		100,					//CURVE_TOLERANCE
-		10,						//DFLT
+		20,						//DFLT
 		1,						//PREC
 		0,						//DISP
 		0,						//WANT_PHASE
@@ -267,10 +309,10 @@ PF_Err NoiseHorizon::ParamsSetup(
 	PF_ADD_SLIDER(
 		"rlValue",	//パラメータの名前
 		0, 				//数値入力する場合の最小値
-		300,			//数値入力する場合の最大値
+		100,			//数値入力する場合の最大値
 		0,				//スライダーの最小値
-		100,			//スライダーの最大値
-		3,				//デフォルトの値
+		10,			//スライダーの最大値
+		2,				//デフォルトの値
 		ID_RL_VALUE
 	);
 	//----------------------------------------------------------------
@@ -278,25 +320,11 @@ PF_Err NoiseHorizon::ParamsSetup(
 	PF_ADD_SLIDER(
 		"rlValue2",	//パラメータの名前
 		1, 				//数値入力する場合の最小値
-		300,			//数値入力する場合の最大値
+		100,			//数値入力する場合の最大値
 		1,				//スライダーの最小値
-		50,			//スライダーの最大値
-		3,				//デフォルトの値
+		20,			//スライダーの最大値
+		2,				//デフォルトの値
 		ID_RL_VALUE2
-	);
-	AEFX_CLR_STRUCT(def);
-	PF_ADD_FLOAT_SLIDER(
-		"rlOpacity",			//Name
-		0,						//VALID_MIN
-		100,					//VALID_MAX
-		0,						//SLIDER_MIN
-		100,					//SLIDER_MAX
-		100,					//CURVE_TOLERANCE
-		10,						//DFLT
-		1,						//PREC
-		0,						//DISP
-		0,						//WANT_PHASE
-		ID_RL_OPACITY
 	);
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
@@ -373,11 +401,14 @@ PF_Err NoiseHorizon::GetParams(ParamInfo* infoP)
 {
 	PF_Err err = PF_Err_NONE;
 	PF_FpLong gv=1;
+
+	// **************
 	ERR(GetCHECKBOX(ID_MOVING, &infoP->moving));
 
 	ERR(GetFLOAT(ID_GLOBAL_VALUE, &gv));
 	if (!err) gv /= 100;
 
+	// **************
 	ERR(GetADD(ID_RGBS_SEED, &infoP->rgbs.seed));
 	PF_FpLong rv = 1;
 	ERR(GetFLOAT(ID_RGBS_VALUE, &rv));
@@ -398,6 +429,19 @@ PF_Err NoiseHorizon::GetParams(ParamInfo* infoP)
 		infoP->rgbs.BShift = (A_long)((double)infoP->rgbs.BShift * gv*rv + 0.5);
 	}
 	A_long v=0;
+
+	ERR(GetADD(ID_SL_SEED, &infoP->sl.seed));
+	ERR(GetFLOAT(ID_SL_VALUE, &infoP->sl.value));
+	if (!err)
+	{
+		infoP->sl.value /= 100;
+	}
+	ERR(GetADD(ID_SL_SHIFT, &infoP->sl.XShift));
+	if (!err)
+	{
+		infoP->sl.XShift = (A_long)((double)infoP->sl.XShift * gv + 0.5);
+	}
+
 	ERR(GetADD(ID_RS_SEED, &v));
 	if (!err)
 	{
@@ -424,7 +468,10 @@ PF_Err NoiseHorizon::GetParams(ParamInfo* infoP)
 		infoP->swapValue = (A_long)((double)infoP->swapValue * gv + 0.5);
 	}
 	ERR(GetADD(ID_SWAPHEIGHT, &infoP->swapHeight));
-
+	if (!err)
+	{
+		infoP->swapHeight = (A_long)((double)infoP->swapHeight * gv + 0.5);
+	}
 
 	ERR(GetADD(ID_NOISE_SEED, &infoP->noise_seed));
 	ERR(GetFLOAT(ID_NOISEVALUE, &infoP->noisevalue));
@@ -434,8 +481,13 @@ PF_Err NoiseHorizon::GetParams(ParamInfo* infoP)
 		infoP->noisevalue *= gv;
 	}
 	ERR(GetADD(ID_NOISELENGTH, &infoP->noiseLength));
+	if (!err)
+	{
+		infoP->noiseLength = (A_long)((double)infoP->noiseLength * gv + 0.5);
+	}
 	ERR(GetFLOAT(ID_NOISESTRONG, &infoP->noiseStrong));
 	if (!err) infoP->noiseStrong /= 100;
+	
 	ERR(GetADD(ID_RL_SEED, &infoP->rl.seed));
 	ERR(GetADD(ID_RL_VALUE, &infoP->rl.value));
 	if (!err)
@@ -443,11 +495,6 @@ PF_Err NoiseHorizon::GetParams(ParamInfo* infoP)
 		infoP->rl.value = (A_long)((double)infoP->rl.value * gv + 0.5);
 	}
 	ERR(GetADD(ID_RL_VALUE2, &infoP->rl.value2));
-	ERR(GetFLOAT(ID_RL_OPACITY, &infoP->rl.Opacity));
-	if (!err)
-	{
-		infoP->rl.Opacity /= 100;
-	}
 
 	return err;
 };
@@ -474,9 +521,11 @@ PF_Err NoiseHorizon::Exec(ParamInfo* infoP)
 	infoP->rs.XShift = (A_long)((double)infoP->rs.XShift * ds);
 	infoP->rs.size = (A_long)((double)infoP->rs.size * ds);
 	infoP->rl.value = (A_long)((double)infoP->rl.value * ds);
+	infoP->sl.XShift = (A_long)((double)infoP->sl.XShift * ds);
 
 	RGBShiftExec(infoP, src, dst);
 	RandomShiftExec(infoP, src, dst);
+	RandomScanlineExec(infoP, src, dst);
 	SwapLineExec(infoP, src, dst);
 	NoiseHorExec(infoP, src, dst);
 	RandomLineExec(infoP, src, dst);

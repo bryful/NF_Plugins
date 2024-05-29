@@ -17,7 +17,11 @@ PF_Err NoiseHorizon::RandomShiftExec(ParamInfo* infoP, NFWorld* src, NFWorld* ds
 	}
 	double ds = ParamDownScaleX();
 	//PF_COPY
-	PF_EffectWorld bufW = NewEffectWorld((int)(infoP->rs.size *ds), (int)(infoP->rs.size *ds), pixelFormat());
+	A_long mw = (int)(infoP->rs.size * ds);
+	if (mw < 16) mw = 16;
+	A_long mh = (int)(infoP->rs.size * ds);
+	if (mh < 16) mh = 16;
+	PF_EffectWorld bufW = NewEffectWorld(mw, mh, pixelFormat());
 	if (ErrResult() != PF_Err_NONE) return err;
 	NFWorld* buf = new NFWorld(&bufW, in_data, pixelFormat());
 

@@ -29,10 +29,8 @@ typedef struct RShiftInfo {
 } RShiftInfo, * RShiftInfoP, ** RShiftInfoH;
 typedef struct RandomLineInfo {
 	A_long		seed;
-	A_long		frame;
 	A_long		value;
 	A_long		value2;
-	PF_FpLong	Opacity;
 } RandomLineInfo, * RandomLineInfoP, ** RandomLineInfoH;
 typedef struct ScanlineInfo {
 	A_long		seed;
@@ -43,10 +41,11 @@ typedef struct ScanlineInfo {
 } ScanlineInfo, * ScanlineInfoP, ** ScanlineInfoH;
 //UIÇÃÉpÉâÉÅÅ[É^
 typedef struct ParamInfo {
-	PF_Boolean	moving;
-	A_long		frame;
+	PF_Boolean		moving;
+	A_long			frame;
 	RGBShiftInfo	rgbs;
 	RShiftInfo		rs;
+	ScanlineInfo	sl;
 	A_long		swapline_seed;
 	A_long		swapValue;
 	A_long		swapHeight;
@@ -78,11 +77,16 @@ enum {
 
 	ID_TOPIC_RS,
 	ID_RS_SEED,
-	ID_RS_SIZE,
 	ID_RS_VALUE,
+	ID_RS_SIZE,
 	ID_RS_SHIFT,
 	ID_TOPIC_RS_END,
 
+	ID_TOPIC_SL,
+	ID_SL_SEED,
+	ID_SL_VALUE,
+	ID_SL_SHIFT,
+	ID_TOPIC_SL_END,
 
 	ID_TOPIC_SWAPLINE,
 	ID_SWAPLINE_SEED,
@@ -101,7 +105,6 @@ enum {
 	ID_RL_SEED,
 	ID_RL_VALUE,
 	ID_RL_VALUE2,
-	ID_RL_OPACITY,
 
 	ID_TOPIC_RL_END,
 
@@ -128,6 +131,7 @@ public:
 	PF_Err RandomLineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err SwapLineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err NoiseHorExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err RandomScanlineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 
 	// ******************************************************
 	PF_Err	About(

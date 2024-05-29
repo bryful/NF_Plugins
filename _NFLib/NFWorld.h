@@ -361,7 +361,7 @@ public:
 
 	}
 #pragma endregion
-	protected:
+	//protected:
 	// ***************************************************************
 #pragma region Copy
 	// ***************************************************************
@@ -1061,6 +1061,24 @@ public:
 			break;
 		}
 		return err;
+	}
+	PF_Pixel GetPix(A_long x, A_long y)
+	{
+		PF_Pixel ret = { 0,0,0,0 };
+		PF_Err err = PF_Err_NONE;
+		switch (m_format)
+		{
+		case PF_PixelFormat_ARGB128:
+			ret = NF_Pixel32To8(GetPix32(x, y));
+			break;
+		case PF_PixelFormat_ARGB64:
+			ret = NF_Pixel16To8(GetPix16(x, y));
+				break;
+		case PF_PixelFormat_ARGB32:
+			ret = GetPix8(x, y);
+			break;
+		}
+		return ret;
 	}
 	std::vector<PixelCountInfo> Histogram()
 	{
