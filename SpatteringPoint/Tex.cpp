@@ -1,11 +1,6 @@
 #pragma once
-#ifndef sputteringData_H
-#define sputteringData_H
 
-#define SPT_COUNT 60
-#define SPT_WIDTH 16
-#define SPT_SIZE(IDX) (SPT_SIZE_TBL[(IDX)])
-#define SPT_VALUE(IDX,X,Y) (SPT[(IDX)][(X) + ((Y) * SPT_WIDTH)])
+#include "Tex.h"
 
 A_u_char SPT[SPT_COUNT][SPT_WIDTH* SPT_WIDTH] = {
 	{
@@ -1089,5 +1084,4 @@ A_u_char SPT[SPT_COUNT][SPT_WIDTH* SPT_WIDTH] = {
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 	}
 };
-A_u_char SPT_SIZE_TBL[SPT_COUNT] = {16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16};
 #endif

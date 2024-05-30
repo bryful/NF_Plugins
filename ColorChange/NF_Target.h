@@ -22,10 +22,10 @@
 
 /*
 #define NFP_CATEGORY_CHANNLE "NFP-Avior_Channel"
-#define NFP_CATEGORY_BETE "NFP-Avior(Beta)"
+#define NFP_CATEGORY_BETA "NFP-Avior(Beta)"
 */
 //#define NF_CATEGORY NFP_CATEGORY_CHANNLE
-#define NF_CATEGORY NFP_CATEGORY_BETE
+#define NF_CATEGORY NFP_CATEGORY_BETA
 
 
 //ƒo[ƒWƒ‡ƒ“‚ğ”ƒ‚¦‚½AlphaFixPiPL.r‚ÌAE_Effect_Version‚à•Ï‚¦‚é‚±‚Æ

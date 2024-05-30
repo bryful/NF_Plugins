@@ -6,6 +6,6 @@
 
 
 #define NFP_CATEGORY_CHANNLE "NFP-Avior_Channel"
-#define NFP_CATEGORY_BETE "NFP-Avior(Beta)"
+#define NFP_CATEGORY_BETA "NFP-Avior(Beta)"
 
 #endif

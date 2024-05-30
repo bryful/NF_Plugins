@@ -1,8 +1,8 @@
-#include "Spattering-Point.h"
+#include "SpatteringPoint.h"
 
 
 // **********************************************************
-PF_Err Spattering-Point::ParamsSetup(
+PF_Err SpatteringPoint::ParamsSetup(
 	PF_InData* in_dataP,
 	PF_OutData* out_dataP,
 	PF_ParamDef* paramsP[],
@@ -94,17 +94,7 @@ PF_Err Spattering-Point::ParamsSetup(
 		0xFF,
 		ID_COLOR
 	);
-	//----------------------------------------------------------------
-	AEFX_CLR_STRUCT(def);
-	PF_ADD_SLIDER(
-		"Int",			//パラメータの名前
-		-30000, 		//数値入力する場合の最小値
-		30000,			//数値入力する場合の最大値
-		0,				//スライダーの最小値
-		300,			//スライダーの最大値
-		10,				//デフォルトの値
-		ID_INT
-	);		
+	
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	//def.flags = PF_ParamFlag_CANNOT_TIME_VARY;//これをつけるとキーフレームが撃てなくなる

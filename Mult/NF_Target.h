@@ -21,11 +21,11 @@
 	//プラグインが表示されるメニュー名
 /*
 #define NFP_CATEGORY_CHANNLE "NFP-Avior_Channel"
-#define NFP_CATEGORY_BETE "NFP-Avior(Beta)"
+#define NFP_CATEGORY_BETA "NFP-Avior(Beta)"
 */
 
 //#define NF_CATEGORY NFP_CATEGORY_CHANNLE
-#define NF_CATEGORY NFP_CATEGORY_BETE
+#define NF_CATEGORY NFP_CATEGORY_BETA
 
 
 //バージョンを買えたAlphaFixPiPL.rのAE_Effect_Versionも変えること

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef Spattering-Point_H
-#define Spattering-Point_H
+#ifndef SpatteringPoint_H
+#define SpatteringPoint_H
 
 #include "../_NFLib/AE_SDK.h"
 #include "../_NFLib/AEInfo.h"
@@ -13,116 +13,44 @@
 #include <string>
 
 #include "NF_Target.h"
+#include "Tex.h"
 
 //UIのパラメータ
 typedef struct ParamInfo {
-	A_long		targetMode;
-	PF_Pixel	targetColor;
-	A_long		blendMode;
-	PF_Pixel	blendColor;
-	PF_FpLong	blendOpacity;
-	PF_FixedPoint	pointValue;
-	/*
-	PF_Pixel	color;
-	A_long		intValue;
-	A_Fixed		fixedValue;
-	PF_FpLong	floatvalue;
-	PF_Boolean	check;
-	A_Fixed		rotValue;
-	A_long		popupValue;
-	Point3D		point3DValue;
-	*/
+	A_long		value;
+	A_long		value2;
+	PF_Point	point;
+	PF_FpLong	radius;
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
 //ユーザーインターフェースのID
 //ParamsSetup関数とRender関数のparamsパラメータのIDになる
 enum {
 	ID_INPUT = 0,	// default input layer
-	ID_TARGET_MODE,
-	ID_TARGET_COLOR,
-	ID_BLEND_MODE,
-	ID_BLEND_COLOR,
-	ID_BLEND_OPACITY,
-	ID_BTN1,
-	ID_BTN2,
-	ID_TOPIC,
-	ID_COLOR,
-	ID_INT,
-	ID_FIXED,
-	ID_FLOAT,
-	ID_CHECK,
-	ID_ANGLE,
-	ID_POPUP,
+	ID_SEED,
+	ID_VALUE,
+	ID_VALUE2,
 	ID_POINT,
-	ID_POINT3D,
-	ID_TOPICEND,
-	ID_BTNSV,
-	ID_BTNLD,
-	ID_LAYER,
+	ID_RADIUS,
 	ID_NUM_PARAMS
 };
 
 // 関数定義
-static PF_Err
-TargetPixel8(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel8* inP,
-	PF_Pixel8* outP);
-static PF_Err
-TargetPixel16(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel16* inP,
-	PF_Pixel16* outP);
-static PF_Err
-TargetPixel32(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel32* inP,
-	PF_Pixel32* outP);
-static PF_Err
-Blend8(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel8* inP,
-	PF_Pixel8* outP);
-static PF_Err
-Blend16(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel16* inP,
-	PF_Pixel16* outP);
-static PF_Err
-Blend32(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel32* inP,
-	PF_Pixel32* outP);
+
 
 static std::string directoryPath;
 //-------------------------------------------------------
-class Spattering-Point : public AEInfo
+class SpatteringPoint : public AEInfo
 {
 public:
 	// ******************************************************
 	PF_Err GetParams(ParamInfo *infoP);
-	json ParamsToJson(ParamInfo* infoP);
-	PF_Err JsonLoad(json jsn);
 	PF_Err Exec(ParamInfo* infoP);
 	PF_Err ParamsSetup(
 		PF_InData* in_dataP,
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
-	PF_Err TargetExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
-	PF_Err BlendExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	// ******************************************************
 	PF_Err	About(
 		PF_InData* in_dataP,
