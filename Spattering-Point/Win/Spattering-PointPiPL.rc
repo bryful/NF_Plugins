@@ -16,8 +16,8 @@ BEGIN
 	"MIB8",
 	"eman",
 	0, 0x0,
-	12, 0x0,
-	"\x0ANF-Spattering-Point\0", 
+	20, 0x0,
+	"\x13NF-Spattering-Point", 
 
 	"MIB8",
 	"gtac", 
@@ -70,8 +70,8 @@ BEGIN
 	"MIB8",
 	"ANMe",
 	0, 0x0,
-	12, 0x0,
-	"\x0ANF-Spattering-Point\0", 
+	20, 0x0,
+	"\x13NF-Spattering-Point", 
 
 	"MIB8",
 	0x6165464CL, 

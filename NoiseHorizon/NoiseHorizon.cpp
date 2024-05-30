@@ -507,7 +507,6 @@ PF_Err NoiseHorizon::Exec(ParamInfo* infoP)
 	NFWorld* dst = new NFWorld(output, in_data, pixelFormat());
 	dst->Copy(src);
 	infoP->nfworld = dst;
-	infoP->rgbs.nfworld = src;
 	infoP->frame = frame();
 	infoP->rgbs.frame = frame();
 	double ds = ParamDownScaleX();
@@ -523,11 +522,11 @@ PF_Err NoiseHorizon::Exec(ParamInfo* infoP)
 	infoP->rl.value = (A_long)((double)infoP->rl.value * ds);
 	infoP->sl.XShift = (A_long)((double)infoP->sl.XShift * ds);
 
-	RGBShiftExec(infoP, src, dst);
 	RandomShiftExec(infoP, src, dst);
 	RandomScanlineExec(infoP, src, dst);
 	SwapLineExec(infoP, src, dst);
 	NoiseHorExec(infoP, src, dst);
+	RGBShiftExec(infoP, src, dst);
 	RandomLineExec(infoP, src, dst);
 
 	delete src;

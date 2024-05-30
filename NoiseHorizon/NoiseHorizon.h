@@ -18,7 +18,6 @@ typedef struct RGBShiftInfo {
 	A_long		RShift;
 	A_long		GShift;
 	A_long		BShift;
-	NFWorld* nfworld;
 } RGBShift, * RGBShiftP, ** RGBShiftH;
 typedef struct RShiftInfo {
 	A_long		seed;
@@ -132,6 +131,9 @@ public:
 	PF_Err SwapLineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err NoiseHorExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 	PF_Err RandomScanlineExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err RGBSHiftSub8(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err RGBSHiftSub16(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err RGBSHiftSub32(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 
 	// ******************************************************
 	PF_Err	About(
