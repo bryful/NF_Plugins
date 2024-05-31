@@ -1084,4 +1084,4 @@ A_u_char SPT[SPT_COUNT][SPT_WIDTH* SPT_WIDTH] = {
 	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 	}
 };
-#endif
+

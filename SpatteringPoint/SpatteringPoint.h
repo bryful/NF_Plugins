@@ -17,10 +17,8 @@
 
 //UIのパラメータ
 typedef struct ParamInfo {
-	A_long		value;
-	A_long		value2;
-	PF_Point	point;
-	PF_FpLong	radius;
+	A_long		seed;3ds 	A_long		value;
+	PF_Rect		rect;
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
 //ユーザーインターフェースのID
@@ -29,9 +27,8 @@ enum {
 	ID_INPUT = 0,	// default input layer
 	ID_SEED,
 	ID_VALUE,
-	ID_VALUE2,
-	ID_POINT,
-	ID_RADIUS,
+	ID_TOPLEFT,
+	ID_BOTTOMRIGHT,
 	ID_NUM_PARAMS
 };
 

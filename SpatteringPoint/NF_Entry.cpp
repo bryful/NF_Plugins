@@ -1,4 +1,4 @@
-#include "Spattering-Point.h"
+#include "SpatteringPoint.h"
 //-----------------------------------------------------------------------------------
 extern "C" {
 	DllExport
@@ -40,7 +40,7 @@ extern "C" {
 		try
 		{
 
-			Spattering-Point ae;
+			SpatteringPoint ae;
 			ae.in_data = in_dataP;
 
 			switch (cmd) {
@@ -118,7 +118,9 @@ extern "C" {
 				err = ae.QueryDynamicFlags(in_dataP,
 					out_dataP,
 					paramsP,
-					reinterpret_cast<PF_UserChangedParamExtra*>(extraP));
+					outputP,
+					reinterpret_cast<PF_UserChangedParamExtra*>(extraP),
+					ID_NUM_PARAMS);
 				break;
 			}
 		}
