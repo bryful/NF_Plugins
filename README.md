@@ -6,11 +6,15 @@ After Effectsエフェクトプラグインをゼロから作って見ようっ�
 * NF-ColorChange.aex<br>色替えプラグイン
 * NF-ColorSelect.aex<br>色残しプラグイン
 * NF-Mult.aex<br>乗算関係エフェクト。Unmultとか
+* NF-NoiseHorizon.aex<br>水平方向に特化したノイズフィルター
 
 <br>
 Skelton_step1は2014/04/14の段階のものです。Skeltonは逐次更新していく予定です<br>
 <br>
 
+## BETA版について
+アーカイブにまとめてパッケージにするまでBETA版です。メニューに<b>NFP-Avior(Beta)</b>と表示されます。<br>
+まぁBETA版でも多分大丈夫ですがなるべくなら使わないようにお願いします。<br>
 
 
 # Tools
