@@ -222,6 +222,7 @@ PF_Err NoiseHor32(ParamInfo* infoP)
 {
 	PF_Err			err = PF_Err_NONE;
 
+
 	int w = infoP->nfworld->width();
 	int h = infoP->nfworld->height();
 
