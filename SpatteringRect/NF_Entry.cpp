@@ -1,4 +1,4 @@
-#include "SpatteringPoint.h"
+#include "SpatteringRect.h"
 //-----------------------------------------------------------------------------------
 extern "C" {
 	DllExport

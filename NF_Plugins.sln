@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ColorSelect", "ColorSelect\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NoiseHorizon", "NoiseHorizon\Win\NoiseHorizon.vcxproj", "{EDC92880-8F77-4F20-88BF-B53FF4FEC7DD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatteringPoint", "SpatteringPoint\Win\SpatteringPoint.vcxproj", "{39E5DB19-6EB4-4B6A-8586-7DA5948B41CA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatteringRect", "SpatteringRect\Win\SpatteringRect.vcxproj", "{39E5DB19-6EB4-4B6A-8586-7DA5948B41CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

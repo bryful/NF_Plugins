@@ -436,7 +436,32 @@ public:
 		}
 		return err;
 	}
+	// ***************************************************************
+	PF_Err CopyEX(NFWorld* src, int x, int y, PF_FpLong sc)
+	{
+		PF_Err err = PF_Err_NONE;
+		int w = src->width();
+		int h = src->height();
 
+		PF_Rect srcR;
+		srcR.left = srcR.top = 0;
+		srcR.right = w;
+		srcR.bottom = h;
+		if (sc != NULL)
+		{
+			w = (A_long)((PF_FpLong)w * sc/100 + 0.5);
+			h = (A_long)((PF_FpLong)h * sc/100 + 0.5);
+		}
+		PF_Rect dstR;
+		dstR.left = x - w / 2;
+		dstR.top = y - h / 2;
+		dstR.right = dstR.left + w;
+		dstR.bottom = dstR.top + h;
+
+		PF_COPY(src->world, world, &srcR, &dstR);
+
+		return err;
+	}
 #pragma endregion
 	// ***************************************************************
 #pragma region SelectedPixel

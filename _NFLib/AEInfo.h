@@ -59,6 +59,7 @@ private:
 protected:
 	PF_PixelFormat		m_format;
 	A_long				m_frame;
+	A_long				m_frameCount;
 	PF_Cmd				m_cmd;
 	A_long				m_paramsCount;
 	A_long				m_infoSize;
@@ -68,6 +69,7 @@ protected:
 public:
 	PF_PixelFormat		pixelFormat() { return m_format; }
 	A_long				frame() { return m_frame; }
+	A_long				frameCount() { return m_frameCount; }
 	PF_Cmd				cmd() { return m_cmd; }
 	A_long				paramsCount() { return m_paramsCount; }
 	void				setParamCount(A_long p) { m_paramsCount = p; }
@@ -98,6 +100,7 @@ public:
 		PF_Err	err = PF_Err_NONE;
 		m_format = PF_PixelFormat_INVALID;
 		m_frame = 0;
+		m_frameCount = 0;
 		m_cmd = PF_Cmd_ABOUT;
 		m_paramsCount = 0;
 		m_infoSize = 0;
@@ -219,8 +222,12 @@ protected:
 			return err;
 		}
 		in_data = in_dataP;
-		if ((in_dataP->current_time >= 0) && (in_dataP->time_step > 0)) {
+		if (in_dataP->time_step > 0) {
 			m_frame = (in_dataP->current_time / in_dataP->time_step);
+		}
+		if (in_dataP->total_time > 0)
+		{
+			m_frameCount = in_dataP->total_time / in_dataP->local_time_step;
 		}
 
 		return err;
@@ -999,7 +1006,7 @@ public:
 
 	}
 	//--------------------------------------------------------------------
-	PF_Err GetPOINT_INT(A_long idx, A_LPoint* pos)
+	PF_Err GetPOINT_INT(A_long idx, PF_Point* pos)
 	{
 		PF_Err err = PF_Err_NONE;
 		PF_FixedPoint r;
@@ -1007,8 +1014,8 @@ public:
 		err = GetPOINT_FIXED(idx, &r);
 		if (!err) {
 
-			pos->x = (A_long)((PF_FpLong)r.x / 65536 + 0.5);
-			pos->y = (A_long)((PF_FpLong)r.y / 65536 + 0.5);
+			pos->h = (A_long)((PF_FpLong)r.x / 65536 + 0.5);
+			pos->v = (A_long)((PF_FpLong)r.y / 65536 + 0.5);
 		}
 		return err;
 

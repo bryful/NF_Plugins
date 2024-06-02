@@ -9,13 +9,13 @@
 
 //-----------------------------------------------------------------------------------
 //プラグインの識別に使われる名前
-#define NF_NAME			"NF-Spattering-Point"
-#define NF_MATCHNAME	"NF-Spattering-Point"
+#define NF_NAME			"NF-SpatteringRect"
+#define NF_MATCHNAME	"NF-SpatteringRect"
 
 
 //-----------------------------------------------------------------------------------
 //プラグインの説明に使われる文字
-#define NF_DESCRIPTION	"NF_Plugins Spattering-Point"
+#define NF_DESCRIPTION	"NF_Plugins SpatteringRect"
 
 	//-----------------------------------------------------------------------------------
 	//プラグインが表示されるメニュー名

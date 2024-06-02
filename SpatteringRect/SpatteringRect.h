@@ -1,24 +1,26 @@
 #pragma once
-#ifndef SpatteringPoint_H
-#define SpatteringPoint_H
+#ifndef SpatteringRect_H
+#define SpatteringRect_H
 
 #include "../_NFLib/AE_SDK.h"
 #include "../_NFLib/AEInfo.h"
 #include "../_NFLib/NFWorld.h"
 #include "../_NFLib/NFLibVersion.h"
 #include "../_NFLib/NFBlend.h"
-#include "../_NFLib/NFJson.h"
-
-#include "../_NFLib/tinyfiledialogs.h"
 #include <string>
+#include <vector>
 
 #include "NF_Target.h"
 #include "Tex.h"
 
 //UIのパラメータ
 typedef struct ParamInfo {
-	A_long		seed;3ds 	A_long		value;
+	A_long		seed; 	
+	A_long		value;
 	PF_Rect		rect;
+	PF_Boolean	isCopyOrigin;
+	std::vector<NFWorld> buf;
+
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
 //ユーザーインターフェースのID
@@ -29,6 +31,7 @@ enum {
 	ID_VALUE,
 	ID_TOPLEFT,
 	ID_BOTTOMRIGHT,
+	ID_COPYTORIGIN,
 	ID_NUM_PARAMS
 };
 
@@ -146,46 +149,10 @@ public:
 		PF_LayerDef* outputP,
 		PF_UserChangedParamExtra* extraP,
 		A_long pc)override;
-	std::string OpenJsonFileDialog(std::string title,std::string defp )
-	{
-		const char* filterPatterns[] = { "*.json", "*.*" };
-		const char* selectedFile = tinyfd_openFileDialog(
-			title.c_str(),                      // ダイアログのタイトル
-			defp.c_str(),                       // 初期ディレクトリ
-			2,                          // フィルタパターンの数
-			filterPatterns,             // フィルタパターン
-			"Json files and All Files", // フィルタの説明
-			0                           // マルチセレクトの可否 (0 = No, 1 = Yes)
-		);
-		std::string ret;
-		if (selectedFile)
-		{
-			ret = std::string(selectedFile);
-		}
-
-		return ret;
-	}
-	std::string SaveJsonFileDialog(std::string title, std::string defp)
-	{
-		const char* filterPatterns[] = { "*.json", "*.*" };
-		const char* selectedFile = tinyfd_saveFileDialog(
-			title.c_str(),                      // ダイアログのタイトル
-			defp.c_str(),                       // 初期ディレクトリ
-			2,                          // フィルタパターンの数
-			filterPatterns,             // フィルタパターン
-			"Json files and All Files" // フィルタの説明
-		);
-		std::string ret;
-		if (selectedFile)
-		{
-			ret = std::string(selectedFile);
-		}
-
-		return ret;
-	}
+	
 };
 
-#endif // Spattering-Point_H
+#endif // SpatteringRect_H
 #ifndef EFFECT_MAIN_H
 #define EFFECT_MAIN_H
 //-----------------------------------------------------------------------------------
