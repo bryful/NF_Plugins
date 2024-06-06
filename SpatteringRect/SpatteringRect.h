@@ -6,7 +6,7 @@
 #include "../_NFLib/AEInfo.h"
 #include "../_NFLib/NFWorld.h"
 #include "../_NFLib/NFLibVersion.h"
-#include "../_NFLib/NFBlend.h"
+#include "../_NFLib/NFUtils.h"
 #include <string>
 #include <vector>
 
@@ -14,12 +14,26 @@
 #include "Tex.h"
 
 //UIのパラメータ
+
+#define BUF_MAX 512
+typedef struct BufInfo {
+	PF_EffectWorld worlds[BUF_MAX];
+	A_long		count;
+	A_long		width;
+	A_long		height;
+} BufInfo, * BufInfoP, ** BufInfoH;
+
 typedef struct ParamInfo {
 	A_long		seed; 	
 	A_long		value;
+	PF_FpLong	opacity;
+	PF_FpLong	opacityRandom;
+	PF_FpLong	scaleRandom;
 	PF_Rect		rect;
+	A_long		textSize;
 	PF_Boolean	isCopyOrigin;
-	std::vector<NFWorld> buf;
+	PF_Boolean	moving;
+	BufInfo		buf;
 
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
@@ -27,18 +41,26 @@ typedef struct ParamInfo {
 //ParamsSetup関数とRender関数のparamsパラメータのIDになる
 enum {
 	ID_INPUT = 0,	// default input layer
-	ID_SEED,
+	ID_TOPIC_TEX,
+	ID_LAYER,
+	ID_TEXSIZE,
+	ID_OPACITY,
+	ID_OPACITYRANDOM,
+	ID_SCALERANDOM,
+	ID_TOPIC_TEX_END,
+
 	ID_VALUE,
 	ID_TOPLEFT,
 	ID_BOTTOMRIGHT,
-	ID_COPYTORIGIN,
+	ID_SEED,
+	ID_MOVING,
+	ID_COPYTOORIGIN,
 	ID_NUM_PARAMS
 };
 
 // 関数定義
 
 
-static std::string directoryPath;
 //-------------------------------------------------------
 class SpatteringPoint : public AEInfo
 {
@@ -51,7 +73,18 @@ public:
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
-	// ******************************************************
+	PF_Err CreateBuf(ParamInfo* infoP);
+	PF_Err DeleteBuf(ParamInfo* infoP);
+	PF_Err QueryDynamicFlags(
+		PF_InData* in_dataP,
+		PF_OutData* out_dataP,
+		PF_ParamDef* paramsP[],
+		PF_LayerDef* outputP,
+		PF_UserChangedParamExtra* extraP,
+		A_long pc
+	) override;
+
+		// ******************************************************
 	PF_Err	About(
 		PF_InData* in_dataP,
 		PF_OutData* out_dataP,

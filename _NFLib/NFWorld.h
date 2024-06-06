@@ -37,6 +37,7 @@ protected:
 	PF_Pixel16* m_data16 = NULL;
 	PF_PixelFloat* m_data32 = NULL;
 
+	PF_Boolean m_WDisposeFLag = FALSE;
 public:
 	PF_InData* in_data = NULL;
 	PF_EffectWorld* world = NULL;
@@ -70,6 +71,12 @@ public:
 		PF_InData* ind = NULL,
 		PF_PixelFormat	fmt = PF_PixelFormat_ARGB32
 	)
+	{
+		Setup(wld, ind, fmt);
+	}
+	void Setup(PF_EffectWorld* wld = NULL,
+		PF_InData* ind = NULL,
+		PF_PixelFormat	fmt = PF_PixelFormat_ARGB32)
 	{
 		in_data = ind;
 		world = wld;
@@ -114,6 +121,7 @@ public:
 
 			}
 		}
+		m_WDisposeFLag = FALSE;
 	}
 	// ***************************************************************
 public:
@@ -126,6 +134,23 @@ public:
 			PF_DISPOSE_HANDLE(m_bufH);
 			m_bufH = NULL;
 		}
+		/*
+		if (m_WDisposeFLag == TRUE) 
+		{
+			if (world)
+			{
+				PF_DISPOSE_WORLD(world);
+			}
+		}
+		*/
+	}
+	void SetWDisposeFlag(PF_Boolean on)
+	{
+		m_WDisposeFLag = on;
+	}
+	PF_Boolean WDisposeFlag() 
+	{
+		return m_WDisposeFLag;
 	}
 #pragma endregion
 	// ***************************************************************
@@ -437,28 +462,321 @@ public:
 		return err;
 	}
 	// ***************************************************************
-	PF_Err CopyEX(NFWorld* src, int x, int y, PF_FpLong sc)
+	// ***************************************************************
+	PF_Err CopyEX8(NFWorld* src, int x, int y)
 	{
 		PF_Err err = PF_Err_NONE;
 		int w = src->width();
 		int h = src->height();
 
-		PF_Rect srcR;
-		srcR.left = srcR.top = 0;
-		srcR.right = w;
-		srcR.bottom = h;
-		if (sc != NULL)
-		{
-			w = (A_long)((PF_FpLong)w * sc/100 + 0.5);
-			h = (A_long)((PF_FpLong)h * sc/100 + 0.5);
-		}
 		PF_Rect dstR;
 		dstR.left = x - w / 2;
 		dstR.top = y - h / 2;
 		dstR.right = dstR.left + w;
 		dstR.bottom = dstR.top + h;
 
-		PF_COPY(src->world, world, &srcR, &dstR);
+		PF_Pixel* srcP = src->data8();
+		PF_Pixel* dstP = data8();
+		for (int y = 0; y < h; y++)
+		{
+			A_long y2 = y + dstR.top;
+			if (y2 < 0) continue;
+			if (y2 >= m_height) break;
+
+			A_long ys = src->yAdr(y);
+			A_long y2s = yAdr(y2);
+			for (int x = 0; x < w; x++)
+			{
+				A_long x2 = x +dstR.left;
+				if (x2 < 0) continue;
+				if (x2 >= m_width) break;
+				PF_Pixel s = srcP[x+ ys];
+				PF_Pixel d = dstP[x2 + y2s];
+				dstP[x2 + y2s] = PixelAlphaBlend8(d, s);
+
+			}
+
+		}
+
+		return err;
+	}
+	PF_Err CopyEX16(NFWorld* src, int x, int y)
+	{
+		PF_Err err = PF_Err_NONE;
+		int w = src->width();
+		int h = src->height();
+
+		PF_Rect dstR;
+		dstR.left = x - w / 2;
+		dstR.top = y - h / 2;
+		dstR.right = dstR.left + w;
+		dstR.bottom = dstR.top + h;
+
+		PF_Pixel16* srcP = src->data16();
+		PF_Pixel16* dstP = data16();
+		for (int y = 0; y < h; y++)
+		{
+			A_long y2 = y + dstR.top;
+			if (y2 < 0) continue;
+			if (y2 >= m_height) break;
+
+			A_long ys = src->yAdr(y);
+			A_long y2s = yAdr(y);
+			for (int x = 0; x < w; x++)
+			{
+				A_long x2 = x + dstR.left;
+				if (x2 < 0) continue;
+				if (x2 >= m_width) break;
+				PF_Pixel16 s = srcP[x + ys];
+				PF_Pixel16 d = dstP[x2 + y2s];
+				dstP[x2 + y2s] = PixelAlphaBlend16(d, s);
+
+			}
+
+		}
+
+		return err;
+	}
+	PF_Err CopyEX32(NFWorld* src, int x, int y)
+	{
+		PF_Err err = PF_Err_NONE;
+		int w = src->width();
+		int h = src->height();
+
+		PF_Rect dstR;
+		dstR.left = x - w / 2;
+		dstR.top = y - h / 2;
+		dstR.right = dstR.left + w;
+		dstR.bottom = dstR.top + h;
+
+		PF_Pixel32* srcP = src->data32();
+		PF_Pixel32* dstP = data32();
+		for (int y = 0; y < h; y++)
+		{
+			A_long y2 = y + dstR.top;
+			if (y2 < 0) continue;
+			if (y2 >= m_height) break;
+
+			A_long ys = src->yAdr(y);
+			A_long y2s = yAdr(y);
+			for (int x = 0; x < w; x++)
+			{
+				A_long x2 = x + dstR.left;
+				if (x2 < 0) continue;
+				if (x2 >= m_width) break;
+				PF_Pixel32 s = srcP[x + ys];
+				PF_Pixel32 d = dstP[x2 + y2s];
+				dstP[x2 + y2s] = PixelAlphaBlend32(d, s);
+
+			}
+
+		}
+
+		return err;
+	}
+	PF_Err CopyEX(NFWorld* src, int x, int y)
+	{
+		PF_Err err = PF_Err_NONE;
+		switch (m_format)
+		{
+		case PF_PixelFormat_ARGB128:
+			err = CopyEX32(src,x,y);
+			break;
+		case PF_PixelFormat_ARGB64:
+			err = CopyEX16(src, x, y);
+			break;
+		case PF_PixelFormat_ARGB32:
+			err = CopyEX8(src, x, y);
+			break;
+		}
+		return err;
+	}
+	// ***************************************************************
+	PF_Err CopyCenter(NFWorld* src, PF_FpLong sc)
+	{
+		PF_Err err = PF_Err_NONE;
+		int w = src->width();
+		int h = src->height();
+
+		w = (A_long)((PF_FpLong)w * sc + 0.5);
+		h = (A_long)((PF_FpLong)h * sc + 0.5);
+		PF_Rect dstR;
+		dstR.left = (m_width - w)/ 2;
+		dstR.top = (m_height - h) / 2;
+		dstR.right = dstR.left + w;
+		dstR.bottom = dstR.top + h;
+
+		if (in_data != NULL) {
+			try {
+				PF_FILL(NULL,NULL,world);
+				PF_COPY(src->world, world, NULL, &dstR);
+			}
+			catch (...) {
+
+			}
+		}
+		return err;
+	}
+	PF_Err AlphaMul8(PF_FpLong sc)
+	{
+		PF_Err err = PF_Err_NONE;
+		if (sc >= 1) return err;
+		if (sc <= 0)
+		{
+			PF_FILL(NULL, NULL, world);
+			return err;
+		}
+		PF_Pixel* dat = data8();
+		for (int y = 0; y < m_height; y++)
+		{
+			A_long yadr = yAdr(y);
+			for (int x = 0; x < m_height; x++)
+			{
+				PF_FpLong a = (PF_FpLong)dat[x + yadr].alpha;
+				if (a != 0)
+				{
+					dat[x + yadr].alpha = RoundByteFpLong(a*sc);
+				}
+			}
+
+		}
+
+		return err;
+	}
+	PF_Err AlphaMul16(PF_FpLong sc)
+	{
+		PF_Err err = PF_Err_NONE;
+		if (sc >= 1) return err;
+		if (sc <= 0)
+		{
+			PF_FILL(NULL, NULL, world);
+			return err;
+		}
+		PF_Pixel16* dat = data16();
+		for (int y = 0; y < m_height; y++)
+		{
+			A_long yadr = yAdr(y);
+			for (int x = 0; x < m_height; x++)
+			{
+				PF_FpLong a = (PF_FpLong)dat[x + yadr].alpha;
+				if (a != 0)
+				{
+					dat[x + yadr].alpha = RoundShortFpLong(a * sc);
+				}
+			}
+
+		}
+
+		return err;
+	}
+	PF_Err AlphaMul32(PF_FpLong sc)
+	{
+		PF_Err err = PF_Err_NONE;
+		if (sc >= 1) return err;
+		if (sc <= 0)
+		{
+			PF_FILL(NULL, NULL, world);
+			return err;
+		}
+		PF_PixelFloat* dat = data32();
+		for (int y = 0; y < m_height; y++)
+		{
+			A_long yadr = yAdr(y);
+			for (int x = 0; x < m_height; x++)
+			{
+				PF_FpLong a = (PF_FpLong)dat[x + yadr].alpha;
+				if (a != 0)
+				{
+					dat[x + yadr].alpha = RoundFpShortDouble(a * sc);
+				}
+			}
+
+		}
+
+		return err;
+	}
+	PF_Err AlphaMul(PF_FpLong sc)
+	{
+		PF_Err err = PF_Err_NONE;
+		switch (m_format)
+		{
+		case PF_PixelFormat_ARGB128:
+			err = AlphaMul32(sc);
+			break;
+		case PF_PixelFormat_ARGB64:
+			err = AlphaMul16(sc);
+			break;
+		case PF_PixelFormat_ARGB32:
+			err = AlphaMul8(sc);
+			break;
+		}
+
+		return err;
+	}
+	// ***************************************************************
+	PF_Err SetChar8(A_u_char* buf, A_long w, A_long h,PF_Pixel p)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		PF_Pixel* data = data8();
+
+		A_long idx = 0;
+		for (int y = 0; y < h; y++)
+		{
+			PF_Pixel* adr = data + yAdr(y);
+			for (int x = 0; x < w; x++)
+			{
+				PF_Pixel col = p;
+				col.alpha = buf[idx];
+				*adr = col;
+				adr++;
+				idx++;
+			}
+		}
+
+		return err;
+	}
+	PF_Err SetChar16(A_u_char* buf, A_long w, A_long h, PF_Pixel16 p)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		PF_Pixel16* data = data16();
+
+		A_long idx = 0;
+		for (int y = 0; y < h; y++)
+		{
+			PF_Pixel16* adr = data + yAdr(y);
+			for (int x = 0; x < w; x++)
+			{
+				PF_Pixel16 col = p;
+				col.alpha = buf[idx];
+				*adr = col;
+				adr++;
+				idx++;
+			}
+		}
+
+		return err;
+	}
+	PF_Err SetChar32(A_u_char* buf, A_long w, A_long h, PF_PixelFloat p)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		PF_Pixel32* data = data32();
+
+		A_long idx = 0;
+		for (int y = 0; y < h; y++)
+		{
+			PF_Pixel32* adr = data + yAdr(y);
+			for (int x = 0; x < w; x++)
+			{
+				PF_Pixel32 col = p;
+				col.alpha = buf[idx];
+				*adr = col;
+				adr++;
+				idx++;
+			}
+		}
 
 		return err;
 	}
@@ -1119,6 +1437,25 @@ public:
 			std::vector<PixelCountInfo> ret;
 			return ret;
 		}
+	}
+	PF_Err SetChar(A_u_char *buf,A_long w,A_long h,PF_Pixel col)
+	{
+		PF_Err err = PF_Err_NONE;
+		switch (m_format)
+		{
+		case PF_PixelFormat_ARGB128:
+			PF_Pixel32 col32 = NF_Pixel8To32(col);
+			err = SetChar32(buf, w, h, col32);
+			break;
+		case PF_PixelFormat_ARGB64:
+			PF_Pixel16 col16 = NF_Pixel8To16(col);
+			err = SetChar16(buf, w, h, col16);
+			break;
+		case PF_PixelFormat_ARGB32:
+			err = SetChar8(buf,w,h,col);
+			break;
+		}
+		return err;
 	}
 #pragma region Iterate
 

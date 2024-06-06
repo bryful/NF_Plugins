@@ -61,8 +61,8 @@ out_data->out_flags
 	//PF_OutFlag_I_DO_DIALOG;
 */
 
-#define NF_OUT_FLAGS	33556034	//通常はこちら
-//#define NF_OUT_FLAGS	33556038	//こっちを有効にすると毎フレームごとに描画する。NON_PARAM_VARYを動作中に切り替えるときもこちらに
+//#define NF_OUT_FLAGS	33556034	//通常はこちら
+#define NF_OUT_FLAGS	33556038	//こっちを有効にすると毎フレームごとに描画する。NON_PARAM_VARYを動作中に切り替えるときもこちらに
 //#define NF_OUT_FLAGS	1604		//8bitのみ
 //#define NF_OUT_FLAGS	1606		//8bitのみ 
 

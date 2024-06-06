@@ -4,7 +4,7 @@
 
 #include "AE_SDK.h"
 
-
+#include "NFWorld.h"
 
 typedef struct {
 	PF_FpLong	x, y, z;
@@ -222,14 +222,17 @@ protected:
 			return err;
 		}
 		in_data = in_dataP;
-		if (in_dataP->time_step > 0) {
-			m_frame = (in_dataP->current_time / in_dataP->time_step);
-		}
-		if (in_dataP->total_time > 0)
-		{
-			m_frameCount = in_dataP->total_time / in_dataP->local_time_step;
-		}
 
+		if ((m_cmd == PF_Cmd_RENDER) || (m_cmd == PF_Cmd_SMART_RENDER))
+		{
+			if (in_dataP->time_step > 0) {
+				m_frame = (in_dataP->current_time / in_dataP->time_step);
+			}
+			if (in_dataP->local_time_step > 0)
+			{
+				m_frameCount = in_dataP->total_time / in_dataP->local_time_step;
+			}
+		}
 		return err;
 	}
 	//******************************************************************************
@@ -646,6 +649,7 @@ public:
 	PF_Err	SmartRender(
 			PF_InData*				in_dataP,
 			PF_OutData*				out_dataP,
+			PF_LayerDef*			outputP,
 			PF_SmartRenderExtra*	extraP,
 			A_long					pc
 		)
@@ -661,6 +665,7 @@ public:
 		m_cmd = PF_Cmd_SMART_RENDER;
 		in_data = in_dataP;
 		out_data = out_dataP;
+		output = outputP;
 		SRextraP = extraP;
 		m_paramsCount = pc;
 		GetFrame(in_dataP);
@@ -1304,6 +1309,32 @@ public:
 
 		return err;
 	}
+	PF_Err CopyEX(NFWorld* src, NFWorld* dst,A_long x,A_long y,PF_FpLong sc)
+	{
+		PF_Err err = PF_Err_NONE;
+		m_err = err;
+		int w = src->width();
+		int h = src->height();
+
+		if (sc != NULL)
+		{
+			w = (A_long)((PF_FpLong)w * sc / 100 + 0.5);
+			h = (A_long)((PF_FpLong)h * sc / 100 + 0.5);
+		}
+		PF_Rect dstR{};
+		dstR.left = x - w / 2;
+		dstR.top = y - h / 2;
+		dstR.right = dstR.left + w;
+		dstR.bottom = dstR.top + h;
+		err = suitesP->WorldTransformSuite1()->copy_hq(in_data->effect_ref,	// This effect ref (unique id)
+			src->world,						// Source
+			dst->world,						// Dest
+			NULL,						// Source rect - null for all pixels
+			&dstR);						// Dest rect - null for all pixels
+		m_err = err;
+
+		return err;
+	}
 	//--------------------------------------------------------------------
 	PF_EffectWorld NewEffectWorld(A_long w, A_long h, PF_PixelFormat fmt)
 	{
@@ -1325,11 +1356,28 @@ public:
 		m_err = err;
 		return ret;
 	}
+
+	NFWorld* NewNFWorld(A_long w, A_long h, PF_PixelFormat fmt)
+	{
+		PF_EffectWorld wld = NewEffectWorld(w, h, fmt);
+		NFWorld* ret= new NFWorld(&wld, in_data, fmt);
+		ret->SetWDisposeFlag(TRUE);
+		return ret;
+	}
 	PF_Err DisposeEffectWorld(PF_EffectWorld world)
 	{
 		PF_Err err = PF_Err_NONE;
 		m_err = err;
 		err = PF_DISPOSE_WORLD(&world);
+		m_err = err;
+		return err;
+
+	}
+	PF_Err DisposeEffectWorldP(PF_EffectWorld* world)
+	{
+		PF_Err err = PF_Err_NONE;
+		m_err = err;
+		err = PF_DISPOSE_WORLD(world);
 		m_err = err;
 		return err;
 
