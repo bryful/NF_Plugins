@@ -84,6 +84,9 @@ PF_Err ColorChange::ParamsSetup(
 
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
+	PF_ADD_CHECKBOX(NF_CATEGORY, NF_NAME, FALSE, 0, ID_VERSION);
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
 	//def.flags = PF_ParamFlag_START_COLLAPSED;	//Ç±ÇÍÇÇ¬ÇØÇÈÇ∆ï\é¶éûÇ…äJÇ¢ÇΩèÛë‘Ç…Ç»ÇÈ
 	PF_ADD_TOPIC("IO", ID_TOPIC_IO);
 

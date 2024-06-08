@@ -17,6 +17,9 @@ PF_Err NoiseHorizon::ParamsSetup(
 	PF_ParamDef		def;
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
+	PF_ADD_CHECKBOX(NF_CATEGORY, NF_NAME, FALSE, 0, ID_VERSION);
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
 	def.flags = PF_ParamFlag_SUPERVISE |
 		PF_ParamFlag_CANNOT_TIME_VARY |
 		PF_ParamFlag_CANNOT_INTERP;

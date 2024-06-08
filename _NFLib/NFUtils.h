@@ -20,6 +20,9 @@
 #define F_RAND2(min,max) ((min) + (A_long)( (double)F_RAND()*((double)(max) - (double)(min) +1.0f )/(double)(1.0f+F_RAND_MAX))) 
 #define F_RAND3(max) ((A_long)( (double)F_RAND()*((double)(max) +1.0f )/(1.0f+F_RAND_MAX) ) )
 
+
+
+
 #define	FIX2FLT(X)	((double)(X) / 65536.0)
 #define	FLT2FIX(F)	((PF_Fixed)((F) * 65536 + (((F) < 0) ? -0.5 : 0.5)))
 #define F_ABS(x) ((x) >= 0 ? (x) : -(x))

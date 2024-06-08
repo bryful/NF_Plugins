@@ -87,7 +87,7 @@ extern "C" {
 				}
 				break;
 			case PF_Cmd_SMART_RENDER:
-				err = ae.SmartRender(in_dataP, out_dataP, reinterpret_cast<PF_SmartRenderExtra*>(extraP), ID_NUM_PARAMS);
+				err = ae.SmartRender(in_dataP, out_dataP, outputP,reinterpret_cast<PF_SmartRenderExtra*>(extraP), ID_NUM_PARAMS);
 				if (!err) {
 					ParamInfo* infoP = reinterpret_cast<ParamInfo*>(ae.LockPreRenderData());
 					if (infoP) {

@@ -19,6 +19,7 @@ typedef struct ParamInfo {
 //ParamsSetupŠÖ”‚ÆRenderŠÖ”‚Ìparamsƒpƒ‰ƒ[ƒ^‚ÌID‚É‚È‚é
 enum {
 	ID_INPUT = 0,	// default input layer
+	ID_VERSION,
 	ID_MODE,
 	ID_NUM_PARAMS
 };

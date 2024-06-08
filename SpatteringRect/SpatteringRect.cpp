@@ -16,8 +16,11 @@ PF_Err SpatteringPoint::ParamsSetup(
 	PF_ParamDef		def;
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
+	PF_ADD_CHECKBOX(NF_CATEGORY,NF_NAME,FALSE,0,ID_VERSION);
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
 	//def.flags = PF_ParamFlag_START_COLLAPSED;	//これをつけると表示時に開いた状態になる
-	PF_ADD_TOPIC("textue", ID_TOPIC_TEX);
+	PF_ADD_TOPIC("texture", ID_TOPIC_TEX);
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_LAYER("texLayer",
@@ -27,7 +30,7 @@ PF_Err SpatteringPoint::ParamsSetup(
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_POPUP(
-		"texSize",
+		"bufferSize",
 		5,	//メニューの数
 		1,	//デフォルト
 		"16|32|48|64|128",
@@ -53,7 +56,7 @@ PF_Err SpatteringPoint::ParamsSetup(
 	PF_ADD_FLOAT_SLIDER(
 		"opacityRandom",		//Name
 		0,						//VALID_MIN
-		100,					//VALID_MAX
+		1000,					//VALID_MAX
 		0,						//SLIDER_MIN
 		100,					//SLIDER_MAX
 		1,						//CURVE_TOLERANCE
@@ -66,9 +69,23 @@ PF_Err SpatteringPoint::ParamsSetup(
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_FLOAT_SLIDER(
+		"scale",				//Name
+		1,						//VALID_MIN
+		100,					//VALID_MAX
+		10,						//SLIDER_MIN
+		100,					//SLIDER_MAX
+		1,						//CURVE_TOLERANCE
+		100,					//DFLT
+		1,						//PREC
+		0,						//DISP
+		0,						//WANT_PHASE
+		ID_SCALE
+	);		//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
+	PF_ADD_FLOAT_SLIDER(
 		"scaleRandom",		//Name
 		0,						//VALID_MIN
-		100,					//VALID_MAX
+		1000,					//VALID_MAX
 		0,						//SLIDER_MIN
 		100,					//SLIDER_MAX
 		1,						//CURVE_TOLERANCE
@@ -223,6 +240,11 @@ PF_Err SpatteringPoint::GetParams(ParamInfo* infoP)
 	{
 		infoP->opacityRandom /= 100;
 	}
+	ERR(GetFLOAT(ID_SCALE, &infoP->scale));
+	if (!err)
+	{
+		infoP->scale /= 100;
+	}
 	ERR(GetFLOAT(ID_SCALERANDOM, &infoP->scaleRandom));
 	if (!err)
 	{
@@ -262,103 +284,7 @@ PF_Err SpatteringPoint::GetParams(ParamInfo* infoP)
 
 	return err;
 };
-// **********************************************************
-PF_Err  SpatteringPoint::CreateBuf(ParamInfo* infoP)
-{
-	PF_Err err = PF_Err_NONE;
 
-	infoP->buf.count = 0;
-	NFWorld* nf = new NFWorld();
-
-
-	PF_ParamDef			buf;
-
-	A_long cnt = frameCount();
-	if (cnt > BUF_MAX) cnt = BUF_MAX;
-
-	int errCount = 0;
-	int idx = 0;
-	A_long bx = (A_long)((double)infoP->textSize * ParamDownScaleX());
-	if (bx < 4) bx = 4;
-	for (int i = 0; i < cnt; i++)
-	{
-		ERR(PF_CHECKOUT_PARAM(in_data,
-			ID_LAYER,
-			(in_data->time_step*i),
-			(in_data->time_step),
-			in_data->time_scale,
-			&buf)
-		);
-		if (buf.u.ld.data) {
-			A_long w = buf.u.ld.width;
-			A_long h = buf.u.ld.height;
-			A_long sz = w;
-			if (w > h) sz = h;
-			PF_Rect srcR;
-			srcR.left = (w - sz) / 2;
-			srcR.top = (h - sz) / 2;
-			srcR.right = srcR.left + sz;
-			srcR.bottom = srcR.top + sz;
-			PF_Rect dstR;
-			dstR.left = dstR.top = 0;
-			dstR.right = dstR.left + bx;
-			dstR.bottom = dstR.top + bx;
-			infoP->buf.worlds[idx] = NewEffectWorld(bx, bx, pixelFormat());
-			if (!ErrResult())
-			{
-				ERR(PF_COPY(&buf.u.ld,
-					&infoP->buf.worlds[idx],
-					&srcR,
-					&dstR));
-				idx++;
-			}
-		}	else {
-			errCount++;
-			if (errCount > 2) break;
-		}
-		ERR(PF_CHECKIN_PARAM(in_data, &buf));		// ALWAYS check in,
-		infoP->buf.count = idx;
-		infoP->buf.width = bx;
-		infoP->buf.height = bx;
-	}
-	/*
-	if (infoP->buf.count <= 0)
-	{
-		infoP->buf.width = SPT_WIDTH;
-		infoP->buf.height = SPT_WIDTH;
-
-		for (int i = 0; i < SPT_COUNT; i++)
-		{
-			PF_EffectWorld wld = NewEffectWorld(SPT_WIDTH, SPT_WIDTH, pixelFormat());
-			infoP->buf.worlds[i] = wld;
-			PF_Pixel8 p8 = { PF_MAX_CHAN8,PF_HALF_CHAN8, PF_HALF_CHAN8, PF_MAX_CHAN8, };
-
-			nf->Setup(&wld, in_data, pixelFormat());
-			nf->SetChar(SPT[i], SPT_WIDTH, SPT_WIDTH, p8);
-		}
-		infoP->buf.count = SPT_COUNT;
-	}
-	*/
-	delete nf;
-	return err;
-
-}
-// **********************************************************
-PF_Err SpatteringPoint::DeleteBuf(ParamInfo* infoP)
-{
-	PF_Err err = PF_Err_NONE;
-
-	if (infoP->buf.count <= 0) return err;
-
-	for (int i = infoP->buf.count - 1; i >=0 ; i--)
-	{
-		DisposeEffectWorldP(&infoP->buf.worlds[i]);
-	}
-	infoP->buf.count = 0;
-	
-
-	return err;
-}
 // **********************************************************
 PF_Err SpatteringPoint::Exec(ParamInfo* infoP)
 {
@@ -373,14 +299,21 @@ PF_Err SpatteringPoint::Exec(ParamInfo* infoP)
 
 	if (infoP->value >= 0)
 	{
+		NFWorld src, dst;
+		src.Setup(input, in_data, pixelFormat());
+		dst.Setup(output, in_data, pixelFormat());
 
-		NFWorld* src = new NFWorld(input, in_data, pixelFormat());
-		NFWorld* dst = new NFWorld(output, in_data, pixelFormat());
+		//NFWorld* src = new NFWorld(input, in_data, pixelFormat());
+		//NFWorld* dst = new NFWorld(output, in_data, pixelFormat());
 
-		CreateBuf(infoP);
-		PF_EffectWorld buf = NewEffectWorld(infoP->buf.width, infoP->buf.height, pixelFormat());
-		NFWorld* bufNF = new NFWorld(&buf, in_data, pixelFormat());
-		if (infoP->buf.count > 0)
+		//CreateBuf(infoP);
+		GetSpatFromLayer(ID_LAYER, infoP->textSize, &infoP->spat);
+		PF_EffectWorld buf = NewEffectWorld(infoP->spat.width, infoP->spat.height, pixelFormat());
+		NFWorld bufNF;
+		bufNF.Setup(&buf, in_data, pixelFormat());
+
+		//NFWorld* bufNF = new NFWorld(&buf, in_data, pixelFormat());
+		if (infoP->spat.count > 0)
 		{
 			if (infoP->moving == TRUE)
 			{
@@ -393,7 +326,6 @@ PF_Err SpatteringPoint::Exec(ParamInfo* infoP)
 			int w = infoP->rect.right - infoP->rect.left;
 			int h = infoP->rect.bottom - infoP->rect.top;
 
-			NFWorld* nf = new NFWorld();
 			for (int i = 0; i < infoP->value; i++)
 			{
 				//位置を決める
@@ -401,47 +333,28 @@ PF_Err SpatteringPoint::Exec(ParamInfo* infoP)
 				int y = infoP->rect.top + F_RANDR(0, h);
 
 				//拡大率を求める
-				PF_FpLong sc = 1 - infoP->scaleRandom;
-				if (sc != 1) 
-				{
-					sc = sc + (1.1 - sc) * F_RAND_D();
-					if (sc > 1)sc = 1;
-				}
-				else {
-					F_RAND_D();
-				}
+				PF_FpLong sc = RandomD(infoP->scale,infoP->scaleRandom);
 
-				PF_FpLong op = infoP->opacity;
-				if (infoP->opacityRandom != 0)
-				{
-					PF_FpLong op2 = op - op * infoP->opacityRandom;
-					op = op2 + (op-op2) * F_RAND_D();
-				}
-				else {
-					F_RAND_D();
-				}
+				PF_FpLong op = RandomD(infoP->opacity, infoP->opacityRandom);
 				//TexIndexを得る
-				int ggIdx = F_RANDR(0, infoP->buf.count -1);
-				nf->Setup(&infoP->buf.worlds[ggIdx],in_data,pixelFormat());
+				int ggIdx = F_RANDR(0, infoP->spat.count -1);
+				NFWorld nf;
+				nf.Setup(&infoP->spat.worlds[ggIdx],in_data,pixelFormat());
 
-				bufNF->CopyCenter(nf, sc);
+				bufNF.CopyCenter(&nf, sc);
 				
 				if (op < 1)
 				{
-					bufNF->AlphaMul(op);
+					bufNF.AlphaMul(op);
 				}
 				
 
-				dst->CopyEX(bufNF, x, y);
+				dst.CopyEX(&bufNF, x, y);
 			}
-			delete nf;
 		}
 
-		DeleteBuf(infoP);
+		DeleteSpat(&infoP->spat);
 		DisposeEffectWorld(buf);
-		delete bufNF;
-		delete src;
-		delete dst;
 	}
 	return err;
 

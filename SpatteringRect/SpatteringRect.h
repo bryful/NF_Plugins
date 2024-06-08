@@ -10,30 +10,26 @@
 #include <string>
 #include <vector>
 
+#include "../_NFLib/AEInfoSpat.h"
+
 #include "NF_Target.h"
 #include "Tex.h"
 
 //UIのパラメータ
 
-#define BUF_MAX 512
-typedef struct BufInfo {
-	PF_EffectWorld worlds[BUF_MAX];
-	A_long		count;
-	A_long		width;
-	A_long		height;
-} BufInfo, * BufInfoP, ** BufInfoH;
 
 typedef struct ParamInfo {
 	A_long		seed; 	
 	A_long		value;
 	PF_FpLong	opacity;
 	PF_FpLong	opacityRandom;
+	PF_FpLong	scale;
 	PF_FpLong	scaleRandom;
 	PF_Rect		rect;
 	A_long		textSize;
 	PF_Boolean	isCopyOrigin;
 	PF_Boolean	moving;
-	BufInfo		buf;
+	SpatInfo	spat;
 
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
@@ -41,11 +37,13 @@ typedef struct ParamInfo {
 //ParamsSetup関数とRender関数のparamsパラメータのIDになる
 enum {
 	ID_INPUT = 0,	// default input layer
+	ID_VERSION,
 	ID_TOPIC_TEX,
 	ID_LAYER,
 	ID_TEXSIZE,
 	ID_OPACITY,
 	ID_OPACITYRANDOM,
+	ID_SCALE,
 	ID_SCALERANDOM,
 	ID_TOPIC_TEX_END,
 
@@ -62,7 +60,7 @@ enum {
 
 
 //-------------------------------------------------------
-class SpatteringPoint : public AEInfo
+class SpatteringPoint : public AEInfoSpat
 {
 public:
 	// ******************************************************
@@ -73,8 +71,6 @@ public:
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
-	PF_Err CreateBuf(ParamInfo* infoP);
-	PF_Err DeleteBuf(ParamInfo* infoP);
 	PF_Err QueryDynamicFlags(
 		PF_InData* in_dataP,
 		PF_OutData* out_dataP,

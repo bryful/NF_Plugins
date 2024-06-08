@@ -16,6 +16,9 @@ PF_Err Mult::ParamsSetup(
 	PF_ParamDef		def;
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
+	PF_ADD_CHECKBOX(NF_CATEGORY, NF_NAME, FALSE, 0, ID_VERSION);
+	//----------------------------------------------------------------
+	AEFX_CLR_STRUCT(def);
 	PF_ADD_POPUP(
 		"Mode",
 		4,	//ÉÅÉjÉÖÅ[ÇÃêî

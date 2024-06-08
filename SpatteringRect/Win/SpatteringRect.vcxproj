@@ -472,6 +472,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Headers\AE_ChannelSuites.h" />
     <ClInclude Include="..\..\_NFLib\AEInfo.h" />
+    <ClInclude Include="..\..\_NFLib\AEInfoSpat.h" />
     <ClInclude Include="..\..\_NFLib\AE_SDK.h" />
     <ClInclude Include="..\..\..\Headers\A.h" />
     <ClInclude Include="..\..\..\Headers\AE_Effect.h" />
@@ -563,6 +564,7 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
     <ClCompile Include="..\..\..\Util\AEFX_SuiteHelper.c" />
     <ClCompile Include="..\..\..\Util\AEGP_SuiteHandler.cpp" />
     <ClCompile Include="..\..\..\Util\MissingSuiteError.cpp" />
+    <ClCompile Include="..\..\_NFLib\AEInfoSpat.cpp" />
     <ClCompile Include="..\NF_Entry.cpp" />
     <ClCompile Include="..\SpatteringRect.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>

@@ -19,6 +19,9 @@
     </ClCompile>
     <ClCompile Include="..\NF_Entry.cpp" />
     <ClCompile Include="..\Tex.cpp" />
+    <ClCompile Include="..\..\_NFLib\AEInfoSpat.cpp">
+      <Filter>Supporting code\NFs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SpatteringRect.h" />
@@ -123,6 +126,9 @@
       <Filter>Header Files\AE</Filter>
     </ClInclude>
     <ClInclude Include="..\Tex.h" />
+    <ClInclude Include="..\..\_NFLib\AEInfoSpat.h">
+      <Filter>Header Files\NF</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
