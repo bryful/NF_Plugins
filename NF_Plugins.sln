@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NoiseHorizon", "NoiseHorizo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatteringRect", "SpatteringRect\Win\SpatteringRect.vcxproj", "{39E5DB19-6EB4-4B6A-8586-7DA5948B41CA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpatteringPoint", "SpatteringPoint\Win\SpatteringPoint.vcxproj", "{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -142,6 +144,18 @@ Global
 		{39E5DB19-6EB4-4B6A-8586-7DA5948B41CA}.Release-MT|x64.Build.0 = Release-MT|x64
 		{39E5DB19-6EB4-4B6A-8586-7DA5948B41CA}.Release-MT|x86.ActiveCfg = Release-MT|Win32
 		{39E5DB19-6EB4-4B6A-8586-7DA5948B41CA}.Release-MT|x86.Build.0 = Release-MT|Win32
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Debug|x64.ActiveCfg = Debug|x64
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Debug|x64.Build.0 = Debug|x64
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Debug|x86.ActiveCfg = Debug|Win32
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Debug|x86.Build.0 = Debug|Win32
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release|x64.ActiveCfg = Release|x64
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release|x64.Build.0 = Release|x64
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release|x86.ActiveCfg = Release|Win32
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release|x86.Build.0 = Release|Win32
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release-MT|x64.ActiveCfg = Release-MT|x64
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release-MT|x64.Build.0 = Release-MT|x64
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release-MT|x86.ActiveCfg = Release-MT|Win32
+		{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}.Release-MT|x86.Build.0 = Release-MT|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

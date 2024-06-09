@@ -153,7 +153,7 @@ PF_Err SpatteringPoint::ParamsSetup(
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_CHECKBOX(
-		"CopyToOrigin",
+		"Origin",
 		"on",
 		FALSE,
 		0,
@@ -297,7 +297,7 @@ PF_Err SpatteringPoint::Exec(ParamInfo* infoP)
 		Copy(input, output);
 	}
 
-	if (infoP->value >= 0)
+	if ((infoP->value >= 0)&&(infoP->opacity>0)&&(infoP->scale))
 	{
 		NFWorld src, dst;
 		src.Setup(input, in_data, pixelFormat());

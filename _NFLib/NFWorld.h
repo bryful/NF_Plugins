@@ -6,6 +6,9 @@
 #include "NFUtils.h"
 #include <vector>
 #include <algorithm>
+
+
+
 typedef struct PixelCountInfo {
 	PF_Pixel	col;
 	A_long		count;
@@ -16,6 +19,9 @@ bool compPixelCountInfo(PixelCountInfo i, PixelCountInfo j);
 #define CPCI
 
 #endif
+
+
+
 class NFWorld
 {
 protected:

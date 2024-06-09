@@ -17,6 +17,10 @@ typedef struct SpatInfo {
 	A_long		height;
 } SpatInfo, * SpatInfoP, ** SpatInfoH;
 
+typedef struct {
+	PF_FpLong	x, y;
+} F_Point;
+
 
 class AEInfoSpat : public AEInfo
 {

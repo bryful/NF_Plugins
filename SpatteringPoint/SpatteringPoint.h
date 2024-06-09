@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SpatteringRect_H
-#define SpatteringRect_H
+#ifndef SpatteringPoint_H
+#define SpatteringPoint_H
 
 #include "../_NFLib/AE_SDK.h"
 #include "../_NFLib/AEInfo.h"
@@ -14,20 +14,40 @@
 
 #include "NF_Target.h"
 
+
 //UIÇÃÉpÉâÉÅÅ[É^
 
 
 typedef struct ParamInfo {
-	A_long		seed; 	
-	A_long		value;
+	A_FloatPoint	pos;
+	PF_FpLong	radius;
+	PF_FpLong	radiusRandom;
+	PF_FpLong	radiusScale;
+
+	A_long		valueMain;
+	A_long		valueSub;
+	PF_FpLong	radiusSub;
+	PF_FpLong	radiusSubRandom;
+
+	A_long		DirectionKind;
+	PF_FpLong	direction;
+	PF_FpLong	directionSpread;
+	PF_FpLong	dirStart;
+	PF_FpLong	dirEnd;
+
+	PF_FpLong	anchorDir;
+	PF_FpLong	anchorLength;
+	A_FloatPoint	anchorPos;
+
+
 	PF_FpLong	opacity;
 	PF_FpLong	opacityRandom;
 	PF_FpLong	scale;
 	PF_FpLong	scaleRandom;
-	PF_Rect		rect;
 	A_long		textSize;
 	PF_Boolean	isCopyOrigin;
 	PF_Boolean	moving;
+	A_long		seed;
 	SpatInfo	spat;
 
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
@@ -46,9 +66,30 @@ enum {
 	ID_SCALERANDOM,
 	ID_TOPIC_TEX_END,
 
-	ID_VALUE,
-	ID_TOPLEFT,
-	ID_BOTTOMRIGHT,
+	ID_TOPIC_OBJ,
+	ID_POS,
+	ID_RADIUS,
+	ID_RADIUS_RANDOM,
+	ID_RADOUS_SCALE,
+
+	ID_GLOBAL_VALUE,
+
+	ID_VALUE_MAIN,
+	ID_VALUE_SUB,
+	ID_RADIUS_SUB,
+	ID_RADIUS_SUB_RANDOM,
+	ID_TOPIC_OBJ_END,
+
+	ID_TOPIC_DIR,
+	ID_DIRECTION_KIND, // round or directinal
+	ID_DIRECTION,
+	ID_DIRECTION_SPREAD,
+
+
+	ID_ANCHOR_DIR,
+	ID_ANCHOR_LENGTH,
+	ID_TOPIC_DIR_END,
+
 	ID_SEED,
 	ID_MOVING,
 	ID_COPYTOORIGIN,
@@ -180,7 +221,7 @@ public:
 	
 };
 
-#endif // SpatteringRect_H
+#endif // SpatteringPoint_H
 #ifndef EFFECT_MAIN_H
 #define EFFECT_MAIN_H
 //-----------------------------------------------------------------------------------

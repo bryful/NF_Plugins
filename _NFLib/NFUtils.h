@@ -904,6 +904,25 @@ inline PF_FpLong pointLength(PF_InData* in_data,PF_FpLong x0, PF_FpLong y0, PF_F
 //äpìxåvéZ
 //*************************************************************************************************
 
+inline  A_FloatPoint ROT_LENGTH(PF_InData* in_data,PF_FpLong r, PF_FpLong l, A_FloatPoint p)
+{
+	A_FloatPoint ret{ 0,0 };
+	PF_FpLong r2 = r - 90;
+	ret.x = (l * PF_COS(r2 * PF_PI / 180)) + p.x;
+	ret.y = (l * PF_SIN(r2 * PF_PI / 180)) + p.y;
+	return ret;
+}
+inline  A_FloatPoint POS_SCALE(A_FloatPoint p, A_FloatPoint c, PF_FpLong sc)
+{
+	A_FloatPoint ret = p;
+	if (sc != 1) 
+	{
+		ret.x = (p.x - c.x) * sc + c.x;
+		ret.y = (p.y - c.y) * sc + c.y;
+	}
+	return ret;
+}
+
 class CRotCalc
 {
 protected:
@@ -999,7 +1018,7 @@ public:
 			if (m_rot<0) m_rot += 360L<<16;
 
 			xx = F_ABS(xx);
-			xx = F_ABS(yy);
+			yy = F_ABS(yy);
 			double ll = PF_SQRT( PF_POW(xx,2) +PF_POW(yy,2));
 			m_length = FLT2FIX(ll);
 		}

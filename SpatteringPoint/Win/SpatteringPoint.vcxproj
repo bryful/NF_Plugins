@@ -27,9 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{39E5DB19-6EB4-4B6A-8586-7DA5948B41CA}</ProjectGuid>
-    <RootNamespace>SpatteringRect</RootNamespace>
-    <ProjectName>SpatteringRect</ProjectName>
+    <ProjectGuid>{3D28D90F-717D-4CD2-AD3F-A4F917B2FD63}</ProjectGuid>
+    <RootNamespace>SpatteringPoint</RootNamespace>
+    <ProjectName>SpatteringPoint</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -150,7 +150,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/SpatteringRect.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/SpatteringPoint.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -199,7 +199,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/SpatteringRect.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/SpatteringPoint.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -253,7 +253,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/SpatteringRect.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/SpatteringPoint.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -307,7 +307,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/SpatteringRect.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/SpatteringPoint.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -361,7 +361,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/SpatteringRect.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/SpatteringPoint.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -417,7 +417,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Debug/SpatteringRect.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug/SpatteringPoint.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -504,7 +504,7 @@
     <ClInclude Include="..\..\_NFLib\NFWorld.h" />
     <ClInclude Include="..\..\_NFLib\Tex.h" />
     <ClInclude Include="..\NF_Target.h" />
-    <ClInclude Include="..\SpatteringRect.h">
+    <ClInclude Include="..\SpatteringPoint.h">
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\..\devstudio\Include\BASETSD.H" />
@@ -519,7 +519,7 @@
     </CustomBuildStep>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\SpatteringRectPiPL.r">
+    <CustomBuild Include="..\SpatteringPointPiPL.r">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling the PiPL</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cl /I "$(ProjectDir)..\..\..\Headers" /EP ".."\\"%(Filename).r" &gt; "$(IntDir)"\\"%(Filename).rr"
 "$(ProjectDir)..\..\..\Resources\PiPLTool" "$(IntDir)%(Filename).rr" "$(IntDir)%(Filename).rrc"
@@ -567,7 +567,7 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
     <ClCompile Include="..\..\_NFLib\AEInfoSpat.cpp" />
     <ClCompile Include="..\..\_NFLib\Tex.cpp" />
     <ClCompile Include="..\NF_Entry.cpp" />
-    <ClCompile Include="..\SpatteringRect.cpp">
+    <ClCompile Include="..\SpatteringPoint.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MSWindows;WIN32;_DEBUG;_WINDOWS</PreprocessorDefinitions>
@@ -591,7 +591,7 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SpatteringRectPiPL.rc" />
+    <ResourceCompile Include="SpatteringPointPiPL.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
