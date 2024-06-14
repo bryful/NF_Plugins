@@ -21,9 +21,9 @@ PF_Err Targeter::ParamsSetup(
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_POPUP(
 		"TargetMode",
-		3,	//メニューの数
+		2,	//メニューの数
 		1,	//デフォルト
-		"1:Alpha|2:Color|3:Diff",
+		"1:Alpha|2:Color",
 		ID_TARGET_MODE
 	);
 	//----------------------------------------------------------------
@@ -166,7 +166,7 @@ PF_Err Targeter::GetParams(ParamInfo* infoP)
 	return err;
 };
 // **********************************************************
-PF_Err Targeter::TargetPix(ParamInfo* infoP,  NFWorld* dst)
+PF_Err Targeter::TargetPix(ParamInfo* infoP, NFWorld* src,NFWorld* dst)
 {
 	PF_Err err = PF_Err_NONE;
 	TargetWorkInfo tinfo;
@@ -177,8 +177,13 @@ PF_Err Targeter::TargetPix(ParamInfo* infoP,  NFWorld* dst)
 		ERR(AlphaTh(&tinfo, dst));
 		break;
 	case 2:
-		break;
-	case 3:
+		tinfo.colTblCount = infoP->targetColorsCount;
+		for (int i = 0; i < tinfo.colTblCount; i++)
+		{
+			tinfo.colTbl[i] = infoP->targetColors[i];
+		}
+
+		ERR(ColorTh(&tinfo, dst));
 		break;
 	}
 	return err;
@@ -197,7 +202,7 @@ PF_Err Targeter::Exec(ParamInfo* infoP)
 	//PF_COPY(input, &subBuf8, NULL, NULL);
 	sub8.Copyto8Bit(&src);
 
-	TargetPix(infoP, &sub8);
+	TargetPix(infoP,&src, &sub8);
 	dst.Copyto_From8Bit(&sub8);
 	//PF_COPY(&subBuf8, output,NULL,NULL);
 

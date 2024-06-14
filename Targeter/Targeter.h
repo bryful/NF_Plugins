@@ -47,6 +47,8 @@ enum {
 };
 
 // ä÷êîíËã`
+PF_Err diff(NFWorld* src, NFWorld* dst8);
+
 //-------------------------------------------------------
 class Targeter : public AEInfo
 {
@@ -59,7 +61,7 @@ public:
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
-	PF_Err TargetPix(ParamInfo* infoP, NFWorld* dst);
+	PF_Err TargetPix(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
 
 	// ******************************************************
 	PF_Err	About(
