@@ -1541,6 +1541,129 @@ public:
 
 		return err;
 	}
+
+	PF_Err Copy8To8bit(NFWorld* d)
+	{
+		return Copy8(d);
+	}
+	PF_Err Copy16To8bit(NFWorld* d)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		if ((m_data == NULL) || (d->m_data == NULL)) return PF_Err_OUT_OF_MEMORY;
+		if ((m_width != d->m_width) || (m_height != d->m_height)) return PF_Err_OUT_OF_MEMORY;
+
+		A_long target = 0;
+		A_long targetD = 0;
+		for (A_long y = 0; y < m_height; y++)
+		{
+			for (A_long x = 0; x < m_width; x++)
+			{
+				PF_Pixel16 p = d->m_data16[targetD];
+				m_data8[target] = NF_Pixel16To8(p);
+				target++;
+				targetD++;
+			}
+			target += m_offsetWidth;
+			targetD += d->m_offsetWidth;
+		}
+		return err;
+	}
+	PF_Err Copy32To8bit(NFWorld* d)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		if ((m_data == NULL) || (d->m_data == NULL)) return PF_Err_OUT_OF_MEMORY;
+		if ((m_width != d->m_width) || (m_height != d->m_height)) return PF_Err_OUT_OF_MEMORY;
+
+		A_long target = 0;
+		A_long targetD = 0;
+		for (A_long y = 0; y < m_height; y++)
+		{
+			for (A_long x = 0; x < m_width; x++)
+			{
+				PF_Pixel32 p = d->m_data32[targetD];
+				m_data8[target] = NF_Pixel32To8(p);
+				target++;
+				targetD++;
+			}
+			target += m_offsetWidth;
+			targetD += d->m_offsetWidth;
+		}
+		return err;
+	}
+	PF_Err Copy8To16bit(NFWorld* d)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		if ((m_data == NULL) || (d->m_data == NULL)) return PF_Err_OUT_OF_MEMORY;
+		if ((m_width != d->m_width) || (m_height != d->m_height)) return PF_Err_OUT_OF_MEMORY;
+
+		A_long target = 0;
+		A_long targetD = 0;
+		for (A_long y = 0; y < m_height; y++)
+		{
+			for (A_long x = 0; x < m_width; x++)
+			{
+				PF_Pixel p = d->m_data[targetD];
+				m_data16[target] = NF_Pixel8To16(p);
+				target++;
+				targetD++;
+			}
+			target += m_offsetWidth;
+			targetD += d->m_offsetWidth;
+		}
+		return err;
+	}
+	PF_Err Copy8To32bit(NFWorld* d)
+	{
+		PF_Err err = PF_Err_NONE;
+
+		if ((m_data == NULL) || (d->m_data == NULL)) return PF_Err_OUT_OF_MEMORY;
+		if ((m_width != d->m_width) || (m_height != d->m_height)) return PF_Err_OUT_OF_MEMORY;
+
+		A_long target = 0;
+		A_long targetD = 0;
+		for (A_long y = 0; y < m_height; y++)
+		{
+			for (A_long x = 0; x < m_width; x++)
+			{
+				PF_Pixel p = d->m_data[targetD];
+				m_data32[target] = NF_Pixel8To32(p);
+				target++;
+				targetD++;
+			}
+			target += m_offsetWidth;
+			targetD += d->m_offsetWidth;
+		}
+		return err;
+	}
+	PF_Err Copyto8Bit(NFWorld* d)
+	{
+		switch (d->pixelFormat())
+		{
+		case PF_PixelFormat_ARGB128:
+			return Copy32To8bit(d);
+		case PF_PixelFormat_ARGB64:
+			return Copy16To8bit(d);
+		case PF_PixelFormat_ARGB32:
+		default:
+			return Copy8To8bit(d);
+		}
+	}
+	PF_Err Copyto_From8Bit(NFWorld* d)
+	{
+		switch (m_format)
+		{
+		case PF_PixelFormat_ARGB128:
+			return Copy8To32bit(d);
+		case PF_PixelFormat_ARGB64:
+			return Copy8To16bit(d);
+		case PF_PixelFormat_ARGB32:
+		default:
+			return Copy8To8bit(d);
+		}
+	}
 #pragma endregion
 	// ******************************************************************
 
