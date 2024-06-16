@@ -17,6 +17,19 @@ PF_Err Skelton::ParamsSetup(
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_CHECKBOX(NF_CATEGORY, NF_NAME, FALSE, 0, ID_VERSION);
+	/*
+	AEFX_CLR_STRUCT(def);
+	def.flags = PF_ParamFlag_SUPERVISE |
+		PF_ParamFlag_CANNOT_TIME_VARY |
+		PF_ParamFlag_CANNOT_INTERP;
+	PF_ADD_CHECKBOX(
+		"moving",
+		"on",
+		TRUE,
+		0,
+		ID_MOVING
+	);
+	*/
 	//----------------------------------------------------------------
 	AEFX_CLR_STRUCT(def);
 	PF_ADD_POPUP(

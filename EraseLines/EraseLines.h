@@ -1,39 +1,31 @@
 #pragma once
-#ifndef ColorChange_H
-#define ColorChange_H
+#ifndef EraseLines_H
+#define EraseLines_H
 
 #include "../_NFLib/AE_SDK.h"
 #include "../_NFLib/AEInfo.h"
 #include "../_NFLib/NFWorld.h"
 #include "../_NFLib/NFLibVersion.h"
 #include "../_NFLib/NFBlend.h"
-#include "../_NFLib/NFJson.h"
-
-#include "../_NFLib/tinyfiledialogs.h"
 
 #include <string>
 #include <vector>
 
 #include "NF_Target.h"
 
-//UIのパラメータ
-typedef struct ColorChangeInfo {
-	PF_Boolean	Enabled;
-	PF_Pixel	Src;
-	PF_Pixel	Dst;
-	PF_Pixel16	Dst16;
-	PF_Pixel32	Dst32;
-} ColorChangeInfo, * ColorChangeInfoP, ** ColorChangeInfoH;
 
-#define COLOR_MAX 16
+#define LINECOLR_MAX 6
+//UIのパラメータ
 typedef struct ParamInfo {
-	PF_Boolean	enabled;
-	PF_Boolean	dispCTable;
-	PF_Boolean	dispUseColor;
-	PF_FpLong	level;
-	A_u_char	lv_byte;
-	A_long		count;
-	ColorChangeInfo colorTable[COLOR_MAX];
+	PF_Pixel	lineColors[LINECOLR_MAX];
+	A_long		lineColorsCount;
+	PF_Pixel	altColor;
+	PF_Pixel16	altColor16;
+	PF_Pixel32	altColor32;
+	A_long		altMode;
+	PF_Boolean	prioritizeDark;
+	PF_Boolean	dotFilter;
+
 } ParamInfo, * ParamInfoP, ** ParamInfoH;
 
 //ユーザーインターフェースのID
@@ -41,85 +33,38 @@ typedef struct ParamInfo {
 enum {
 	ID_INPUT = 0,	// default input layer
 	ID_VERSION,
-	ID_TOPIC_IO,
-	ID_DispTable,
-	ID_DispUse,
-	ID_BTN_SAVE,
-	ID_BTN_LOAD,
-	ID_TOPIC_IO_END,
-	ID_TOPIC_CTABLE,
-	ID_ENABLED,
-	ID_LEVEL,
-	ID_CTABLE_ST //8
+	ID_LINECOLOR0,
+	ID_TOPIC_COLORS
+
+	//ID_NUM_PARAMS
 };
-#define ID_CTABLE(idx) (ID_CTABLE_ST + idx*3 )
-#define ID_TOPIC_CTABLE_END (ID_CTABLE_ST + COLOR_MAX*3)
-#define ID_NUM_PARAMS  (ID_TOPIC_CTABLE_END+1)
+
+#define ID_LINE_COLOR_E(IDX) (ID_TOPIC_COLORS + 1 + 2 * (IDX-1))
+#define ID_LINE_COLOR(IDX)   (ID_TOPIC_COLORS + 1 + 2 * (IDX-1) +1)
+#define ID_TOPIC_COLORS_END (ID_TOPIC_COLORS + 1 + 2 * (LINECOLR_MAX-1))
+#define ID_ALT_MODE (ID_TOPIC_COLORS_END + 1)
+#define ID_ALTCOLOR (ID_TOPIC_COLORS_END + 2)
+#define ID_DOTFLT	(ID_TOPIC_COLORS_END + 3)
+#define ID_PRIORITIZE_DARK 	(ID_TOPIC_COLORS_END + 4)
+#define ID_NUM_PARAMS (ID_TOPIC_COLORS_END + 5)
+
 
 // 関数定義
-static PF_Err
-ColChange8(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel8* inP,
-	PF_Pixel8* outP);
-static PF_Err
-ColChange16(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel16* inP,
-	PF_Pixel16* outP);
-static PF_Err
-ColChange32(
-	void* refcon,
-	A_long		xL,
-	A_long		yL,
-	PF_Pixel32* inP,
-	PF_Pixel32* outP);
 
-static std::string directoryPath;
+
 //-------------------------------------------------------
-class ColorChange : public AEInfo
+class EraseLines : public AEInfo
 {
 public:
 	// ******************************************************
-	/*
-	int ColorDef[16][3]{
-		{0xFF,0x00,0x00},//00
-		{0x00,0xFF,0x00},//01
-		{0x00,0x00,0xFF},//02
-		{0xFF,0xFF,0x00},//03
-		{0x00,0xFF,0xFF},//04
-		{0xFF,0x00,0xFF},//05
-		{0xC0,0x00,0x00},//06
-		{0x00,0xC0,0x00},//07
-		{0x00,0x00,0xC0},//08
-		{0xC0,0xC0,0x00},//09
-		{0x00,0xC0,0xC0},//10
-		{0xC0,0x00,0xC0},//11
-		{0x80,0x00,0x00},//12
-		{0x00,0x80,0x00},//13
-		{0x00,0x00,0x80},//14
-		{0x80,0x80,0x00}//15
-	};
-	*/
-	// ******************************************************
-	A_long ChkTableSub(ParamInfo* infoP, A_long idx);
-	void ChkParams(ParamInfo* infoP);
 	PF_Err GetParams(ParamInfo *infoP);
-	ParamInfo JsonToParams(json jsn);
-	json ParamsToJson(ParamInfo* infoP);
-	PF_Err ParamsSet(ParamInfo* infoP);
 	PF_Err Exec(ParamInfo* infoP);
 	PF_Err ParamsSetup(
 		PF_InData* in_dataP,
 		PF_OutData* out_dataP,
 		PF_ParamDef* paramsP[],
 		PF_LayerDef* outputP) override;
-	//PF_Err TargetExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
-	//PF_Err BlendExec(ParamInfo* infoP, NFWorld* src, NFWorld* dst);
+	PF_Err EraseLinesSub(ParamInfo* infoP, NFWorld* src);
 	// ******************************************************
 	PF_Err	About(
 		PF_InData* in_dataP,
@@ -218,46 +163,10 @@ public:
 		PF_LayerDef* outputP,
 		PF_UserChangedParamExtra* extraP,
 		A_long pc)override;
-	std::string OpenJsonFileDialog(std::string title,std::string defp )
-	{
-		const char* filterPatterns[] = { "*.ccj" };
-		const char* selectedFile = tinyfd_openFileDialog(
-			title.c_str(),                      // ダイアログのタイトル
-			defp.c_str(),                       // 初期ディレクトリ
-			1,                          // フィルタパターンの数
-			filterPatterns,             // フィルタパターン
-			"Ccj files", // フィルタの説明
-			0                           // マルチセレクトの可否 (0 = No, 1 = Yes)
-		);
-		std::string ret;
-		if (selectedFile)
-		{
-			ret = std::string(selectedFile);
-		}
-
-		return ret;
-	}
-	std::string SaveJsonFileDialog(std::string title, std::string defp)
-	{
-		const char* filterPatterns[] = { "*.ccj" };
-		const char* selectedFile = tinyfd_saveFileDialog(
-			title.c_str(),                      // ダイアログのタイトル
-			defp.c_str(),                       // 初期ディレクトリ
-			1,                          // フィルタパターンの数
-			filterPatterns,             // フィルタパターン
-			"Ccj files" // フィルタの説明
-		);
-		std::string ret;
-		if (selectedFile)
-		{
-			ret = std::string(selectedFile);
-		}
-
-		return ret;
-	}
+	
 };
 
-#endif // ColorChange_H
+#endif // EraseLines_H
 #ifndef EFFECT_MAIN_H
 #define EFFECT_MAIN_H
 //-----------------------------------------------------------------------------------
