@@ -25,7 +25,7 @@ typedef struct {
 #define NF_ABOUT_DIALOG	"var  FsAbout = function()\
 {\
 	var strName = \"%s\";\
-	var strVersion = \"version %s.%s\";\
+	var strVersion = \"Ver %s.%s [%s]\";\
 	var strDis = \"%s\";\
 	var strMyName = \"https://github.com/bryful : bryful@gmail.com \";\
     var nanae = \"Nanae Furuhashi - My daughter, May her soul rest in peaceD\";\
@@ -346,6 +346,7 @@ public:
 				Dispname,
 				majorver,
 				minorver,
+				__DATE__,
 				des);
 
 			ERR(suitesP->UtilitySuite5()->AEGP_ExecuteScript(ae_plugin_idP->my_id, scriptCode, TRUE, NULL, NULL));
