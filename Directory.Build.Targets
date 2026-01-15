@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <BuildDate>$([System.DateTime]::Now.ToString("yyyyMMdd"))</BuildDate>
+    
+    <!-- Debug x64: After Effectsのプラグインフォルダに直接出力 -->
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\Adobe\Common\Plug-ins\7.0\MediaCore\NF_Plugins_Debug\</OutDir>
+    
+    <!-- Release x64: 日付付きフォルダに出力 -->
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\_output\NF-Plugins_$(BuildDate)\</OutDir>
+    
+    <!-- Release x64 ビルド時のファイル名を直接指定 -->
+    <TargetName Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">NF_$(ProjectName)_$(BuildDate)</TargetName>
+    <TargetPath Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">$(OutDir)NF_$(ProjectName)_$(BuildDate)$(TargetExt)</TargetPath>
+    
+    <!-- Debug x64 ビルド時のファイル名 -->
+    <TargetName Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">F's $(ProjectName)</TargetName>
+    <TargetPath Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">$(OutDir)NF_$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+</Project>

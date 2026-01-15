@@ -122,6 +122,7 @@
       <Filter>Header Files\AE</Filter>
     </ClInclude>
     <ClInclude Include="..\EraseLines.h" />
+    <ClInclude Include="..\..\_NFLib\YYMMDD.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

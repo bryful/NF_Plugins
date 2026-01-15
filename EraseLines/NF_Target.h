@@ -12,10 +12,10 @@
 #define NF_NAME			"NF-EraseLines"
 #define NF_MATCHNAME	"NF-EraseLines"
 
-
 //-----------------------------------------------------------------------------------
 //プラグインの説明に使われる文字
-#define NF_DESCRIPTION	"NF_Plugins EraseLines"
+#define NF_DESCRIPTION	"NF_Plugins EraseLines (" __DATE__ ")"
+
 
 	//-----------------------------------------------------------------------------------
 	//プラグインが表示されるメニュー名
