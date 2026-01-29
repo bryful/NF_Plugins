@@ -385,10 +385,10 @@ PF_Err Skelton::Exec(ParamInfo* infoP)
 		dst->Copy(src);
 	}
 	PF_ParamDef			checkout;
-	PF_ChannelDesc		desc;
-	PF_ChannelRef		ref;
-	PF_ChannelChunk		chunk;
-	PF_Boolean			found_depthPB;
+	//PF_ChannelDesc		desc;
+	//PF_ChannelRef		ref;
+	//PF_ChannelChunk		chunk;
+	//PF_Boolean			found_depthPB;
 	int32_t				num_channelsL = 0;
 	PF_Rect				rect = { 0,0,100,100 };
 	PF_Rect				rect2 = { 0,0,100,100 };

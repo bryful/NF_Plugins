@@ -447,7 +447,7 @@ PF_Err ColorChange::Exec(ParamInfo* infoP)
 		std::vector<PixelCountInfo> pc = src->Histogram();
 		if (pc.size() > 0)
 		{
-			A_long cnt = pc.size();
+			A_long cnt = (A_long)pc.size();
 			if (cnt > 16 * 4) cnt = 16 * 4;
 
 			for (int i = 0; i < cnt; i++)

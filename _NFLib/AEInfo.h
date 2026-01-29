@@ -1294,6 +1294,91 @@ public:
 			dst);			// dest
 
 	}
+	PF_Err iterate_origin8(
+		PF_EffectWorld* src,
+		void* refcon,
+		PF_Err(*pix_fn)(void* refcon, A_long x, A_long y, PF_Pixel* in, PF_Pixel* out),
+		PF_EffectWorld* dst
+	)
+	{
+		PF_Point			origin;
+		origin.h = (A_short)in_data->output_origin_x;
+		origin.v = (A_short)in_data->output_origin_y;
+		return suitesP->Iterate8Suite1()->iterate_origin(
+			in_data,
+			0,				// progress base
+			dst->height,	// progress final
+			src,			// src 
+			&dst->extent_hint,			// area - null for all pixels
+			&origin,
+			refcon,			// refcon - your custom data pointer
+			pix_fn,			// pixel function pointer
+			dst);			// dest
+
+	}
+	PF_Err iterate_origin16(
+		PF_EffectWorld* src,
+		void* refcon,
+		PF_Err(*pix_fn)(void* refcon, A_long x, A_long y, PF_Pixel16* in, PF_Pixel16* out),
+		PF_EffectWorld* dst
+	)
+	{
+		PF_Point			origin;
+		origin.h = (A_short)in_data->output_origin_x;
+		origin.v = (A_short)in_data->output_origin_y;
+		return suitesP->Iterate16Suite1()->iterate_origin(
+			in_data,
+			0,				// progress base
+			dst->height,	// progress final
+			src,			// src 
+			&dst->extent_hint,			// area - null for all pixels
+			&origin,
+			refcon,			// refcon - your custom data pointer
+			pix_fn,			// pixel function pointer
+			dst);			// dest
+
+	}
+	PF_Err iterate_origin32(
+		PF_EffectWorld* src,
+		void* refcon,
+		PF_Err(*pix_fn)(void* refcon, A_long x, A_long y, PF_PixelFloat* in, PF_PixelFloat* out),
+		PF_EffectWorld* dst
+	)
+	{
+		PF_Point			origin;
+		origin.h = (A_short)in_data->output_origin_x;
+		origin.v = (A_short)in_data->output_origin_y;
+		return suitesP->IterateFloatSuite1()->iterate_origin(
+			in_data,
+			0,				// progress base
+			dst->height,	// progress final
+			src,			// src 
+			&dst->extent_hint,			// area - null for all pixels
+			&origin,
+			refcon,			// refcon - your custom data pointer
+			pix_fn,			// pixel function pointer
+			dst);			// dest
+
+	}
+	PF_Err iterate_generic(
+		A_long iterationsL,
+		void* refconPV,
+		PF_Err(*fn_func)(
+			void* refconPV,
+			A_long  thread_idxL,
+			A_long  i,
+			A_long  itrtL))
+	{
+		PF_Err err = PF_Err_NONE;
+		AEFX_SuiteScoper<PF_Iterate8Suite1> iter_scope(
+			in_data,
+			kPFIterate8Suite,
+			kPFIterate8SuiteVersion1,
+			out_data
+		);
+		err = iter_scope->iterate_generic(iterationsL, refconPV, fn_func);
+		return err;
+	}
 #pragma endregion
 
 	//--------------------------------------------------------------------

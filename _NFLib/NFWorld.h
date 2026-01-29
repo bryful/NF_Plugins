@@ -1016,7 +1016,7 @@ public:
 		}
 		if (ret.size() > 16)
 		{
-			for (int i = ret.size() - 1; i >= 0; i--)
+			for (int i = (int)ret.size() - 1; i >= 0; i--)
 			{
 				if (ret[i].count < 10)
 				{
@@ -1056,7 +1056,7 @@ public:
 		}
 		if (ret.size() > 16)
 		{
-			for (int i = ret.size() - 1; i >= 0; i--)
+			for (int i = (int)ret.size() - 1; i >= 0; i--)
 			{
 				if (ret[i].count < 10)
 				{
@@ -1096,7 +1096,7 @@ public:
 		}
 		if (ret.size() > 16)
 		{
-			for (int i = ret.size() - 1; i >= 0; i--)
+			for (int i = (int)ret.size() - 1; i >= 0; i--)
 			{
 				if (ret[i].count < 10)
 				{
@@ -1398,16 +1398,22 @@ public:
 		switch (m_format)
 		{
 		case PF_PixelFormat_ARGB128:
+		{
 			PF_Pixel32 col32 = NF_Pixel8To32(col);
 			err = Fill32(rct, col32);
 			break;
-		case PF_PixelFormat_ARGB64:
+		}
+		case PF_PixelFormat_ARGB64: 
+		{
 			PF_Pixel16 col16 = NF_Pixel8To16(col);
 			err = Fill16(rct, col16);
 			break;
+		}
 		case PF_PixelFormat_ARGB32:
-			err = Fill8(rct,col);
+		{
+			err = Fill8(rct, col);
 			break;
+		}
 		}
 		return err;
 	}
@@ -1450,16 +1456,22 @@ public:
 		switch (m_format)
 		{
 		case PF_PixelFormat_ARGB128:
+		{
 			PF_Pixel32 col32 = NF_Pixel8To32(col);
 			err = SetChar32(buf, w, h, col32);
 			break;
+		}
 		case PF_PixelFormat_ARGB64:
+		{
 			PF_Pixel16 col16 = NF_Pixel8To16(col);
 			err = SetChar16(buf, w, h, col16);
 			break;
+		}
 		case PF_PixelFormat_ARGB32:
-			err = SetChar8(buf,w,h,col);
+		{
+			err = SetChar8(buf, w, h, col);
 			break;
+		}
 		}
 		return err;
 	}
