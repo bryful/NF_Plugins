@@ -1,5 +1,7 @@
 ﻿# NF-Plugins
 After Effectsエフェクトプラグインをゼロから作って見ようって事で作成した物です。<br>
+[https://github.com/bryful/F-s-PluginsProjects](https://github.com/bryful/F-s-PluginsProjects)に統合しました。
+
 <br>
 以下のプラグインを追加しました。
 
